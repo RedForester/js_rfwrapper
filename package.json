@@ -1,0 +1,24 @@
+{
+  "name": "rfwrapper",
+  "version": "0.0.0",
+  "description": "простая обертка над RF API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@srv.nppsatek.ru:Deissh/rfwrapper.git"
+  },
+  "keywords": [
+    "rf",
+    "api",
+    "wrapper"
+  ],
+  "author": "deissh",
+  "license": "MIT",
+  "dependencies": {
+    "babel-register": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
