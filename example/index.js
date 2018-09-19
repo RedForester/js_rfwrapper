@@ -9,4 +9,4 @@ rf.event('node_updated', (ctx) => {
     console.log(ctx)
 })
 
-console.log(typeof(rf.initPolling()))
+rf.initPolling()
