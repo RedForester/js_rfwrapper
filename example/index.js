@@ -5,6 +5,8 @@ const rf = new rfwrapper({
     password: '412'
 })
 
-rf.event('node_updated', (err, data) => {
-    console.log(data)
+rf.event('node_updated', (ctx) => {
+    console.log(ctx)
 })
+
+// rf.startPolling()
