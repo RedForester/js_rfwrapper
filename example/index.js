@@ -1,12 +1,15 @@
 const rfwrapper = require('../');
 
 const rf = new rfwrapper({
-    mail: '123',
-    password: '412'
+    host: 'http://***REMOVED***/',
+    mail: 'admin@zippiex.com',
+    password: '***REMOVED***' // example user
 })
 
 rf.event('node_updated', (ctx) => {
     console.log(ctx)
 })
 
-rf.initPolling()
+rf.initPolling('1bcf5ff3-c392-43db-8e6f-e8090210b0f7').catch((err) => {
+    console.error(err)
+})
