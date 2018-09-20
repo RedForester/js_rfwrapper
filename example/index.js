@@ -6,7 +6,11 @@ const rf = new rfwrapper({
     password: '***REMOVED***' // example user
 })
 
-rf.event('node_updated', (ctx) => {
+rf.event('node_created', (ctx) => {
+    console.log(ctx)
+})
+
+rf.on((ctx) => {
     console.log(ctx)
 })
 
