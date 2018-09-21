@@ -1,18 +1,55 @@
 
 Todo:
-  ☐ Добавить подписку на события + обработчики к ним
-    ✔ добавить возможность создания промежуточных обработчиков @done(18-09-18 20:55)
   ☐ Сделать проверку пользователя
   ✔ Написать класс для работы с базовыми api запросами @done(18-09-19 12:32)
   ✔ Добавить возможность настроить сервер @done(18-09-18 20:53)
 
+  API class:
+    user:
+      ☐ /api/singup​ (POST)​
+      ☐ /api/forgotten_password​ (POST)
+      ☐ /api/user​ (GET)
+      ☐ /api/user​ (PATCH)​
+
+    map:
+      ☐ /api/maps (GET)
+      ☐ /api/maps/<id> (GET)
+      ☐ /api/maps/<id> (PATCH)​
+      ☐ /api/maps/<id> (DELETE)​ 
+      ☐ /api/maps/<id>/users (GET)
+      // получить подветку дерева 
+      ☐ /api/maps/<map_id>/nodes/<root_id>​ ​(GET)
+      // получить типы узлов для заданной карты
+      ☐ /api/maps/<map_id>/node_types​ (GET)
+
+    node:
+      ☐ /api/nodes/<id> (GET)
+      ☐ /api/nodes​ ​(POST​)
+      ☐ /api/nodes/<id>​ ​(PATCH)​
+      ☐ /api/nodes/<id>​ (DELETE)​
+    
+    node_type:
+      ☐ /api/node_types/<id>​ (GET)
+      ☐ /api/node_types​ (POST)
+      ☐ /api/node_types/<id>​ (PATCH​)
+      ☐ /api/node_types/<id>​ (DELETE)
+    
+    search:
+      ☐ /api/search​ ​ (POST)
+
+    batch:
+      ☐ /api/batch (POST)
+
   Events:
     ☐ Добавить подписку на события
       ✔ написать заготовку для получения событий @done(18-09-20 13:20)
-      ☐ подписка на изменения всей карты @started(18-09-20 13:20)
-        ☐ подписка на определенные действия @started(18-09-20 13:20)
+      ✔ подписка на изменения всей карты @started(18-09-20 13:20) @done(18-09-21 16:13) @lasted(1d2h53m1s)
+        ✔ подписка на определенные действия @started(18-09-20 13:20) @done(18-09-21 16:13) @lasted(1d2h53m4s)
       ☐ подписка на события пользователей
         ☐ подписка на определенные действия
   
+  Use:
+    ✔ Добавить возможность писать промежуточные обработчики @done(18-09-21 16:13)
+
   On: 
     ✘ Добавить возможность добавлять глобальный обработчик @cancelled(18-09-18 20:56)
