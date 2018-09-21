@@ -6,6 +6,12 @@ const rf = new rfwrapper({
     password: '***REMOVED***' // example user
 })
 
+rf.use((ctx, next) => {
+    if (ctx.who.username !== 'admin@zippiex.com') {
+        next()
+    }
+})
+
 rf.event('node_created', (ctx) => {
     console.log(ctx)
 })
