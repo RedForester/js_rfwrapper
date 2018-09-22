@@ -6,7 +6,10 @@
   "private": true,
   "scripts": {
     "lint": "eslint lib",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release:major": "npm version major && git push origin && git push origin --tags",
+    "release:minor": "npm version minor && git push origin && git push origin --tags",
+    "release:patch": "npm version patch && git push origin && git push origin --tags"
   },
   "repository": {
     "type": "git",
