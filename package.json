@@ -1,6 +1,6 @@
 {
   "name": "rfwrapper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "простая обертка над RF API",
   "main": "index.js",
   "private": true,
