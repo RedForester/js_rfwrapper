@@ -6,6 +6,10 @@ const rf = new rfwrapper({
     password: '***REMOVED***' // example user
 })
 
+rf.user().get.then((data) => {
+    console.log(data)
+})
+
 rf.use((ctx, next) => {
     if (ctx.who.username !== 'admin@zippiex.com') {
         next()
