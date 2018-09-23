@@ -8,7 +8,8 @@ Todo:
     user:
       ☐ /api/singup​ (POST)​
       ☐ /api/forgotten_password​ (POST)
-      ☐ /api/user​ (GET)
+      ✔ /api/user/<id>​ (GET) @done(18-09-23 16:24)
+      ✔ /api/user (GET) @done(18-09-23 16:24)
       ☐ /api/user​ (PATCH)​
 
     map:
@@ -29,10 +30,10 @@ Todo:
       ☐ /api/nodes/<id>​ (DELETE)​
     
     node_type:
-      ☐ /api/node_types/<id>​ (GET)
-      ☐ /api/node_types​ (POST)
+      ✔ /api/node_types/<id>​ (GET) @done(18-09-23 16:28)
+      ✔ /api/node_types​ (POST) @done(18-09-23 16:32)
       ☐ /api/node_types/<id>​ (PATCH​)
-      ☐ /api/node_types/<id>​ (DELETE)
+      ✔ /api/node_types/<id>​ (DELETE) @done(18-09-23 16:29)
     
     search:
       ☐ /api/search​ ​ (POST)
