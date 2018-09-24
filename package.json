@@ -2,9 +2,10 @@
   "name": "rfwrapper",
   "version": "0.1.0",
   "description": "простая обертка над RF API",
-  "main": "index.js",
+  "main": "lib/index.js",
   "private": true,
   "scripts": {
+    "build": "./node_modules/.bin/babel src -d lib",
     "lint": "eslint lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release:major": "npm version major && git push origin && git push origin --tags",
@@ -23,6 +24,7 @@
   "author": "deissh",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",

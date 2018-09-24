@@ -1,5 +1,5 @@
 require("babel-register");
 require("babel-polyfill");
 
-module.exports = require('./lib/index');
+module.exports = require('./src/index');
 
