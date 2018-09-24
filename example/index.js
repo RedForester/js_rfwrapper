@@ -6,7 +6,7 @@ const rf = new rfwrapper({
     password: '***REMOVED***' // example user
 })
 
-rf.user().get.then((data) => {
+rf.user.get().then((data) => {
     console.log(data)
 })
 
