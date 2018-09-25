@@ -3,6 +3,11 @@ import methods from './methods'
 import pkg from '../package.json'
 
 class rfwrapper {
+
+    /**
+     * Создает rfwrapper для работы с api RF
+     * @param {object} settings Параметрый для настройки rfwrapper`а
+     */
     constructor(settings) {
         if (!settings.mail || !settings.password) {
             throw new Error('You must set user email and password hash!')
@@ -38,23 +43,30 @@ class rfwrapper {
         })
     }
 
-    /*
+    /**
      * Подписка на определенные события
+     * @param {string} trigger Одно из доступных событий
+     * @param  {...object} middlewares Обработчики (указываются последовательно)
+     * @returns {promise} Промис
      */
     event(trigger, ...middlewares) {
         this.event(trigger, ...middlewares)
     }
 
-    /*
+    /**
      * Создает промежуточные обработчики которые выполняются последовательно,
-     * функция выполняется при каждом получении нового события RF
+     * функция выполняется при каждом получении нового события RF.
+     * @param  {...function} middlewares Обработчики (указываются последовательно)
+     * @returns {promise} Промис
      */
     use(...middlewares) {
         this.use(...middlewares)
     }
 
-    /*
-     * Создание LongPolling соединения
+    /**
+     * Создает и запускает LongPoll клиент для выбраной карты
+     * @param {string} mapid uuid карты для которой будет работать LongPolling
+     * @returns {promise} Промис
      */
     initPolling(mapid) {
         if (!mapid) {

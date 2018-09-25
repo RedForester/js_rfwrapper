@@ -1,3 +1,9 @@
+
+/**
+ * Используется для 
+ * @param  {...any} middlewares Обработчики (указываются последовательно)
+ * @returns {this} ~
+ */
 export default function (...middlewares) {
     const idx = this.middlewares.length
     middlewares.forEach((fn) => {

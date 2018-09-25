@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+/**
+ * @async
+ * @returns {promise} Промис который содержит параметры для подключения к RFKV
+ */
 export default async function () {
     // TODO: получаем данные для сессии KV
     const userPromise = axios.get('/api/user', this.settings.axios),

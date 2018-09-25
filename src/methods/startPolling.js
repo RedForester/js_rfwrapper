@@ -1,6 +1,11 @@
 import Context from '../context'
 import axios from 'axios'
 
+/**
+ * Используется для создания LongPoll соединения с RFKV
+ * @param  {string} mapid uuid карты для которой будет работать LongPolling
+ * @returns {promise} Возвращяет промис
+ */
 export default async function (mapid) {
     // TODO: добавить общий вид ошибок и коды/названия к ним
 
