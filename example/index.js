@@ -1,13 +1,9 @@
-const rfwrapper = require('../');
+const rfwrapper = require('../index');
 
 const rf = new rfwrapper({
     host: 'http://***REMOVED***/',
     mail: 'admin@zippiex.com',
     password: '***REMOVED***' // example user
-})
-
-rf.user.get().then((data) => {
-    console.log(data)
 })
 
 rf.use((ctx, next) => {
