@@ -1,4 +1,4 @@
-const rfwrapper = require('../index');
+const rfwrapper = require('../');
 
 /*
  * Авторизация пользователя
