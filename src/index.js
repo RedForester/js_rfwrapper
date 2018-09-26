@@ -1,6 +1,9 @@
 import api from './api'
+import map from './map'
 import methods from './methods'
 import pkg from '../package.json'
+
+export const rfapi = {}
 
 class rfwrapper {
 
@@ -17,6 +20,7 @@ class rfwrapper {
 
         this.middlewares = []
         this.methods = []
+        this.api = []
 
         this.settings = {
             mapid: '',
@@ -36,9 +40,12 @@ class rfwrapper {
             this[key] = method.bind(this)
         })
         Object.entries(api).forEach(([key, method]) => {
-            this[key] = {}
+            this.api[key] = {}
+            rfapi[key] = {}
+
             Object.entries(method).forEach(([keym, func]) => {
-                this[key][keym] = func.bind(this)
+                rfapi[key][keym] = func.bind(this)
+                this.api[key][keym] = func.bind(this)
             })
         })
     }

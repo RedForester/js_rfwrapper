@@ -1,4 +1,4 @@
-const rfwrapper = require('../');
+const rfwrapper = require('../index');
 
 /*
  * Авторизация пользователя
@@ -15,6 +15,6 @@ const rf = new rfwrapper({
  * Пример получения информации о текущем пользователе
  * Возвращяет промис с data (при успешном выполнении)
  */
-rf.user.get().then((data) => {
+rf.api.user.get().then((data) => {
     console.log(data)
 })

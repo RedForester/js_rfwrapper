@@ -105,3 +105,34 @@ rf.event('node_created', (ctx) => {
  - `branch_moved`
  - `node_moved`
  - `node_updated`
+ 
+### node("uuid", options)
+Получение узла по id 
+ 
+ * create
+ * destroy
+ * (get)
+ * (set)
+ 
+#### create({ title, ...params })
+ Создает узел и делает его дочерним
+ 
+#### destroy()
+Удаляет узел 
+
+#### (get)
+Получение всей информации об узле (JSON)
+
+#### (set)
+обновление информации об узле
+
+### map("uuid", options)
+Получение карты по uuid
+
+ * destroy
+ * getTree
+ * getUsers
+ * getTypes
+ * (get)
+ * (set)
+ 

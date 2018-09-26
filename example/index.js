@@ -1,4 +1,4 @@
-const rfwrapper = require('../');
+const rfwrapper = require('../index');
 
 const rf = new rfwrapper({
     host: 'http://***REMOVED***/',
