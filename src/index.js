@@ -1,5 +1,4 @@
 import api from './api'
-import map from './map'
 import methods from './methods'
 import pkg from '../package.json'
 
