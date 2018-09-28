@@ -17,4 +17,20 @@ const rf = new rfwrapper({
  */
 rf.api.user.get().then((data) => {
     console.log(data)
+}).
+catch((err) => {
+    console.log(err)
+})
+
+rf.api.global.sendBatch([
+    {
+        method: "GET",
+        url: "/api/user"
+    }
+]).
+then((data) => {
+    console.log(data)
+}).
+catch((err) => {
+    console.log(err)
 })
