@@ -11,6 +11,9 @@ const rf = new rfwrapper({
     password: '***REMOVED***' // example user
 })
 
+const node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
+console.log(node.data)
+
 /*
  * Пример получения информации о текущем пользователе
  * Возвращяет промис с data (при успешном выполнении)
@@ -22,15 +25,17 @@ catch((err) => {
     console.log(err)
 })
 
-rf.api.global.sendBatch([
-    {
-        method: "GET",
-        url: "/api/user"
-    }
-]).
-then((data) => {
-    console.log(data)
-}).
-catch((err) => {
-    console.log(err)
-})
+/*
+ * rf.api.global.sendBatch([
+ *     {
+ *         method: "GET",
+ *         url: "/api/user"
+ *     }
+ * ]).
+ * then((data) => {
+ *     console.log(data)
+ * }).
+ * catch((err) => {
+ *     console.log(err)
+ * })
+ */

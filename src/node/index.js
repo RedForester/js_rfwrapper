@@ -1,21 +1,15 @@
-import methods from './methods'
+import * as methods from './methods'
 
 export default class {
-    constructor(uuid, settings) {
-        this.nodeid = uuid
+    constructor(nodeid, settings) {
+        this.nodeid = nodeid
         this.settings = settings
-        this.data = {}
 
         Object.entries(methods).forEach(([key, method]) => {
             this[key] = method.bind(this)
         })
-    }
-
-    load() {
-        this.load()
-    }
-
-    get json(){
-        return this.data
+        this.load().then(data => {
+            this.data = data
+        })
     }
 }

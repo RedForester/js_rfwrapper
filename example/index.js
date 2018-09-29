@@ -14,7 +14,8 @@ map.use((ctx, next) => {
     }
 })
 
-map.event('node_created', (ctx) => {
+// вызывается на любом событии
+map.event('*', (ctx) => {
     console.log(ctx)
 })
 

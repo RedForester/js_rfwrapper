@@ -2,6 +2,7 @@ import api from './api'
 import pkg from '../package.json'
 
 import MapClass from './map'
+import NodeClass from './node'
 
 export const rfapi = {}
 
@@ -34,6 +35,7 @@ class rfwrapper {
         // импортируем все методы для работы с модулем
         Object.entries(api).forEach(([key, method]) => {
             this.api[key] = {}
+            // сохдаем копию для работы из вне класса
             rfapi[key] = {}
 
             Object.entries(method).forEach(([keym, func]) => {
@@ -46,6 +48,10 @@ class rfwrapper {
     map(mapid){
         // лайвхак из за бейбла 6ой версии, переписать
         return new MapClass(mapid, this.settings)
+    }
+
+    node(nodeid){
+        return new NodeClass(nodeid, this.settings)
     }
 
     version(){
