@@ -12,7 +12,18 @@ const rf = new rfwrapper({
 })
 
 const node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
-console.log(node.data)
+node.json().then(data => {
+    console.log(data)
+
+    /*
+     * какие то действия
+     * результат действий
+     */
+    return data.id
+}).
+then(data => {
+    console.log(`Node id: ${data}`)
+})
 
 /*
  * Пример получения информации о текущем пользователе
