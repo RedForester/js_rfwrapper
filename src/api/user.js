@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import axios from 'axios'
 
 export async function get (userid = 'self') {
