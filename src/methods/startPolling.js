@@ -25,7 +25,7 @@ export default async function (mapid) {
         try {
             const { data: newevent } = await axios(
                 `${kvurl}/keys/RF:${sid}:mapNotifLast:${mapid}:${kv_session}` 
-                    + `?n=3&r=2&w=2&waitTimeout=1&waitVersion=${version}`,
+                    + `?n=3&r=2&w=2&waitTimeout=60&waitVersion=${version}`,
                 this.settings.axios
             )
             if (lastevent === '') {
