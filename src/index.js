@@ -46,7 +46,6 @@ class rfwrapper {
     }
 
     map(mapid){
-        // лайвхак из за бейбла 6ой версии, переписать
         return new MapClass(mapid, this.settings)
     }
 

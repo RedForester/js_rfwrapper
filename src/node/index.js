@@ -3,9 +3,9 @@ import { rfapi } from '../index'
 
 export default class {
     constructor(nodeid, settings) {
-        this.nodeid = nodeid
+        this.id = nodeid
         this.settings = settings
-        this.node = {}
+        this.info = {}
         
         Object.entries(methods).forEach(([key, method]) => {
             this['_' + key] = method.bind(this)
@@ -19,7 +19,7 @@ export default class {
      * @returns {none}.
      */
     async _initialize() {
-        this.node = await rfapi.node.get(this.nodeid)
+        this.info = await rfapi.node.get(this.id)
     }
 
     /**
@@ -30,6 +30,6 @@ export default class {
      */
     async json(update = {}) {
         await this._initialized
-        return this.node
+        return this.info
     }
 }

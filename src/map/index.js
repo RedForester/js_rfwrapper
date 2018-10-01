@@ -2,8 +2,8 @@ import methods from './methods'
 import { rfapi } from "../index";
 
 export default class {
-    constructor(uuid, settings) {
-        this.mapid = uuid
+    constructor(mapid, settings) {
+        this.id = mapid
         this.settings = settings
 
         this.middlewares = []
@@ -20,23 +20,24 @@ export default class {
     }
 
     /**
-     * Иницилизирует карту и загружает информацию из RF API
-     * @async
-     * @returns {none}.
-     */
-    async _initialize() {
-        this.data = await rfapi.map.get(this.mapid)
-    }
-
-    /**
      * Получение информации об карте, изменение карты если указано
      * @async
-     * @param {JSON} update Информация которую необходимо изменить
+     * @param {object} update Информация которую необходимо изменить
      * @returns {JSON} Информация об узле в виде JSON
      */
     async json(update = {}) {
         await this._initialized
         return this.data
+    }
+
+    /**
+     * Получение дерева узлов
+     * @param {string} nodeid uuid узла-начала дерева
+     * @return {Promise<*>} Дерево узлов
+     */
+    async getNodes(nodeid = '') {
+        await this._initialized
+        return this.getNodes(this.id, nodeid)
     }
 
     /**
@@ -66,6 +67,15 @@ export default class {
      */
     async start() {
         await this._initialize()
-        return this.startPolling(this.mapid)
+        return this.startPolling(this.id)
+    }
+
+    /**
+     * Иницилизирует карту и загружает информацию из RF API
+     * @async
+     * @returns {none}.
+     */
+    async _initialize() {
+        this.data = await rfapi.map.get(this.id)
     }
 }

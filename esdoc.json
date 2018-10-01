@@ -5,7 +5,7 @@
         {
           "name": "esdoc-publish-markdown-plugin",
           "option": {
-            "filename":"README1.md"
+            "filename":"DOCS.md"
           }
         }
       ]
