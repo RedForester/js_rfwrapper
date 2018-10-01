@@ -8,7 +8,7 @@ export default class {
         this.node = {}
         
         Object.entries(methods).forEach(([key, method]) => {
-            this[key] = method.bind(this)
+            this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
     }

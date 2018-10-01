@@ -1,4 +1,5 @@
-import methods from '../methods'
+import methods from './methods'
+import { rfapi } from "../index";
 
 export default class {
     constructor(uuid, settings) {
@@ -8,11 +9,34 @@ export default class {
         this.middlewares = []
         this.methods = []
 
+        this.data = {}
         this.nodes = {}
 
         Object.entries(methods).forEach(([key, method]) => {
             this[key] = method.bind(this)
         })
+
+        this._initialized = this._initialize()
+    }
+
+    /**
+     * Иницилизирует карту и загружает информацию из RF API
+     * @async
+     * @returns {none}.
+     */
+    async _initialize() {
+        this.data = await rfapi.map.get(this.mapid)
+    }
+
+    /**
+     * Получение информации об карте, изменение карты если указано
+     * @async
+     * @param {JSON} update Информация которую необходимо изменить
+     * @returns {JSON} Информация об узле в виде JSON
+     */
+    async json(update = {}) {
+        await this._initialized
+        return this.data
     }
 
     /**
@@ -37,9 +61,11 @@ export default class {
 
     /**
      * Создает и запускает LongPoll клиент для выбраной карты
+     * @async
      * @returns {promise} Промис
      */
-    start() {
+    async start() {
+        await this._initialize()
         return this.startPolling(this.mapid)
     }
 }
