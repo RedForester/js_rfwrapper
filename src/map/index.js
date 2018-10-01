@@ -27,7 +27,9 @@ export default class {
      */
     async json(update = {}) {
         await this._initialized
-        return this.data
+        if (update === {}) {
+            return this.data
+        }
     }
 
     /**

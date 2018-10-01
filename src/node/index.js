@@ -30,6 +30,8 @@ export default class {
      */
     async json(update = {}) {
         await this._initialized
-        return this.info
+        if (update === {}){
+            return this.info
+        }
     }
 }
