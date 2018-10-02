@@ -1,10 +1,20 @@
 import axios from 'axios'
 
+/**
+ * Получение информации об карте
+ * @param {string} mapid uuid карты
+ * @return {Promise<*>} Информация об карте
+ */
 export async function get (mapid) {
     const res = await axios(`/api/maps/${mapid}`, this.settings.axios)
     return res.data
 }
 
+/**
+ * Получение всех типов узла
+ * @param {string} mapid uuid карты
+ * @return {Promise<*>} Список типов
+ */
 export async function getTypes (mapid) {
     const res = await axios(`/api/maps/${mapid}/node_types`, this.settings.axios)
     return res.data
@@ -12,10 +22,11 @@ export async function getTypes (mapid) {
 
 /**
  * Получение дерева узлов
+ * @async
  * @param {string} mapid uuid карты
  * @param {string} nodeid uuid узла, если не указан то от начала карты
  * @param {number} level_count максимальная глубина при получении узлов
- * @return {Promise<*>} Дерево узлов
+ * @return {object} Дерево узлов
  */
 export async function getTree (mapid, nodeid = '', level_count = 5) {
     if (nodeid === '') {
@@ -26,7 +37,24 @@ export async function getTree (mapid, nodeid = '', level_count = 5) {
     return res.data
 }
 
+/**
+ * Запрос доступа к карте
+ * @async
+ * @param {string} mapid uuid карты
+ * @return {object} JSON
+ */
+export async function requestAccess (mapid) {
+    const res = await axios.post(`/api/maps/${mapid}/request_access`, this.settings.axios)
+    return res.data
+}
+
 // FIX: исправить, неработает
+/**
+ * Создание новой карты
+ * @async
+ * @param {string} name название карты
+ * @return {object} Информация об карте
+ */
 export async function create (name = 'New map') {
     const res = await axios.post(`/api/maps`, {
         name
