@@ -35,3 +35,33 @@ export async function search(query, maps) {
     }, this.settings.axios)
     return res.data
 }
+
+/**
+ * Получение SID
+ * @async
+ * @return {string} результат
+ */
+export async function getSID() {
+    const res = await axios(`/api/server/sid`, this.settings.axios)
+    return res.data
+}
+
+/**
+ * Получение всех данных для RF KV
+ * @async
+ * @return {object} результат
+ */
+export async function getKV() {
+    const res = await axios(`/api/server/kv`, this.settings.axios)
+    return res.data
+}
+
+/**
+ * Получение версии RF
+ * @async
+ * @return {object} результат
+ */
+export async function getVersion() {
+    const res = await axios(`/api/version`, this.settings.axios)
+    return res.data
+}

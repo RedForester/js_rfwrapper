@@ -61,3 +61,14 @@ export async function create (name = 'New map') {
     }, this.settings.axios)
     return res.data
 }
+
+/**
+ * Получение списка пользователей на карте
+ * @async
+ * @param {string} mapid uuid карты
+ * @return {object} JSON
+ */
+export async function users (mapid) {
+    const res = await axios.post(`/api/maps/${mapid}/users`, this.settings.axios)
+    return res.data
+}
