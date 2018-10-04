@@ -27,9 +27,9 @@ class rfwrapper {
                     password: settings.password,
                 },
                 baseURL: settings.host || 'http://app.redforester.com/',
-                responseType: 'json'
+                responseType: 'json',
             },
-            longpooling: settings.longpooling || null
+            longpooling: settings.longpooling || null,
         }
 
         // импортируем все методы для работы с модулем

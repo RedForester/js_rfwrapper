@@ -36,9 +36,9 @@ export default class {
      * @param {string} nodeid uuid узла-начала дерева
      * @return {Promise<*>} Дерево узлов
      */
-    async getNodes(nodeid = '') {
+    async getNodes(nodeid) {
         await this._initialized
-        return this._getNodes(this._id, nodeid)
+        return this._getNodes(this._id, nodeid ? nodeid : this._data.root_node_id)
     }
 
     /**
