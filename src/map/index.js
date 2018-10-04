@@ -3,17 +3,19 @@ import { rfapi } from "../index";
 
 export default class {
     constructor(mapid, settings) {
-        this.id = mapid
-        this.settings = settings
+        this._id = mapid
+        this._settings = settings
 
-        this.middlewares = []
-        this.methods = []
+        this._middlewares = []
+        this._methods = []
 
-        this.data = {}
-        this.nodes = {}
+        this._data = {}
+        this._nodes = {}
+
+        this._longpoll = false
 
         Object.entries(methods).forEach(([key, method]) => {
-            this[key] = method.bind(this)
+            this['_' + key] = method.bind(this)
         })
 
         this._initialized = this._initialize()
@@ -22,12 +24,11 @@ export default class {
     /**
      * Получение информации об карте, изменение карты если указано
      * @async
-     * @param {object} update Информация которую необходимо изменить
      * @returns {JSON} Информация об узле в виде JSON
      */
-    async json(update = {}) {
+    async json() {
         await this._initialized
-        return this.data
+        return this._data
     }
 
     /**
@@ -37,7 +38,7 @@ export default class {
      */
     async getNodes(nodeid = '') {
         await this._initialized
-        return this.getNodes(this.id, nodeid)
+        return this._getNodes(this._id, nodeid)
     }
 
     /**
@@ -47,7 +48,7 @@ export default class {
      * @returns {promise} Промис
      */
     event(trigger, ...middlewares) {
-        this.event(trigger, ...middlewares)
+        this._event(trigger, ...middlewares)
     }
 
     /**
@@ -57,7 +58,7 @@ export default class {
      * @returns {promise} Промис
      */
     use(...middlewares) {
-        this.use(...middlewares)
+        this._use(...middlewares)
     }
 
     /**
@@ -67,7 +68,19 @@ export default class {
      */
     async start() {
         await this._initialize()
-        return this.startPolling(this.id)
+        this._longpool = true
+        return this._start()
+    }
+
+    /**
+     * Останавливает LongPoll клиент для выбраной карты
+     * @async
+     * @returns {promise} Промис
+     */
+    async stop() {
+        await this._initialize()
+        this._longpool = false
+        return true
     }
 
     /**
@@ -76,6 +89,6 @@ export default class {
      * @returns {none}.
      */
     async _initialize() {
-        this.data = await rfapi.map.get(this.id)
+        this._data = await rfapi.map.get(this._id)
     }
 }

@@ -12,18 +12,6 @@ map.json().then(data => {
     console.log(JSON.stringify(data, null, 4))
 })
 
-map.getNodes().then(data => {
-    console.log(data)
-}).catch(err => {
-    console.log(err)
-})
-
-map.use((ctx, next) => {
-    if (ctx.who.username !== 'admin@zippiex.com') {
-        next()
-    }
-})
-
 // вызывается на любом событии
 map.event('*', (ctx) => {
     console.log(ctx)
