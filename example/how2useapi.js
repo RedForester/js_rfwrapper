@@ -38,6 +38,10 @@ catch((err) => {
     console.log(err)
 })
 
+rf.api.global.exceptions().then((data) => {
+    console.log(data)
+})
+
 /*
  * rf.api.global.sendBatch([
  *     {

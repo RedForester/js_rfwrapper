@@ -15,7 +15,6 @@ export default async function start () {
         lastevent = ''
 
     while (this._longpool === true) {
-        // TODO: добавить прерывание
         try {
             const newevent = await rfapi.global.mapNotifLast(this._id, user.kv_session, version)
             if (lastevent === '') {

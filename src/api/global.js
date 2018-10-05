@@ -89,9 +89,28 @@ export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
  * @param {string} kvsession Уникальный индификатор пользователя
  * @param {string} from Временная отметка откуда начать
  * @param {string} to Временная отметка до куда
- * @return {data}
+ * @return {data} .
  */
 export async function mapNotif(mapid, kvsession, from, to) {
     const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this.settings.axios)
     return res.data
+}
+
+/**
+ * Список всех возможных ошибок RF
+ * @return {Promise<data>} .
+ */
+export async function exceptions() {
+    const errors = {}
+    const res = await axios(`/exceptions`, this.settings.axios)
+
+    res.data.forEach((pref) => {
+        // pref - префикс
+        pref.forEach((error) => {
+            // error - ошибка
+            errors[error.prefix + error.code] = error
+        })
+    })
+
+    return errors
 }
