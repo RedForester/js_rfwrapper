@@ -34,11 +34,12 @@ export default class {
     /**
      * Получение дерева узлов
      * @param {string} nodeid uuid узла-начала дерева
-     * @return {Promise<*>} Дерево узлов
+     * @param {number} level_count глибина получения
+     * @return {Promise<tree>} Дерево узлов
      */
-    async getNodes(nodeid) {
+    async getNodes(nodeid = this._data.root_node_id, level_count = 5) {
         await this._initialized
-        return this._getNodes(this._id, nodeid ? nodeid : this._data.root_node_id)
+        return this._getNodes(this._id, nodeid, level_count)
     }
 
     /**
