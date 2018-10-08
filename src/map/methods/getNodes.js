@@ -6,7 +6,7 @@ import { rfapi } from "../../index"
  * @async
  * @returns {NodeList} дерево узлов
  */
-export default async function (nodeid, level_count) {
-    this._nodes = await rfapi.map.getTree(this._id, nodeid, level_count)
+export default async function () {
+    this._nodes = await rfapi.node.get(this._id)
     return this._nodes
 }
