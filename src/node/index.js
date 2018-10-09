@@ -4,22 +4,13 @@ import { rfapi } from '../index'
 export default class {
     constructor(nodeid, settings) {
         this.id = nodeid
-        this.settings = settings
-        this.info = {}
+        this._settings = settings
+        this._info = {}
         
         Object.entries(methods).forEach(([key, method]) => {
-            this['_' + key] = method.bind(this)
+            // this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
-    }
-
-    /**
-     * Иницилизирует узел и загружает информацию из RF API
-     * @async
-     * @returns {none}.
-     */
-    async _initialize() {
-        this.info = await rfapi.node.get(this.id)
     }
 
     /**
@@ -30,6 +21,15 @@ export default class {
      */
     async json(update = {}) {
         await this._initialized
-        return this.info
+        return this._info
+    }
+
+    /**
+     * Иницилизирует узел и загружает информацию из RF API
+     * @async
+     * @returns {none}.
+     */
+    async _initialize() {
+        this._info = await rfapi.node.get(this.id)
     }
 }

@@ -12,7 +12,17 @@ export async function get (nodeid) {
 }
 
 
-export async function create(mapid, parentid, position, properties = {}) {
-    const res = await axios.post(`/api/nodes/${nodeid}`, this.settings.axios)
+export async function create(map_id, parent, position, properties = {}) {
+    const res = await axios.post(`/api/nodes/`, {
+        map_id,
+        parent,
+        position,
+        properties: JSON.stringify(properties)
+    }, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        ...this.settings.axios
+    })
     return res.data
 }
