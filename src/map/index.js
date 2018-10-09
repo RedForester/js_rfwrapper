@@ -103,4 +103,12 @@ export default class {
     async _initialize() {
         this._data = await rfapi.map.get(this.id)
     }
+
+    /**
+     * Вызывается после загрузки карты
+     * @return {Promise<void>}
+     */
+    async loaded () {
+        await this._initialize()
+    }
 }

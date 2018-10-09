@@ -12,34 +12,34 @@ const rf = new rfwrapper({
 })
 
 const node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
+// информация об узле
+console.log(node)
 
-console.log()
-
-node.json().then(data => {
-    console.log(data)
-
-    /*
-     * какие то действия
-     * результат действий
-     */
-    return data.id
-}).
-then(data => {
-    console.log(`Node id: ${data}`)
-})
+// node.json().then(data => {
+//     console.log(data)
+//
+//     /*
+//      * какие то действия
+//      * результат действий
+//      */
+//     return data.id
+// }).
+// then(data => {
+//     console.log(`Node id: ${data}`)
+// })
 
 /*
  * Пример получения информации о текущем пользователе
  * Возвращяет промис с data (при успешном выполнении)
  */
-rf.api.user.get().then(async (user) => {
-    console.log(user)
-    const newevent = await rf.api.global.mapNotifLast('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', user.kv_session, 0)
-    console.log(newevent)
-}).
-catch((err) => {
-    console.log(err)
-})
+// rf.api.user.get().then(async (user) => {
+//     console.log(user)
+//     const newevent = await rf.api.global.mapNotifLast('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', user.kv_session, 0)
+//     console.log(newevent)
+// }).
+// catch((err) => {
+//     console.log(err)
+// })
 
 // rf.api.global.exceptions().then((data) => {
 //     console.log(data)

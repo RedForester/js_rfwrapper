@@ -3,12 +3,61 @@ import { rfapi } from '../index'
 
 export default class {
     constructor(nodeid, settings) {
+
+        /*
+         * Модель узла
+         * todo: придумать более красивый способ хранения
+         */
         this.id = nodeid
+        this.map_id = ''
+        this.parent = ''
+        this.position = []
+        this.access = ''
+        this.originalParent = ''
+        this.body = {
+            id: nodeid,
+            map_id: '',
+            type_id: '',
+            properties: {
+                style: {},
+                byType: {},
+                byUser: {},
+                global: {
+                    title: ''
+                }
+            },
+            parent: '',
+            unread_comments_count: 0,
+            children: [],
+            access: {},
+            meta: {
+                creation_timestamp: '',
+                last_modified_timestamp: '',
+                last_modified_user: '',
+                author: '',
+                editable: true,
+                commentable: true
+            },
+            comments_count: 0
+        }
+        this.hidden = ''
+        this.readers = []
+        this.nodelevel = 0
+        this.meta = {
+            creation_timestamp: '',
+                last_modified_timestamp: '',
+                last_modified_user: '',
+                author: '',
+                editable: true,
+                commentable: true
+        }
+
+        // Private
         this._settings = settings
         this._info = {}
-        
+
         Object.entries(methods).forEach(([key, method]) => {
-            this['_' + key] = method.bind(this)
+            // this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
     }

@@ -1,3 +1,5 @@
-export default {
+import load from './load'
 
+export default {
+    load
 }
