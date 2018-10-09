@@ -3,7 +3,27 @@ import { rfapi } from "../index";
 
 export default class {
     constructor(mapid, settings) {
-        this._id = mapid
+        // Public
+        this.id = mapid
+        this.root_node_id = ''
+        this.owner = ''
+        this.owner_name = ''
+        this.owner_avatar = ''
+        this.layout = ''
+        this.public = ''
+        this.node_count = 0
+        this.user_count = 0
+        this.name = ''
+        this.role = {
+            role: '',
+            editable: '',
+            description: '',
+            alias: {
+                node: ''
+            }
+        }
+
+        // Private
         this._settings = settings
 
         this._middlewares = []
@@ -14,21 +34,12 @@ export default class {
 
         this._longpoll = false
 
+        // подключаем методы для работы с картой
         Object.entries(methods).forEach(([key, method]) => {
             this['_' + key] = method.bind(this)
         })
 
         this._initialized = this._initialize()
-    }
-
-    /**
-     * Получение информации об карте, изменение карты если указано
-     * @async
-     * @returns {JSON} Информация об узле в виде JSON
-     */
-    async json() {
-        await this._initialized
-        return this._data
     }
 
     /**
@@ -39,7 +50,7 @@ export default class {
      */
     async getNodes(nodeid = this._data.root_node_id, level_count = 5) {
         await this._initialized
-        return this._getNodes(this._id, nodeid, level_count)
+        return this._getNodes(this.id, nodeid, level_count)
     }
 
     /**
@@ -90,6 +101,6 @@ export default class {
      * @returns {none}.
      */
     async _initialize() {
-        this._data = await rfapi.map.get(this._id)
+        this._data = await rfapi.map.get(this.id)
     }
 }

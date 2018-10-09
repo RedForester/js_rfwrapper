@@ -16,12 +16,12 @@ export default async function start () {
 
     while (this._longpool === true) {
         try {
-            const newevent = await rfapi.global.mapNotifLast(this._id, user.kv_session, version)
+            const newevent = await rfapi.global.mapNotifLast(this.id, user.kv_session, version)
             if (lastevent === '') {
                 lastevent = newevent.value
                 version = newevent.version
             } else {
-                const events = await rfapi.global.mapNotif(this._id, user.kv_session, lastevent, newevent.value)
+                const events = await rfapi.global.mapNotif(this.id, user.kv_session, lastevent, newevent.value)
 
                 version = newevent.version
                 lastevent = newevent.value

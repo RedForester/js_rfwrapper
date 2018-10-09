@@ -7,6 +7,6 @@ import { rfapi } from "../../index"
  * @returns {NodeList} дерево узлов
  */
 export default async function () {
-    this._nodes = await rfapi.node.get(this._id)
+    this._nodes = await rfapi.node.get(this.id)
     return this._nodes
 }
