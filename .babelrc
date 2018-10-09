@@ -1,11 +1,9 @@
 {
-    "plugins": ["transform-object-rest-spread", "transform-es2015-modules-commonjs", "transform-runtime"],
+    "plugins": [
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-modules-commonjs"
+    ],
     "presets": [
-        [
-            "env",
-            {
-                "useBuiltIns": true
-            }
-        ]
+        "@babel/preset-env"
     ]
 }
