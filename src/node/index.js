@@ -8,7 +8,7 @@ export default class {
         this._info = {}
         
         Object.entries(methods).forEach(([key, method]) => {
-            // this['_' + key] = method.bind(this)
+            this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
     }
@@ -19,7 +19,7 @@ export default class {
      * @param {JSON} update Информация которую необходимо изменить
      * @returns {JSON} Информация об узле в виде JSON
      */
-    async json(update = {}) {
+    async json() {
         await this._initialized
         return this._info
     }

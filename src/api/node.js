@@ -11,8 +11,15 @@ export async function get (nodeid) {
     return res.data
 }
 
-
-export async function create(map_id, parent, position, properties = {}) {
+/**
+ * Создание нового узла
+ * @param {string} map_id uuid карты
+ * @param {string} parent родитель узла
+ * @param {string} position позиция относительно родителя
+ * @param {string} properties свойства нового узла
+ * @return {Promise<data>} результат
+ */
+export async function create(map_id, parent, { position = '["R",-1]', properties = {} }) {
     const res = await axios.post(`/api/nodes/`, {
         map_id,
         parent,

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "./node_modules/.bin/babel src -d lib",
-    "lint": "eslint lib",
+    "lint": "eslint src",
     "docs": "./node_modules/.bin/esdoc -c esdoc.json",
     "release:major": "npm version major && git push origin && git push origin --tags",
     "release:minor": "npm version minor && git push origin && git push origin --tags",
