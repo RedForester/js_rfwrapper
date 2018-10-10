@@ -17,10 +17,10 @@ class rfwrapper {
             throw new Error('You must set user email and password hash!')
         }
         // загружаем информацию о пакете
-        this.version = pkg.version
-        this.api = []
+        this._version = pkg.version
+        this._api = []
 
-        this.settings = {
+        this._settings = {
             axios: {
                 auth: {
                     username: settings.mail,
@@ -34,27 +34,27 @@ class rfwrapper {
 
         // импортируем все методы для работы с модулем
         Object.entries(api).forEach(([key, method]) => {
-            this.api[key] = {}
+            this._api[key] = {}
             // сохдаем копию для работы из вне класса
             rfapi[key] = {}
 
             Object.entries(method).forEach(([keym, func]) => {
                 rfapi[key][keym] = func.bind(this)
-                this.api[key][keym] = func.bind(this)
+                this._api[key][keym] = func.bind(this)
             })
         })
     }
 
-    map(mapid){
-        return new MapClass(mapid, this.settings)
+    map(mapid) {
+        return new MapClass(mapid, this._settings)
     }
 
-    node(nodeid){
-        return new NodeClass(nodeid, this.settings)
+    node(nodeid) {
+        return new NodeClass(nodeid, this._settings)
     }
 
-    version(){
-        return this.version
+    get version() {
+        return this._version
     }
 }
 
