@@ -3,17 +3,40 @@ import { rfapi } from "../index";
 
 export default class {
     constructor(mapid, settings) {
+        // Public
         this.id = mapid
-        this.settings = settings
+        this.root_node_id = ''
+        this.owner = ''
+        this.owner_name = ''
+        this.owner_avatar = ''
+        this.layout = ''
+        this.public = ''
+        this.node_count = 0
+        this.user_count = 0
+        this.name = ''
+        this.role = {
+            role: '',
+            editable: '',
+            description: '',
+            alias: {
+                node: ''
+            }
+        }
 
-        this.middlewares = []
-        this.methods = []
+        // Private
+        this._settings = settings
 
-        this.data = {}
-        this.nodes = {}
+        this._middlewares = []
+        this._methods = []
 
+        this._data = {}
+        this._nodes = {}
+
+        this._longpoll = false
+
+        // подключаем методы для работы с картой
         Object.entries(methods).forEach(([key, method]) => {
-            this[key] = method.bind(this)
+            this['_' + key] = method.bind(this)
         })
 
         this._initialized = this._initialize()
@@ -35,11 +58,12 @@ export default class {
     /**
      * Получение дерева узлов
      * @param {string} nodeid uuid узла-начала дерева
-     * @return {Promise<*>} Дерево узлов
+     * @param {number} level_count глибина получения
+     * @return {Promise<tree>} Дерево узлов
      */
-    async getNodes(nodeid = '') {
+    async getNodes(nodeid = this._data.root_node_id, level_count = 5) {
         await this._initialized
-        return this.getNodes(this.id, nodeid)
+        return this._getNodes(this.id, nodeid, level_count)
     }
 
     /**
@@ -49,7 +73,7 @@ export default class {
      * @returns {promise} Промис
      */
     event(trigger, ...middlewares) {
-        this.event(trigger, ...middlewares)
+        this._event(trigger, ...middlewares)
     }
 
     /**
@@ -59,7 +83,7 @@ export default class {
      * @returns {promise} Промис
      */
     use(...middlewares) {
-        this.use(...middlewares)
+        this._use(...middlewares)
     }
 
     /**
@@ -69,7 +93,19 @@ export default class {
      */
     async start() {
         await this._initialize()
-        return this.startPolling(this.id)
+        this._longpool = true
+        return this._start()
+    }
+
+    /**
+     * Останавливает LongPoll клиент для выбраной карты
+     * @async
+     * @returns {promise} Промис
+     */
+    async stop() {
+        await this._initialize()
+        this._longpool = false
+        return true
     }
 
     /**
@@ -78,6 +114,14 @@ export default class {
      * @returns {none}.
      */
     async _initialize() {
-        this.data = await rfapi.map.get(this.id)
+        this._data = await rfapi.map.get(this.id)
+    }
+
+    /**
+     * Вызывается после загрузки карты
+     * @return {Promise<void>} .
+     */
+    async loaded () {
+        await this._initialize()
     }
 }

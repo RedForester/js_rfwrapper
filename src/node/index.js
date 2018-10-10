@@ -1,25 +1,90 @@
 import * as methods from './methods'
 import { rfapi } from '../index'
 
-export default class {
+export default class Node {
     constructor(nodeid, settings) {
+        if (nodeid || settings) {
+            throw new Error('Must be set node id and setting')
+        }
+
+        /*
+         * Модель узла
+         * todo: придумать более красивый способ хранения
+         */
         this.id = nodeid
-        this.settings = settings
-        this.info = {}
-        
+        this.map_id = ''
+        this.parent = ''
+        this.position = []
+        this.access = ''
+        this.originalParent = ''
+        this.body = {
+            id: nodeid,
+            map_id: '',
+            type_id: '',
+            properties: {
+                style: {},
+                byType: {},
+                byUser: {},
+                global: {
+                    title: ''
+                }
+            },
+            parent: '',
+            unread_comments_count: 0,
+            children: [],
+            access: {},
+            meta: {
+                creation_timestamp: '',
+                last_modified_timestamp: '',
+                last_modified_user: '',
+                author: '',
+                editable: true,
+                commentable: true
+            },
+            comments_count: 0
+        }
+        this.hidden = ''
+        this.readers = []
+        this.nodelevel = 0
+        this.meta = {
+            creation_timestamp: '',
+                last_modified_timestamp: '',
+                last_modified_user: '',
+                author: '',
+                editable: true,
+                commentable: true
+        }
+
+        // Private
+        this._settings = settings
+        this._info = {}
+
         Object.entries(methods).forEach(([key, method]) => {
-            this['_' + key] = method.bind(this)
+            // this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
     }
 
+    set body(newbody) {
+        this.body = newbody
+        // todo: обновление узла
+    }
+
     /**
-     * Иницилизирует узел и загружает информацию из RF API
-     * @async
-     * @returns {none}.
+     * Получение дочерних узлов
+     * @return {Array} список new Node
      */
-    async _initialize() {
-        this.info = await rfapi.node.get(this.id)
+    get children() {
+        const arr = []
+        this.body.children.forEach((node) => {
+            arr.push(new Node(node.id, this._settings))
+        })
+
+        return arr
+    }
+
+    set children(node) {
+        // todo: преобразование new Node в дочерний узел
     }
 
     /**
@@ -28,10 +93,17 @@ export default class {
      * @param {JSON} update Информация которую необходимо изменить
      * @returns {JSON} Информация об узле в виде JSON
      */
-    async json(update = {}) {
+    async json() {
         await this._initialized
-        if (update === {}){
-            return this.info
-        }
+        return this._info
+    }
+
+    /**
+     * Иницилизирует узел и загружает информацию из RF API
+     * @async
+     * @returns {none}.
+     */
+    async _initialize() {
+        this._info = await rfapi.node.get(this.id)
     }
 }

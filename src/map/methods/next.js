@@ -6,8 +6,8 @@
  * @returns {this.next} Переключение на новый обработчик
  */
 export default function (ctx, idx = -1) {
-    if (this.middlewares.length > idx + 1) {
-        const { fn, trigger } = this.middlewares[idx + 1]
+    if (this._middlewares.length > idx + 1) {
+        const { fn, trigger } = this._middlewares[idx + 1]
         
         if (trigger === ctx.type || trigger === '*') {
             return fn(ctx)
@@ -15,6 +15,6 @@ export default function (ctx, idx = -1) {
             return fn(ctx)
         }
 
-        return this.next(ctx, idx + 1)
+        return this._next(ctx, idx + 1)
     }
 }

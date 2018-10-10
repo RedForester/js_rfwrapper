@@ -8,21 +8,7 @@ const rf = new rfwrapper({
 
 const map = rf.map('1bcf5ff3-c392-43db-8e6f-e8090210b0f7')
 
-map.json().then(data => {
-    console.log(JSON.stringify(data, null, 4))
-})
-
-map.getNodes().then(data => {
-    console.log(data)
-}).catch(err => {
-    console.log(err)
-})
-
-map.use((ctx, next) => {
-    if (ctx.who.username !== 'admin@zippiex.com') {
-        next()
-    }
-})
+console.log(map)
 
 // вызывается на любом событии
 map.event('*', (ctx) => {
