@@ -6,7 +6,7 @@ import axios from 'axios'
  * @return {Promise<*>} Информация об карте
  */
 export async function get (mapid) {
-    const res = await axios(`/api/maps/${mapid}`, this.settings.axios)
+    const res = await axios(`/api/maps/${mapid}`, this._settings.axios)
     return res.data
 }
 
@@ -16,7 +16,7 @@ export async function get (mapid) {
  * @return {Promise<*>} Список типов
  */
 export async function getTypes (mapid) {
-    const res = await axios(`/api/maps/${mapid}/node_types`, this.settings.axios)
+    const res = await axios(`/api/maps/${mapid}/node_types`, this._settings.axios)
     return res.data
 }
 
@@ -30,10 +30,10 @@ export async function getTypes (mapid) {
  */
 export async function getTree (mapid, nodeid = '', level_count = 5) {
     if (nodeid === '') {
-        const res = await axios(`/api/maps/${mapid}/nodes/level_count/${level_count}`, this.settings.axios)
+        const res = await axios(`/api/maps/${mapid}/nodes/level_count/${level_count}`, this._settings.axios)
         return res.data
     }
-    const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.settings.axios)
+    const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this._settings.axios)
     return res.data
 }
 
@@ -44,7 +44,7 @@ export async function getTree (mapid, nodeid = '', level_count = 5) {
  * @return {object} JSON
  */
 export async function requestAccess (mapid) {
-    const res = await axios.post(`/api/maps/${mapid}/request_access`, this.settings.axios)
+    const res = await axios.post(`/api/maps/${mapid}/request_access`, this._settings.axios)
     return res.data
 }
 
@@ -58,7 +58,7 @@ export async function requestAccess (mapid) {
 export async function create (name = 'New map') {
     const res = await axios.post(`/api/maps`, {
         name
-    }, this.settings.axios)
+    }, this._settings.axios)
     return res.data
 }
 
@@ -69,6 +69,6 @@ export async function create (name = 'New map') {
  * @return {object} JSON
  */
 export async function users (mapid) {
-    const res = await axios.post(`/api/maps/${mapid}/users`, this.settings.axios)
+    const res = await axios.post(`/api/maps/${mapid}/users`, this._settings.axios)
     return res.data
 }

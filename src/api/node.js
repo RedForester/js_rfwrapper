@@ -7,7 +7,7 @@ import axios from 'axios'
  * @returns {object} информация об узле
  */
 export async function get (nodeid) {
-    const res = await axios(`/api/nodes/${nodeid}`, this.settings.axios)
+    const res = await axios(`/api/nodes/${nodeid}`, this._settings.axios)
     return res.data
 }
 
@@ -29,7 +29,7 @@ export async function create(map_id, parent, { position = '["R",-1]', properties
         headers: {
             'Content-Type': 'multipart/form-data'
         },
-        ...this.settings.axios
+        ...this._settings.axios
     })
     return res.data
 }

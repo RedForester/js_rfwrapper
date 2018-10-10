@@ -8,7 +8,7 @@ import axios from 'axios'
  * @return {Promise} результат
  */
 export async function get (nodetypeid) {
-    const res = await axios(`/api/node_types/${nodetypeid}`, this.settings.axios)
+    const res = await axios(`/api/node_types/${nodetypeid}`, this._settings.axios)
     return res.data
 }
 
@@ -19,6 +19,6 @@ export async function get (nodetypeid) {
  */
 // TODO:
 export async function create () {
-    const res = await axios.post(`/api/node_types`, this.settings.axios)
+    const res = await axios.post(`/api/node_types`, this._settings.axios)
     return res.data
 }

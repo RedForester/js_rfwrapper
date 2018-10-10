@@ -62,7 +62,7 @@ export async function getKV() {
  * @return {object} результат
  */
 export async function getVersion() {
-    const res = await axios(`/api/version`, this.settings.axios)
+    const res = await axios(`/api/version`, this._settings.axios)
     return res.data
 }
 
@@ -76,10 +76,10 @@ export async function getVersion() {
  */
 export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
     if (waitVersion !== 0) {
-        const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`, this.settings.axios)
+        const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`, this._settings.axios)
         return res.data
     }
-    const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}`, this.settings.axios)
+    const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}`, this._settings.axios)
     return res.data
 }
 
@@ -92,7 +92,7 @@ export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
  * @return {data} .
  */
 export async function mapNotif(mapid, kvsession, from, to) {
-    const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this.settings.axios)
+    const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this._settings.axios)
     return res.data
 }
 
@@ -102,7 +102,7 @@ export async function mapNotif(mapid, kvsession, from, to) {
  */
 export async function exceptions() {
     const errors = {}
-    const res = await axios(`/exceptions`, this.settings.axios)
+    const res = await axios(`/exceptions`, this._settings.axios)
 
     res.data.forEach((pref) => {
         // pref - префикс
