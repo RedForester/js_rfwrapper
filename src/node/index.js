@@ -3,6 +3,9 @@ import { rfapi } from '../index'
 
 export default class {
     constructor(nodeid, settings) {
+        if (nodeid || settings) {
+            throw new Error('Must be set node id and setting')
+        }
 
         /*
          * Модель узла
