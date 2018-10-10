@@ -1,7 +1,7 @@
 import * as methods from './methods'
 import { rfapi } from '../index'
 
-export default class {
+export default class Node {
     constructor(nodeid, settings) {
         if (nodeid || settings) {
             throw new Error('Must be set node id and setting')
@@ -63,6 +63,28 @@ export default class {
             // this['_' + key] = method.bind(this)
         })
         this._initialized = this._initialize()
+    }
+
+    set body(newbody) {
+        this.body = newbody
+        // todo: обновление узла
+    }
+
+    /**
+     * Получение дочерних узлов
+     * @return {Array} список new Node
+     */
+    get children() {
+        const arr = []
+        this.body.children.forEach((node) => {
+            arr.push(new Node(node.id, this._settings))
+        })
+
+        return arr
+    }
+
+    set children(node) {
+        // todo: преобразование new Node в дочерний узел
     }
 
     /**

@@ -106,7 +106,7 @@ export default class {
 
     /**
      * Вызывается после загрузки карты
-     * @return {Promise<void>}
+     * @return {Promise<void>} .
      */
     async loaded () {
         await this._initialize()

@@ -29,7 +29,7 @@ export async function getTypes (mapid) {
  * @return {object} Дерево узлов
  */
 export async function getTree (mapid, nodeid = '', level_count = 5) {
-    if (nodeid === '') {
+    if (nodeid !== 0) {
         const res = await axios(`/api/maps/${mapid}/nodes/level_count/${level_count}`, this._settings.axios)
         return res.data
     }
