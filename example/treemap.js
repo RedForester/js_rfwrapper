@@ -7,6 +7,9 @@ const rf = new rfwrapper({
 })
 
 const map = rf.map('1bcf5ff3-c392-43db-8e6f-e8090210b0f7')
+map.ready.then((self) => {
+    console.log(self)
+})
 
 map.getNodes().then((nodes) => {
     console.log(nodes)

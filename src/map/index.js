@@ -30,7 +30,7 @@ export default class Map {
         this._middlewares = []
         this._methods = []
 
-        this._data = {}
+        this._info = {}
         this._nodes = []
 
         this._longpoll = false
@@ -40,7 +40,7 @@ export default class Map {
             this['_' + key] = method.bind(this)
         })
 
-        this._initialized = this._initialize()
+        this.ready = this._initialize()
     }
 
     /**
@@ -62,8 +62,8 @@ export default class Map {
      * @param {number} level_count глибина получения
      * @return {Promise<tree>} Дерево узлов
      */
-    async getNodes(nodeid = this._data.root_node_id, level_count = 1) {
-        await this._initialized
+    async getNodes(nodeid = this._info.root_node_id, level_count = 1) {
+        await this.ready
         const nodes = await rfapi.map.getTree(this.id, nodeid, level_count)
         nodes.body.children.forEach((nodes) => {
             this._nodes.push(new NodeClass(nodes.id))
@@ -98,7 +98,7 @@ export default class Map {
      * @returns {promise} Промис
      */
     async start() {
-        await this._initialize()
+        await this.ready()
         this._longpool = true
         return this._start()
     }
@@ -109,7 +109,7 @@ export default class Map {
      * @returns {promise} Промис
      */
     async stop() {
-        await this._initialize()
+        await this.ready()
         this._longpool = false
         return true
     }
@@ -120,7 +120,13 @@ export default class Map {
      * @returns {none}.
      */
     async _initialize() {
-        this._data = await rfapi.map.get(this.id)
+        this._info = await rfapi.map.get(this.id)
+
+        Object.entries(this._info).forEach(([name, value]) => {
+            this[name] = value
+        })
+
+        return this
     }
 
     /**
@@ -128,6 +134,6 @@ export default class Map {
      * @return {Promise<void>} .
      */
     async loaded () {
-        await this._initialize()
+        await this.ready()
     }
 }

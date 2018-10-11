@@ -61,7 +61,8 @@ export default class Node {
          *     this['_' + key] = method.bind(this)
          * })
          */
-        this._initialized = this._initialize()
+
+        this.ready = this._initialize()
     }
 
     /**
@@ -84,7 +85,7 @@ export default class Node {
      * @returns {JSON} Информация об узле в виде JSON
      */
     async json() {
-        await this._initialized
+        await this.ready
         return this._info
     }
 
@@ -99,5 +100,6 @@ export default class Node {
         Object.entries(this._info).forEach(([name, value]) => {
             this[name] = value
         })
+        return this
     }
 }
