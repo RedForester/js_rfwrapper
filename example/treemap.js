@@ -13,6 +13,7 @@ map.ready.then((self) => {
 
 map.getNodes().then((nodes) => {
     console.log(nodes)
-}).catch((err) => {
+}).
+catch((err) => {
     console.log(err)
 })
