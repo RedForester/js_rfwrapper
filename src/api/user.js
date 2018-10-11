@@ -15,7 +15,7 @@ export async function get (userid = 'self') {
         const res = await axios(`/api/user/${userid}`, this._settings.axios)
         return res.data
     } catch (err) {
-        throw new Error(err.response.data)
+        throw err.response.data
     }
 
 }

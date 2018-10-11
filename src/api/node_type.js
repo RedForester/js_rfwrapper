@@ -12,7 +12,7 @@ export async function get (nodetypeid) {
         const res = await axios(`/api/node_types/${nodetypeid}`, this._settings.axios)
         return res.data
     } catch (err) {
-        throw new Error(err.response.data)
+        throw err.response.data
     }
 }
 
@@ -27,6 +27,6 @@ export async function create () {
         const res = await axios.post(`/api/node_types`, this._settings.axios)
         return res.data
     } catch (err) {
-        throw new Error(err.response.data)
+        throw err.response.data
     }
 }

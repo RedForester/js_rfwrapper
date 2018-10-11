@@ -11,7 +11,7 @@ export async function get (nodeid) {
         const res = await axios(`/api/nodes/${nodeid}`, this._settings.axios)
         return res.data
     } catch (err) {
-        throw new Error(err.response.data)
+        throw err.response.data
     }
 }
 
@@ -38,6 +38,6 @@ export async function create(map_id, parent, { position = '["R",-1]', properties
         })
         return res.data
     } catch (err) {
-        throw new Error(err.response.data)
+        throw err.response.data
     }
 }
