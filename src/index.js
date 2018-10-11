@@ -53,6 +53,10 @@ class rfwrapper {
         return new NodeClass(nodeid, this._settings)
     }
 
+    get api() {
+        return this._api
+    }
+
     get version() {
         return this._version
     }

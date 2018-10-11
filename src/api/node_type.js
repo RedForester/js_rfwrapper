@@ -8,8 +8,12 @@ import axios from 'axios'
  * @return {Promise} результат
  */
 export async function get (nodetypeid) {
-    const res = await axios(`/api/node_types/${nodetypeid}`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/node_types/${nodetypeid}`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -19,6 +23,10 @@ export async function get (nodetypeid) {
  */
 // TODO:
 export async function create () {
-    const res = await axios.post(`/api/node_types`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/node_types`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }

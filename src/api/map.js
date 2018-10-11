@@ -6,8 +6,12 @@ import axios from 'axios'
  * @return {Promise<*>} Информация об карте
  */
 export async function get (mapid) {
-    const res = await axios(`/api/maps/${mapid}`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/maps/${mapid}`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -16,8 +20,12 @@ export async function get (mapid) {
  * @return {Promise<*>} Список типов
  */
 export async function getTypes (mapid) {
-    const res = await axios(`/api/maps/${mapid}/node_types`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/maps/${mapid}/node_types`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -29,12 +37,16 @@ export async function getTypes (mapid) {
  * @return {object} Дерево узлов
  */
 export async function getTree (mapid, nodeid = '', level_count = 5) {
-    if (nodeid !== 0) {
-        const res = await axios(`/api/maps/${mapid}/nodes/level_count/${level_count}`, this._settings.axios)
+    try {
+        if (nodeid !== 0) {
+            const res = await axios(`/api/maps/${mapid}/nodes/level_count/${level_count}`, this._settings.axios)
+            return res.data
+        }
+        const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this._settings.axios)
         return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
     }
-    const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this._settings.axios)
-    return res.data
 }
 
 /**
@@ -44,8 +56,12 @@ export async function getTree (mapid, nodeid = '', level_count = 5) {
  * @return {object} JSON
  */
 export async function requestAccess (mapid) {
-    const res = await axios.post(`/api/maps/${mapid}/request_access`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/maps/${mapid}/request_access`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 // FIX: исправить, неработает
@@ -56,10 +72,14 @@ export async function requestAccess (mapid) {
  * @return {object} Информация об карте
  */
 export async function create (name = 'New map') {
-    const res = await axios.post(`/api/maps`, {
-        name
-    }, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/maps`, {
+            name
+        }, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -69,6 +89,10 @@ export async function create (name = 'New map') {
  * @return {object} JSON
  */
 export async function users (mapid) {
-    const res = await axios.post(`/api/maps/${mapid}/users`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/maps/${mapid}/users`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }

@@ -7,8 +7,12 @@ import axios from 'axios'
  * @returns {object} информация об узле
  */
 export async function get (nodeid) {
-    const res = await axios(`/api/nodes/${nodeid}`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/nodes/${nodeid}`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -20,16 +24,20 @@ export async function get (nodeid) {
  * @return {Promise<data>} результат
  */
 export async function create(map_id, parent, { position = '["R",-1]', properties = {} }) {
-    const res = await axios.post(`/api/nodes/`, {
-        map_id,
-        parent,
-        position,
-        properties: JSON.stringify(properties)
-    }, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        ...this._settings.axios
-    })
-    return res.data
+    try {
+        const res = await axios.post(`/api/nodes/`, {
+            map_id,
+            parent,
+            position,
+            properties: JSON.stringify(properties)
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            ...this._settings.axios
+        })
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }

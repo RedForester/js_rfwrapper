@@ -6,8 +6,12 @@ import axios from 'axios'
  * @return {object} результат
  */
 export async function getMaps () {
-    const res = await axios(`/api/maps`, this.settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/maps`, this.settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -17,8 +21,12 @@ export async function getMaps () {
  * @return {object} результат
  */
 export async function sendBatch (body) {
-    const res = await axios.post(`/api/batch`, body, this.settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/batch`, body, this.settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -29,11 +37,15 @@ export async function sendBatch (body) {
  * @return {object} результат поиска
  */
 export async function search(query, maps) {
-    const res = await axios.post(`/api/batch`, {
-        query,
-        map_ids: maps
-    }, this.settings.axios)
-    return res.data
+    try {
+        const res = await axios.post(`/api/batch`, {
+            query,
+            map_ids: maps
+        }, this.settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -42,8 +54,12 @@ export async function search(query, maps) {
  * @return {string} результат
  */
 export async function getSID() {
-    const res = await axios(`/api/server/sid`, this.settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/server/sid`, this.settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -52,8 +68,12 @@ export async function getSID() {
  * @return {object} результат
  */
 export async function getKV() {
-    const res = await axios(`/api/server/kv`, this.settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/server/kv`, this.settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -62,8 +82,12 @@ export async function getKV() {
  * @return {object} результат
  */
 export async function getVersion() {
-    const res = await axios(`/api/version`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/api/version`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -75,12 +99,16 @@ export async function getVersion() {
  * @return {data} .
  */
 export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
-    if (waitVersion !== 0) {
-        const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`, this._settings.axios)
+    try {
+        if (waitVersion !== 0) {
+            const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`, this._settings.axios)
+            return res.data
+        }
+        const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}`, this._settings.axios)
         return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
     }
-    const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}`, this._settings.axios)
-    return res.data
 }
 
 /**
@@ -92,8 +120,12 @@ export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
  * @return {data} .
  */
 export async function mapNotif(mapid, kvsession, from, to) {
-    const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this._settings.axios)
-    return res.data
+    try {
+        const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this._settings.axios)
+        return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }
 
 /**
@@ -102,15 +134,18 @@ export async function mapNotif(mapid, kvsession, from, to) {
  */
 export async function exceptions() {
     const errors = {}
-    const res = await axios(`/exceptions`, this._settings.axios)
+    try {
+        const res = await axios(`/exceptions`, this._settings.axios)
 
-    res.data.forEach((pref) => {
-        // pref - префикс
-        pref.forEach((error) => {
-            // error - ошибка
-            errors[error.prefix + error.code] = error
+        res.data.forEach((pref) => {
+            // pref - префикс
+            pref.forEach((error) => {
+                // error - ошибка
+                errors[error.prefix + error.code] = error
+            })
         })
-    })
-
-    return errors
+        return errors
+    } catch (err) {
+        throw new Error(err.response.data)
+    }
 }

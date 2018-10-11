@@ -7,10 +7,15 @@ import axios from 'axios'
  * @returns {object} информация об пользователе
  */
 export async function get (userid = 'self') {
-    if (userid === 'self') {
-        const res = await axios(`/api/user`, this._settings.axios)
+    try {
+        if (userid === 'self') {
+            const res = await axios(`/api/user`, this._settings.axios)
+            return res.data
+        }
+        const res = await axios(`/api/user/${userid}`, this._settings.axios)
         return res.data
+    } catch (err) {
+        throw new Error(err.response.data)
     }
-    const res = await axios(`/api/user/${userid}`, this._settings.axios)
-    return res.data
+
 }
