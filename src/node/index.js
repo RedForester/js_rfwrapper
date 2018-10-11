@@ -1,11 +1,8 @@
-import * as methods from './methods'
+// import * as methods from './methods'
 import { rfapi } from '../index'
 
 export default class Node {
     constructor(nodeid, settings) {
-        if (nodeid || settings) {
-            throw new Error('Must be set node id and setting')
-        }
 
         /*
          * Модель узла
@@ -59,15 +56,12 @@ export default class Node {
         this._settings = settings
         this._info = {}
 
-        Object.entries(methods).forEach(([key, method]) => {
-            // this['_' + key] = method.bind(this)
-        })
+        /*
+         * Object.entries(methods).forEach(([key, method]) => {
+         *     this['_' + key] = method.bind(this)
+         * })
+         */
         this._initialized = this._initialize()
-    }
-
-    set body(newbody) {
-        this.body = newbody
-        // todo: обновление узла
     }
 
     /**
@@ -81,10 +75,6 @@ export default class Node {
         })
 
         return arr
-    }
-
-    set children(node) {
-        // todo: преобразование new Node в дочерний узел
     }
 
     /**

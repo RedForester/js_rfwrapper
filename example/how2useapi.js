@@ -32,18 +32,22 @@ console.log(node)
  * Пример получения информации о текущем пользователе
  * Возвращяет промис с data (при успешном выполнении)
  */
-// rf.api.user.get().then(async (user) => {
-//     console.log(user)
-//     const newevent = await rf.api.global.mapNotifLast('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', user.kv_session, 0)
-//     console.log(newevent)
-// }).
-// catch((err) => {
-//     console.log(err)
-// })
+/*
+ * rf.api.user.get().then(async (user) => {
+ *     console.log(user)
+ *     const newevent = await rf.api.global.mapNotifLast('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', user.kv_session, 0)
+ *     console.log(newevent)
+ * }).
+ * catch((err) => {
+ *     console.log(err)
+ * })
+ */
 
-// rf.api.global.exceptions().then((data) => {
-//     console.log(data)
-// })
+/*
+ * rf.api.global.exceptions().then((data) => {
+ *     console.log(data)
+ * })
+ */
 
 /*
  * rf.api.global.sendBatch([

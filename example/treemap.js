@@ -10,6 +10,7 @@ const map = rf.map('1bcf5ff3-c392-43db-8e6f-e8090210b0f7')
 
 map.getNodes().then(data => {
     console.log(data)
-}).catch((err) => {
+}).
+catch((err) => {
     console.log(err)
 })

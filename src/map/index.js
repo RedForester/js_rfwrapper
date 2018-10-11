@@ -1,7 +1,7 @@
 import methods from './methods'
 import { rfapi } from "../index";
 
-export default class {
+export default class Map {
     constructor(mapid, settings) {
         // Public
         this.id = mapid
