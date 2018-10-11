@@ -1,4 +1,5 @@
 import methods from './methods'
+import NodeClass from  '../node'
 import { rfapi } from "../index";
 
 export default class Map {
@@ -30,7 +31,7 @@ export default class Map {
         this._methods = []
 
         this._data = {}
-        this._nodes = {}
+        this._nodes = []
 
         this._longpoll = false
 
@@ -61,9 +62,14 @@ export default class Map {
      * @param {number} level_count глибина получения
      * @return {Promise<tree>} Дерево узлов
      */
-    async getNodes(nodeid = this._data.root_node_id, level_count = 5) {
+    async getNodes(nodeid = this._data.root_node_id, level_count = 1) {
         await this._initialized
-        return this._getNodes(this.id, nodeid, level_count)
+        const nodes = await rfapi.map.getTree(this.id, nodeid, level_count)
+        nodes.body.children.forEach((nodes) => {
+            this._nodes.push(new NodeClass(nodes.id))
+        })
+
+        return this._nodes
     }
 
     /**

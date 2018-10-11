@@ -95,5 +95,9 @@ export default class Node {
      */
     async _initialize() {
         this._info = await rfapi.node.get(this.id)
+
+        Object.entries(this._info).forEach(([name, value]) => {
+            this[name] = value
+        })
     }
 }
