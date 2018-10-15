@@ -5,7 +5,7 @@ import { rfapi } from "../index";
  * @async
  * @return {Promise<Node>} Информация об узле
  */
-export default async function create (params = {}) {
+export default async function create (params) {
     // создается узел с указанаными параметрами, если не указаны то по стандарту
     const node = await rfapi.node.create(this.map_id, this.id, {
         position: '["R",-1]',

@@ -1,4 +1,4 @@
-const rfwrapper = require('../index');
+const rfwrapper = require('../lib/index');
 
 /*
  * Авторизация пользователя
@@ -17,7 +17,9 @@ node.ready.then((data) => {
     console.log(data)
 })
 
-rf.api.node.create('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', 'eeed40bf-05e5-44f3-982a-e992c9437b0e', {})
+
+
+// rf.api.node.create('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', 'eeed40bf-05e5-44f3-982a-e992c9437b0e', {})
 
 /*
  * Пример получения информации о текущем пользователе
@@ -31,11 +33,9 @@ rf.api.node.create('1bcf5ff3-c392-43db-8e6f-e8090210b0f7', 'eeed40bf-05e5-44f3-9
 //     console.log(err)
 // })
 
-/*
- * rf.api.global.exceptions().then((data) => {
- *     console.log(data)
- * })
- */
+// rf.api.global.exceptions().then((data) => {
+//     console.log(data)
+// })
 
 /*
  * rf.api.global.sendBatch([

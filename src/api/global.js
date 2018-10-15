@@ -7,9 +7,12 @@ import axios from 'axios'
  */
 export async function getMaps () {
     try {
-        const res = await axios(`/api/maps`, this.settings.axios)
+        const res = await axios(`/api/maps`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -22,9 +25,12 @@ export async function getMaps () {
  */
 export async function sendBatch (body) {
     try {
-        const res = await axios.post(`/api/batch`, body, this.settings.axios)
+        const res = await axios.post(`/api/batch`, body, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -44,6 +50,9 @@ export async function search(query, maps) {
         }, this.settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -55,9 +64,12 @@ export async function search(query, maps) {
  */
 export async function getSID() {
     try {
-        const res = await axios(`/api/server/sid`, this.settings.axios)
+        const res = await axios(`/api/server/sid`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -69,9 +81,12 @@ export async function getSID() {
  */
 export async function getKV() {
     try {
-        const res = await axios(`/api/server/kv`, this.settings.axios)
+        const res = await axios(`/api/server/kv`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -86,6 +101,9 @@ export async function getVersion() {
         const res = await axios(`/api/version`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -107,6 +125,9 @@ export async function mapNotifLast(mapid, kvsession, waitVersion = 0) {
         const res = await axios(`/kv/keys/mapNotifLast:${mapid}:${kvsession}`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -124,6 +145,9 @@ export async function mapNotif(mapid, kvsession, from, to) {
         const res = await axios(`/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -146,6 +170,9 @@ export async function exceptions() {
         })
         return errors
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }

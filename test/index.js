@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const chai = require('chai')
-const rfwrapper = require('../lib/index')
+const rfwrapper = require('../index')
 const pkg = require('../package')
 
 chai.should()

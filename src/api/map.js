@@ -10,6 +10,9 @@ export async function get (mapid) {
         const res = await axios(`/api/maps/${mapid}`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response.data) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -24,6 +27,9 @@ export async function getTypes (mapid) {
         const res = await axios(`/api/maps/${mapid}/node_types`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response.data) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -45,6 +51,9 @@ export async function getTree (mapid, nodeid = '', level_count = 5) {
         const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response.data) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -60,6 +69,9 @@ export async function requestAccess (mapid) {
         const res = await axios.post(`/api/maps/${mapid}/request_access`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response.data) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -78,6 +90,9 @@ export async function create (name = 'New map') {
         }, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }
@@ -93,6 +108,9 @@ export async function users (mapid) {
         const res = await axios.post(`/api/maps/${mapid}/users`, this._settings.axios)
         return res.data
     } catch (err) {
+        if (!err.response) {
+            throw err
+        }
         throw err.response.data
     }
 }

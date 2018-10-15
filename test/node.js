@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const chai = require('chai')
-const rfwrapper = require('../lib/index')
+const rfwrapper = require('../index')
 const pkg = require('../package')
 
 chai.should()
@@ -10,6 +10,8 @@ const rf = new rfwrapper({
     mail: 'admin@zippiex.com',
     password: '***REMOVED***' // example user
 })
+
+const node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
 
 describe('Node class', () => {
     describe('#init', () => {
@@ -31,27 +33,12 @@ describe('Node class', () => {
     })
 
     describe('#json', () => {
-        it('should be valide json', async () => {
-            const node = await rf.node('adasd')
+        it('should be valide json', () => {
             node.should.to.be.a('object')
         })
     })
 
     describe('#create', () => {
-        let node
-
-        before(() => {
-            node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
-        })
-
-        it('should be valide params', () => {
-            try {
-                rf.node.create()
-            } catch (err) {
-                it.should.throw(Error)
-            }
-        })
-
         it('should create new node as children in root node', async () => {
             newnode = await node.create()
             newnode.should.to.be.a('object')
