@@ -1,5 +1,5 @@
-import load from './load'
+import create from './create'
 
 export default {
-    load
+    create
 }

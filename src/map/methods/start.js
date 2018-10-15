@@ -35,7 +35,6 @@ export default async function start () {
                 // ошибка 408 -> переподключение, иначе останавливаем
                 if (err.response.status !== 408){
                     console.error('longpolling: ' + err.response.statusText)
-                    console.log(user)
                     this._longpool = false
                 }
             } else {

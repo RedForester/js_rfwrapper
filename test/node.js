@@ -32,12 +32,18 @@ describe('Node class', () => {
 
     describe('#json', () => {
         it('should be valide json', async () => {
-            const node = await rf.node('adasd').json()
+            const node = await rf.node('adasd')
             node.should.to.be.a('object')
         })
     })
 
     describe('#create', () => {
+        let node
+
+        before(() => {
+            node = rf.node('eeed40bf-05e5-44f3-982a-e992c9437b0e')
+        })
+
         it('should be valide params', () => {
             try {
                 rf.node.create()
@@ -47,13 +53,15 @@ describe('Node class', () => {
         })
 
         it('should create new node as children in root node', async () => {
-            await rf.node.create('some title')
+            newnode = await node.create()
+            newnode.should.to.be.a('object')
         })
 
-        it('should create new node as children in node', async () => {
-            await rf.node.create('some title', {
-                parrent: '1efdsayf8asdfsewsdr92cm3'
+        it('should create new node as children in root node with title', async () => {
+            newnode = await node.create({
+                name: 'new node!'
             })
+            newnode.should.to.be.a('object')
         })
     })
 })

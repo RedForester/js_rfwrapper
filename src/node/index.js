@@ -1,4 +1,4 @@
-// import * as methods from './methods'
+import methods from './methods'
 import { rfapi } from '../index'
 
 export default class Node {
@@ -56,13 +56,22 @@ export default class Node {
         this._settings = settings
         this._info = {}
 
-        /*
-         * Object.entries(methods).forEach(([key, method]) => {
-         *     this['_' + key] = method.bind(this)
-         * })
-         */
+        Object.entries(methods).forEach(([key, method]) => {
+            this['_' + key] = method.bind(this)
+        })
 
         this.ready = this._initialize()
+    }
+
+    /**
+     * Используется для создания нового узла
+     * @param {object} properties параметры узла
+     * @return {Promise<Node>} .
+     */
+    async create(properties = {}) {
+        await this.ready
+        const node = await this.create(properties)
+        return node
     }
 
     /**

@@ -50,7 +50,7 @@ export default class Map {
      * @returns {JSON} Информация об узле в виде JSON
      */
     async json(update = {}) {
-        await this._initialized
+        await this.ready
         if (update === {}) {
             return this.data
         }
@@ -98,7 +98,7 @@ export default class Map {
      * @returns {promise} Промис
      */
     async start() {
-        await this.ready()
+        await this.ready
         this._longpool = true
         return this._start()
     }
@@ -109,7 +109,7 @@ export default class Map {
      * @returns {promise} Промис
      */
     async stop() {
-        await this.ready()
+        await this.ready
         this._longpool = false
         return true
     }
@@ -134,6 +134,6 @@ export default class Map {
      * @return {Promise<void>} .
      */
     async loaded () {
-        await this.ready()
+        await this.ready
     }
 }

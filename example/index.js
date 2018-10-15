@@ -8,11 +8,9 @@ const rf = new rfwrapper({
 
 const map = rf.map('1bcf5ff3-c392-43db-8e6f-e8090210b0f7')
 
-console.log(map)
-
 // вызывается на любом событии
 map.event('*', (ctx) => {
-    console.log(ctx)
+    JSON.stringify(ctx, ' ', 2);
 })
 
 map.start().catch((err) => {

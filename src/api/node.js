@@ -30,12 +30,7 @@ export async function create(map_id, parent, { position = '["R",-1]', properties
             parent,
             position,
             properties: JSON.stringify(properties)
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-            ...this._settings.axios
-        })
+        }, this._settings.axios)
         return res.data
     } catch (err) {
         throw err.response.data
