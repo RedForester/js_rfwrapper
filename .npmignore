@@ -4,4 +4,4 @@ src
 test
 .idea
 .vscode
-index.js
+./index.js
