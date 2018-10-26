@@ -1,13 +1,14 @@
 export interface IParams {
-    username: string,
-    password: string
+  username: string;
+  password: string;
+  host?: string;
 }
 
 export interface IAxios {
-    auth: {
-        username: string,
-        password: string,
-    },
-    baseURL: string,
-    responseType: string,
+  auth: {
+    username: string;
+    password: string;
+  };
+  baseURL: string;
+  responseType: string;
 }
