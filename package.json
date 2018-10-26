@@ -1,47 +1,62 @@
 {
-  "name": "rfwrapper",
-  "version": "1.0.3",
-  "description": "простая обертка над RF API",
-  "main": "lib/index.js",
-  "scripts": {
-    "publish": "npm run build && npm publish",
-    "build": "./node_modules/.bin/babel src -d lib",
-    "lint": "eslint src",
-    "docs": "./node_modules/.bin/esdoc -c esdoc.json",
-    "test": "npm run build && ./node_modules/.bin/istanbul cover --report text ./node_modules/.bin/_mocha test",
-    "release:major": "npm version major && git push origin && git push origin --tags",
-    "release:minor": "npm version minor && git push origin && git push origin --tags",
-    "release:patch": "npm version patch && git push origin && git push origin --tags"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@srv.nppsatek.ru:Deissh/rfwrapper.git"
+  "name": "rfapi",
+  "version": "0.0.0",
+  "description": "rfapi",
+  "license": "MIT",
+  "repository": "",
+  "author": {
+    "name": "deissh",
+    "email": "deissh@yandex.ru",
+    "url": "https://vk.com/keelvel"
   },
   "keywords": [
-    "rf",
-    "api",
-    "wrapper"
+    ""
   ],
-  "author": "deissh",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "chai": "^4.2.0",
-    "esdoc": "^1.1.0",
-    "esdoc-publish-markdown-plugin": "^1.1.0",
-    "eslint": "^5.6.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
+    "build": "tsc --pretty",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "jest --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
     "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "@types/node": "^8.0.0",
+    "coveralls": "^2.0.0",
+    "jest": "^22.0.4",
+    "prettier": "^1.5.2",
+    "rimraf": "^2.0.0",
+    "ts-jest": "^22.0.1",
+    "ts-node": "^3.2.0",
+    "tslint": "^5.0.0",
+    "tslint-config-prettier": "^1.1.0",
+    "typescript": "^2.3.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "testEnvironment": "node"
   }
 }
