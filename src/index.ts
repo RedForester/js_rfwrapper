@@ -5,6 +5,9 @@ import CNode from './api/node';
 import CNodeType from './api/node_type';
 import CUser from './api/user';
 
+/**
+ * Модуль для работы только с API RF
+ */
 export class api {
   private settings: IParams;
   private axios: IAxios;
@@ -43,5 +46,35 @@ export class api {
 
   public get user(): CUser {
     return new CUser(this.axios)
+  }
+}
+
+export class wrapper {
+  private settings: IParams;
+  private axios: IAxios;
+
+  constructor(settings: IParams) {
+    if (!settings.username || !settings.password) {
+      throw new Error('You must set user email and password hash!');
+    }
+
+    this.settings = settings;
+    this.axios = {
+      auth: {
+        username: this.settings.username,
+        password: this.settings.password,
+      },
+      baseURL: this.settings.host || 'app.redforester.com',
+      responseType: 'json',
+    };
+  }
+
+  /**
+   * Создает экземпляр узла
+   * @param {string} nodeid uuid узла
+   * @returns {CNodeWrapper}
+   */
+  public Node() {
+    throw new Error('Not implemented')
   }
 }
