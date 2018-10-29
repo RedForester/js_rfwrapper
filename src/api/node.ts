@@ -7,6 +7,7 @@ export default class CNode {
   constructor(params: IAxios) {
     this.axios = params;
   }
+
   /**
    * Получение информации об узле
    * @async
@@ -16,6 +17,43 @@ export default class CNode {
   public async get(nodeid: string): Promise<any> {
     try {
       const res = await axios(`/api/nodes/${nodeid}`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * Обновление информации об узле
+   * @async
+   * @param {string} nodeid uuid узла
+   * @param {any} body
+   * @returns {Promise<any>} информация об узле
+   */
+  public async update(nodeid: string, body: any): Promise<any> {
+    try {
+      const res = await axios.post(`/api/nodes/${nodeid}`, body, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * Удаление узла
+   * @async
+   * @param {string} nodeid uuid узла
+   * @returns {Promise<any>} информация об узле
+   */
+  public async delete(nodeid: string): Promise<any> {
+    try {
+      const res = await axios.delete(`/api/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {

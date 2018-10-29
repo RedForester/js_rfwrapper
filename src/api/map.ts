@@ -25,6 +25,24 @@ export default class CMap {
   }
 
   /**
+   * Обновление информации об карте
+   * @param {string} mapid uuid карты
+   * @param {any} body изменения
+   * @return {Promise<object>} Информация об карте
+   */
+  public async update(mapid: string, body: any): Promise<object> {
+    try {
+      const res = await axios.post(`/api/maps/${mapid}`, body, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
    * Получение всех типов узла
    * @param {string} mapid uuid карты
    * @return {Promise<any>} Список типов

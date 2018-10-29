@@ -29,4 +29,21 @@ export default class CUser {
       throw err.response.data;
     }
   }
+
+  /**
+   * Обновление информации о пользователе
+   * @param {any} body изменения
+   * @return {Promise<object>}
+   */
+  public async update(body: any): Promise<object> {
+    try {
+      const res = await axios.post(`/api/user`, body, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
 }
