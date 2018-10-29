@@ -66,7 +66,7 @@ export default class CMapWrapper {
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public event(trigger: string, ...middlewares: Array<Function>): any {
+  public on(trigger: string, ...middlewares: Array<Function>): any {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -84,6 +84,7 @@ export default class CMapWrapper {
    * @returns {Promise<any>} Возвращяет промис
    */
   public async start(): Promise<any> {
+    await this.ready
     const user: any = await this.api.user.get();
     this.longpool = true;
     let version = 0,
@@ -134,6 +135,6 @@ export default class CMapWrapper {
    */
   public async init() {
     this.info = await this.api.map.get(this.id);
-    return;
+    return this;
   }
 }
