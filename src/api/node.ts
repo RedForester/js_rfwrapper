@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {
-  IAxios
-} from '../interfaces';
+import { IAxios } from '../interfaces';
 
 export default class CNode {
   private axios: IAxios;
@@ -17,13 +15,13 @@ export default class CNode {
    */
   public async get(nodeid: string): Promise<any> {
     try {
-      const res = await axios(`/api/nodes/${nodeid}`, this.axios)
-      return res.data
+      const res = await axios(`/api/nodes/${nodeid}`, this.axios);
+      return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err
+        throw err;
       }
-      throw err.response.data
+      throw err.response.data;
     }
   }
 
@@ -35,23 +33,28 @@ export default class CNode {
    * @param {string} properties свойства нового узла
    * @return {Promise<data>} результат
    */
-  public async create(map_id: string, parent: string, {
-    position = '["R",-1]',
-    properties = {}
-  }: any): Promise<any> {
+  public async create(
+    map_id: string,
+    parent: string,
+    { position = '["R",-1]', properties = {} }: any
+  ): Promise<any> {
     try {
-      const res = await axios.post(`/api/nodes/`, {
-        map_id,
-        parent,
-        position,
-        properties: JSON.stringify(properties)
-      }, this.axios)
-      return res.data
+      const res = await axios.post(
+        `/api/nodes/`,
+        {
+          map_id,
+          parent,
+          position,
+          properties: JSON.stringify(properties),
+        },
+        this.axios
+      );
+      return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err
+        throw err;
       }
-      throw err.response.data
+      throw err.response.data;
     }
   }
 }

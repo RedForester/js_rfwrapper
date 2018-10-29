@@ -5,6 +5,9 @@ import CNode from './api/node';
 import CNodeType from './api/node_type';
 import CUser from './api/user';
 
+import CNodeWrapper from './Node';
+import CMapWrapper from './Map';
+
 /**
  * Модуль для работы только с API RF
  */
@@ -37,15 +40,15 @@ export class api {
   }
 
   public get node(): CNode {
-    return new CNode(this.axios)
+    return new CNode(this.axios);
   }
 
   public get nodetype(): CNodeType {
-    return new CNodeType(this.axios)
+    return new CNodeType(this.axios);
   }
 
   public get user(): CUser {
-    return new CUser(this.axios)
+    return new CUser(this.axios);
   }
 }
 
@@ -74,7 +77,16 @@ export class wrapper {
    * @param {string} nodeid uuid узла
    * @returns {CNodeWrapper}
    */
-  public Node() {
-    throw new Error('Not implemented')
+  public Node(id: string): CNodeWrapper {
+    return new CNodeWrapper(this.axios, id);
+  }
+
+  /**
+   * Создает экземпляр карты
+   * @param {string} mapid uuid карты
+   * @returns {CMapWrapper}
+   */
+  public Map(id: string): CMapWrapper {
+    return new CMapWrapper(this.axios, id);
   }
 }
