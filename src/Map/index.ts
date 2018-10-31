@@ -95,13 +95,8 @@ export default class CMapWrapper {
           });
         }
       } catch (err) {
-        if (err.response) {
+        if (err !== 'Timeout') {
           // ошибка 408 -> переподключение, иначе останавливаем
-          if (err.response.status !== 408) {
-            this.longpool = false;
-            throw new Error('longpolling: ' + err.response.statusText);
-          }
-        } else {
           this.longpool = false;
           throw new Error('longpolling: ' + err);
         }

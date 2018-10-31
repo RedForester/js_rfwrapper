@@ -6,12 +6,12 @@ const wrapper = new rf.wrapper({
 })
 
 // подписка на события карты сразу после того как будут получены данные карты
-wrapper.Map('1fd251b0-d20f-43ca-9d8f-9cbe09de4710').ready.then((map) => {
+wrapper.Map('06c5b79d-299d-4787-98ee-bc95459be2b2').ready.then((map) => {
   console.log(map)
   
   // пример события
   map.on('node_updated', (ctx) => {
-    console.log(ctx)
+    console.log(map)
   })
 
   // запуск лонгпуллинга
