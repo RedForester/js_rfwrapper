@@ -5,7 +5,7 @@ import CNode from './api/node';
 import CNodeType from './api/node_type';
 import CUser from './api/user';
 
-import CNodeWrapper from './Node';
+import { CNodeWrapper } from './Node';
 import CMapWrapper from './Map';
 
 /**
@@ -19,7 +19,7 @@ export class api {
     if (!settings.username || !settings.password) {
       throw new Error('You must set user email and password hash!');
     }
-
+    
     this.settings = settings;
     this.axios = {
       auth: {

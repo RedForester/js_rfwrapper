@@ -16,7 +16,7 @@ export default class CNode {
    */
   public async get(nodeid: string): Promise<any> {
     try {
-      const res = await axios(`/api/nodes/${nodeid}`, this.axios);
+      const res = await axios.get(`/api/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
