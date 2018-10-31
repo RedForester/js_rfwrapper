@@ -26,14 +26,14 @@ export default class CMapWrapper {
 
   /**
    * Добавление нового промежуточного обработчика
-   * @param {Array < Function >} middlewares
+   * @param {Array < Function >} middlewares Обработчик
    * @returns {any}
    */
   public use(...middlewares: Array<Function>): any {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
-        fn: (ctx: Context) => fn(ctx, () => this.next(ctx, idx)),
+        fn: (ctx: Context) => fn(ctx, () => this.next(ctx, this, idx)),
       });
     });
 
@@ -46,7 +46,7 @@ export default class CMapWrapper {
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  private next(ctx: Context, idx: number = -1): any {
+  private next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
     //todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
@@ -57,7 +57,7 @@ export default class CMapWrapper {
         return fn(ctx);
       }
 
-      return this.next(ctx, idx + 1);
+      return this.next(ctx, map, idx + 1);
     }
   }
 
@@ -70,7 +70,7 @@ export default class CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
-        fn: (ctx: Context) => fn(ctx, () => this.next(ctx, idx)),
+        fn: (ctx: Context) => fn(ctx, () => this.next(ctx, this, idx)),
         trigger: trigger,
       });
     });
@@ -84,7 +84,7 @@ export default class CMapWrapper {
    * @returns {Promise<any>} Возвращяет промис
    */
   public async start(): Promise<any> {
-    await this.ready
+    await this.ready;
     const user: any = await this.api.user.get();
     this.longpool = true;
     let version = 0,
@@ -112,7 +112,7 @@ export default class CMapWrapper {
           lastevent = newevent.value;
 
           events.forEach((event: any) => {
-            this.next(new Context(event.value));
+            this.next(new Context(event.value), this);
           });
         }
       } catch (err) {
