@@ -50,7 +50,7 @@ export default class CGlobal {
    * @param {array} maps uuid карт
    * @return {Promise<any>} результат поиска
    */
-  public async search(query: string, maps: Array<string>): Promise<any> {
+  public async search(query: string, maps: string[]): Promise<any> {
     try {
       const res = await axios.post(
         `/api/batch`,
@@ -191,7 +191,7 @@ export default class CGlobal {
     try {
       const res = await axios(`/exceptions`, this.axios);
 
-      res.data.forEach((pref: Array<any>) => {
+      res.data.forEach((pref: any[]) => {
         // pref - префикс
         pref.forEach((error: any) => {
           // error - ошибка

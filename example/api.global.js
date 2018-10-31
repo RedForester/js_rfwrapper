@@ -2,7 +2,7 @@ const rf = require('../');
 
 const api = new rf.api({
   username: '***REMOVED***',
-  password: '***REMOVED***'
+  password: '***REMOVED***',
 })
 
 api.global.getMaps().then((data) => {
