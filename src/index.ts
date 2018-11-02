@@ -75,18 +75,18 @@ export class wrapper {
   /**
    * Создает экземпляр узла
    * @param {string} nodeid uuid узла
-   * @returns {CNodeWrapper}
+   * @returns {Promise<CNodeWrapper>}
    */
-  public Node(id: string): CNodeWrapper {
-    return new CNodeWrapper(this.axios, id);
+  public Node(id: string): Promise<CNodeWrapper> {
+    return new CNodeWrapper(this.axios, id).ready;
   }
 
   /**
    * Создает экземпляр карты
    * @param {string} mapid uuid карты
-   * @returns {CMapWrapper}
+   * @returns {Promise<CMapWrapper>}
    */
-  public Map(id: string): CMapWrapper {
-    return new CMapWrapper(this.axios, id);
+  public Map(id: string): Promise<CMapWrapper> {
+    return new CMapWrapper(this.axios, id).ready;
   }
 }
