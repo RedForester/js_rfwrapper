@@ -1,13 +1,17 @@
 import CApi from '../api';
-import { IAxios } from '../interfaces';
+import { IAxios, IMapRole, IUserInfo } from '../interfaces';
 import Context from './contex';
 
 export default class CMapWrapper {
   // для проверки того что карта готова
-  public ready: Promise<any>;
+  public ready: Promise<CMapWrapper>;
 
-  // uuid карты
+  // map info
   public id: string;
+
+  /*
+    Private
+  */
   private middlewares: any[]; // todo
   // для работы с апи внутри библеотеки
   private api: CApi;
@@ -29,7 +33,7 @@ export default class CMapWrapper {
    * @param {Array < Function >} middlewares Обработчик
    * @returns {any}
    */
-  public use(...middlewares: Function[]): any {
+  public use(...middlewares: Function[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -45,7 +49,7 @@ export default class CMapWrapper {
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public on(trigger: string, ...middlewares: Function[]): any {
+  public on(trigger: string, ...middlewares: Function[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -62,7 +66,7 @@ export default class CMapWrapper {
    * @async
    * @returns {Promise<any>} Возвращяет промис
    */
-  public async start(): Promise<any> {
+  public async start(): Promise<CMapWrapper> {
     await this.ready;
     const user: any = await this.api.user.get();
     this.longpool = true;
@@ -102,13 +106,16 @@ export default class CMapWrapper {
         }
       }
     }
+
+    return this;
   }
 
   /**
    * Иницилизирует и загружает информацию о карте
    */
-  public async init() {
+  public async init(): Promise<CMapWrapper> {
     this.info = await this.api.map.get(this.id);
+    this.start()
     return this;
   }
 
@@ -131,5 +138,48 @@ export default class CMapWrapper {
 
       return this.next(ctx, map, idx + 1);
     }
+  }
+
+  /*
+    Getters and Setters
+  */
+  get name(): string {
+    return this.info.name
+  }
+  get accessed(): string {
+    return this.info.accessed
+  }
+  get layout(): string {
+    return this.info.layout
+  }
+  get node_count(): number {
+    return this.info.node_count
+  }
+  get user_count(): number {
+    return this.info.user_count
+  }
+  get objid(): string {
+    return this.info.objid
+  }
+  get owner(): string {
+    return this.info.owner
+  }
+  get owner_avatar(): string {
+    return this.info.owner_avatar
+  }
+  get owner_name(): string {
+    return this.info.owner_name
+  }
+  get public(): string {
+    return this.info.public
+  }
+  get role(): Array<IMapRole> {
+    return this.info.role
+  }
+  get root_node_id(): string {
+    return this.info.root_node_id
+  }
+  get users(): Array<IUserInfo> {
+    return this.info.users
   }
 }

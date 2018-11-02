@@ -1,5 +1,5 @@
 import CApi from '../api';
-import { IAxios } from '../interfaces';
+import { IAxios, INodeInfo } from '../interfaces';
 
 export class CNodeWrapper {
   public ready: any;
@@ -25,6 +25,11 @@ export class CNodeWrapper {
    */
   public async init() {
     this.info = await this.api.node.get(this.id);
+    return this;
+  }
+
+  public async update(data: INodeInfo): Promise<CNodeWrapper> {
+    // todo
     return this;
   }
 
