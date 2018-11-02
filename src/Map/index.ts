@@ -1,18 +1,18 @@
+import CApi from '../api';
 import { IAxios } from '../interfaces';
 import Context from './contex';
-import CApi from '../api';
 
 export default class CMapWrapper {
-  private middlewares: Array<any>; // todo
-  // для работы с апи внутри библеотеки
-  private api: CApi;
-  // для отслеживания статуса лонгпулинга
-  private longpool: boolean = false;
   // для проверки того что карта готова
   public ready: Promise<any>;
 
   // uuid карты
   public id: string;
+  private middlewares: any[]; // todo
+  // для работы с апи внутри библеотеки
+  private api: CApi;
+  // для отслеживания статуса лонгпулинга
+  private longpool: boolean = false;
   // информация о карте
   private info: any = {};
 
@@ -29,7 +29,7 @@ export default class CMapWrapper {
    * @param {Array < Function >} middlewares Обработчик
    * @returns {any}
    */
-  public use(...middlewares: Array<Function>): any {
+  public use(...middlewares: Function[]): any {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -41,37 +41,16 @@ export default class CMapWrapper {
   }
 
   /**
-   * Последовательно переключает обработчики
-   * @param {Context} ctx Содержит new Context
-   * @param {number} idx Порядковый номер обработчика
-   * @returns {any} Переключение на новый обработчик
-   */
-  private next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
-    //todo
-    if (this.middlewares.length > idx + 1) {
-      const { fn, trigger } = this.middlewares[idx + 1];
-
-      if (trigger === ctx.type || trigger === '*') {
-        return fn(ctx);
-      } else if (!trigger) {
-        return fn(ctx);
-      }
-
-      return this.next(ctx, map, idx + 1);
-    }
-  }
-
-  /**
    * Подписка на события названию события
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public on(trigger: string, ...middlewares: Array<Function>): any {
+  public on(trigger: string, ...middlewares: Function[]): any {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
         fn: (ctx: Context) => fn(ctx, () => this.next(ctx, this, idx)),
-        trigger: trigger,
+        trigger,
       });
     });
 
@@ -116,15 +95,10 @@ export default class CMapWrapper {
           });
         }
       } catch (err) {
-        if (err.response) {
+        if (err !== 'Timeout') {
           // ошибка 408 -> переподключение, иначе останавливаем
-          if (err.response.status !== 408) {
-            this.longpool = false;
-            throw 'longpolling: ' + err.response.statusText;
-          }
-        } else {
           this.longpool = false;
-          throw 'longpolling: ' + err;
+          throw new Error('longpolling: ' + err);
         }
       }
     }
@@ -136,5 +110,26 @@ export default class CMapWrapper {
   public async init() {
     this.info = await this.api.map.get(this.id);
     return this;
+  }
+
+  /**
+   * Последовательно переключает обработчики
+   * @param {Context} ctx Содержит new Context
+   * @param {number} idx Порядковый номер обработчика
+   * @returns {any} Переключение на новый обработчик
+   */
+  private next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
+    // todo
+    if (this.middlewares.length > idx + 1) {
+      const { fn, trigger } = this.middlewares[idx + 1];
+
+      if (trigger === ctx.type || trigger === '*') {
+        return fn(ctx);
+      } else if (!trigger) {
+        return fn(ctx);
+      }
+
+      return this.next(ctx, map, idx + 1);
+    }
   }
 }

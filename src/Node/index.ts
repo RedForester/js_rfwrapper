@@ -1,12 +1,11 @@
-import { IAxios } from '../interfaces';
 import CApi from '../api';
+import { IAxios } from '../interfaces';
 
 export class CNodeWrapper {
-  private api: CApi;
-  private info!: any;
-
   public ready: any;
   public id: string;
+  private api: CApi;
+  private info!: any;
 
   /**
    * Класс для работы с узлом
@@ -17,7 +16,7 @@ export class CNodeWrapper {
     this.api = new CApi(params);
     this.id = id;
 
-    this.ready = this.init()
+    this.ready = this.init();
   }
 
   /**
@@ -32,30 +31,30 @@ export class CNodeWrapper {
   // Getters and Setters
 
   get map_id(): string {
-    return this.info.map_id
+    return this.info.map_id;
   }
   get parent(): string {
-    return this.info.parent
+    return this.info.parent;
   }
-  get position(): Array<string> {
-    return this.info.position
+  get position(): string[] {
+    return this.info.position;
   }
   get access(): string {
-    return this.info.access
+    return this.info.access;
   }
-  get originalParent() :string {
-    return this.info.originalParent
+  get originalParent(): string {
+    return this.info.originalParent;
   }
   get hidden(): boolean {
-    return this.info.hidden
+    return this.info.hidden;
   }
-  get readers(): Array<string> {
-    return this.info.readers
+  get readers(): string[] {
+    return this.info.readers;
   }
   get nodelevel(): number {
-    return this.info.nodelevel
+    return this.info.nodelevel;
   }
   get meta(): object {
-    return this.info.meta
+    return this.info.meta;
   }
 }
