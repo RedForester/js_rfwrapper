@@ -16,7 +16,7 @@ export interface IAxios {
 // интейрфейсы для работы Wrapper
 // информация об узле
 export interface INodeInfo {
-  id: string;
+  id?: string;
   map_id: string;
   parent: string;
   position: Array<string>;
@@ -30,7 +30,7 @@ export interface INodeInfo {
 }
 
 export interface INodeBody {
-  id: string
+  id?: string
   map_id: string
   type_id: string
   properties: any

@@ -1,6 +1,7 @@
 import CApi from '../api';
-import { IAxios, IMapRole, IUserInfo } from '../interfaces';
+import { IAxios, IMapRole, IUserInfo, INodeInfo } from '../interfaces';
 import Context from './contex';
+import { CNodeWrapper } from '../Node';
 
 export default class CMapWrapper {
   // для проверки того что карта готова
@@ -15,6 +16,8 @@ export default class CMapWrapper {
   private middlewares: any[]; // todo
   // для работы с апи внутри библеотеки
   private api: CApi;
+  // для хранения настроек
+  private axios: IAxios;
   // для отслеживания статуса лонгпулинга
   private longpool: boolean = false;
   // информация о карте
@@ -22,10 +25,21 @@ export default class CMapWrapper {
 
   constructor(params: IAxios, id: string) {
     this.api = new CApi(params);
+    this.axios = params;
     this.middlewares = [];
 
     this.id = id;
     this.ready = this.init();
+  }
+
+  /**
+   * Создание нового узла
+   * @param {string} nodeid uuid узла, если не указан то создается от корня карты
+   * @param {INodeInfo} data данные будут добавлены при создании карты
+   */
+  public async create(nodeid: string = this.root_node_id, data?: INodeInfo): Promise<CNodeWrapper> {
+    const node = await this.api.node.create(this.id, nodeid, {})
+    return new CNodeWrapper(this.axios, node.id).ready
   }
 
   /**
