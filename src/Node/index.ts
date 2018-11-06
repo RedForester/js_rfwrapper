@@ -3,7 +3,21 @@ import { IAxios, INodeInfo } from '../interfaces';
 
 export class CNodeWrapper {
   public ready: any;
+
+  // node info
   public id: string;
+  // noinspection TsLint
+  public map_id: string = '';
+  public parent: string = '';
+  public position: string[] = [];
+  public access: string = '';
+  public originalParent: string = '';
+  public hidden: boolean = false;
+  public readers: string[] = [];
+  public nodelevel: number = 0;
+  public meta: object = {};
+
+  // PRIVATE
   private api: CApi;
   private info!: any;
 
@@ -24,7 +38,9 @@ export class CNodeWrapper {
    * @returns {Promise<CNodeWrapper>} загруженый класс
    */
   public async init() {
-    this.info = await this.api.node.get(this.id);
+    const data = await this.api.node.get(this.id);
+    // заполняем свойства у класса
+    Object.assign(this, data);
     return this;
   }
 
@@ -35,31 +51,5 @@ export class CNodeWrapper {
 
   // Getters and Setters
 
-  get map_id(): string {
-    return this.info.map_id;
-  }
-  get parent(): string {
-    return this.info.parent;
-  }
-  get position(): string[] {
-    return this.info.position;
-  }
-  get access(): string {
-    return this.info.access;
-  }
-  get originalParent(): string {
-    return this.info.originalParent;
-  }
-  get hidden(): boolean {
-    return this.info.hidden;
-  }
-  get readers(): string[] {
-    return this.info.readers;
-  }
-  get nodelevel(): number {
-    return this.info.nodelevel;
-  }
-  get meta(): object {
-    return this.info.meta;
-  }
+
 }

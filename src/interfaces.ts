@@ -30,16 +30,16 @@ export interface INodeInfo {
 }
 
 export interface INodeBody {
-  id?: string
-  map_id: string
-  type_id: string
-  properties: any
-  parent: string
-  unread_comments_count: string
-  children: Array<INodeInfo>
-  access: any
-  meta: any
-  comments_count: string
+  id?: string;
+  map_id: string;
+  type_id: string;
+  properties: any;
+  parent: string;
+  unread_comments_count: string;
+  children: Array<INodeInfo>;
+  access: any;
+  meta: any;
+  comments_count: string;
 }
 
 // информация о карте

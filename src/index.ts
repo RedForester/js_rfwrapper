@@ -5,7 +5,7 @@ import CNodeType from './api/node_type';
 import CUser from './api/user';
 import { IAxios, IParams } from './interfaces';
 
-import CMapWrapper from './Map';
+import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
 
 /**
@@ -26,7 +26,7 @@ export class api {
         username: this.settings.username,
         password: this.settings.password,
       },
-      baseURL: this.settings.host || 'app.redforester.com',
+      baseURL: this.settings.host || 'http://app.redforester.com/',
       responseType: 'json',
     };
   }

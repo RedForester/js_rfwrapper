@@ -1,14 +1,32 @@
 import CApi from '../api';
-import { IAxios, IMapRole, IUserInfo, INodeInfo } from '../interfaces';
-import Context from './contex';
+import { IAxios, IMapRole, INodeInfo, IUserInfo } from '../interfaces';
 import { CNodeWrapper } from '../Node';
+import Context from './contex';
 
-export default class CMapWrapper {
+export class CMapWrapper {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
   // map info
   public id: string;
+  public name: string = '';
+  public accessed: string = '';
+  public layout: string = '';
+  // noinspection TsLint
+  public node_count: number = 0;
+  // noinspection TsLint
+  public user_count: number = 0;
+  public objid: string = '';
+  public owner: string = '';
+  // noinspection TsLint
+  public owner_avatar: string = '';
+  // noinspection TsLint
+  public owner_name: string = '';
+  public public: string = '';
+  public role: IMapRole[] = [];
+  // noinspection TsLint
+  public root_node_id: string = '';
+  public users: IUserInfo[] = [];
 
   /*
     Private
@@ -23,6 +41,11 @@ export default class CMapWrapper {
   // информация о карте
   private info: any = {};
 
+  /**
+   * Создает экземпляр класса CMapWrapper
+   * @param params параметры для работы axios
+   * @param id uuid карты с которой будем работать
+   */
   constructor(params: IAxios, id: string) {
     this.api = new CApi(params);
     this.axios = params;
@@ -33,13 +56,29 @@ export default class CMapWrapper {
   }
 
   /**
+   * Иницилизирует и загружает информацию о карте
+   */
+  public async init(): Promise<CMapWrapper> {
+    const data = await this.api.map.get(this.id);
+
+    // заполняем свойства у класса
+    Object.assign(this, data);
+
+    this.start();
+    return this;
+  }
+
+  /**
    * Создание нового узла
    * @param {string} nodeid uuid узла, если не указан то создается от корня карты
    * @param {INodeInfo} data данные будут добавлены при создании карты
    */
-  public async create(nodeid: string = this.root_node_id, data?: INodeInfo): Promise<CNodeWrapper> {
-    const node = await this.api.node.create(this.id, nodeid, {})
-    return new CNodeWrapper(this.axios, node.id).ready
+  public async create(
+    nodeid: string = this.root_node_id,
+    data?: INodeInfo
+  ): Promise<CNodeWrapper> {
+    const node = await this.api.node.create(this.id, nodeid, {});
+    return new CNodeWrapper(this.axios, node.id).ready;
   }
 
   /**
@@ -47,7 +86,7 @@ export default class CMapWrapper {
    * @param {Array < Function >} middlewares Обработчик
    * @returns {any}
    */
-  public use(...middlewares: Function[]): CMapWrapper {
+  public use(...middlewares: any[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -63,7 +102,7 @@ export default class CMapWrapper {
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public on(trigger: string, ...middlewares: Function[]): CMapWrapper {
+  public on(trigger: string, ...middlewares: any[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -81,11 +120,14 @@ export default class CMapWrapper {
    * @returns {Promise<any>} Возвращяет промис
    */
   public async start(): Promise<CMapWrapper> {
+    // если карта загрузилась то продолжаем
     await this.ready;
+
     const user: any = await this.api.user.get();
+
     this.longpool = true;
-    let version = 0,
-      lastevent = '';
+    let version = 0;
+    let lastevent = '';
 
     while (this.longpool === true) {
       try {
@@ -125,15 +167,6 @@ export default class CMapWrapper {
   }
 
   /**
-   * Иницилизирует и загружает информацию о карте
-   */
-  public async init(): Promise<CMapWrapper> {
-    this.info = await this.api.map.get(this.id);
-    this.start()
-    return this;
-  }
-
-  /**
    * Последовательно переключает обработчики
    * @param {Context} ctx Содержит new Context
    * @param {number} idx Порядковый номер обработчика
@@ -157,43 +190,4 @@ export default class CMapWrapper {
   /*
     Getters and Setters
   */
-  get name(): string {
-    return this.info.name
-  }
-  get accessed(): string {
-    return this.info.accessed
-  }
-  get layout(): string {
-    return this.info.layout
-  }
-  get node_count(): number {
-    return this.info.node_count
-  }
-  get user_count(): number {
-    return this.info.user_count
-  }
-  get objid(): string {
-    return this.info.objid
-  }
-  get owner(): string {
-    return this.info.owner
-  }
-  get owner_avatar(): string {
-    return this.info.owner_avatar
-  }
-  get owner_name(): string {
-    return this.info.owner_name
-  }
-  get public(): string {
-    return this.info.public
-  }
-  get role(): Array<IMapRole> {
-    return this.info.role
-  }
-  get root_node_id(): string {
-    return this.info.root_node_id
-  }
-  get users(): Array<IUserInfo> {
-    return this.info.users
-  }
 }
