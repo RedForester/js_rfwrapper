@@ -2,11 +2,11 @@
  * Создает класс для обработки событий, передается с необходимыми параметрами
  */
 export default class {
-  what: any;
-  type: any;
-  data: any;
-  sessionId: any;
-  who: any;
+  public what: any;
+  public type: any;
+  public data: any;
+  public sessionId: any;
+  public who: any;
 
   /**
    * @param {object} event Новое событие

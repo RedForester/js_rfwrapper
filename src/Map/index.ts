@@ -12,19 +12,14 @@ export class CMapWrapper {
   public name: string = '';
   public accessed: string = '';
   public layout: string = '';
-  // noinspection TsLint
   public node_count: number = 0;
-  // noinspection TsLint
   public user_count: number = 0;
   public objid: string = '';
   public owner: string = '';
-  // noinspection TsLint
   public owner_avatar: string = '';
-  // noinspection TsLint
   public owner_name: string = '';
   public public: string = '';
   public role: IMapRole[] = [];
-  // noinspection TsLint
   public root_node_id: string = '';
   public users: IUserInfo[] = [];
 

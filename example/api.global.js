@@ -1,6 +1,6 @@
 const rf = require('../');
 
-const api = new rf.api({
+const api = new rf.Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
 })

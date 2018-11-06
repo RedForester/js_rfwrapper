@@ -1,6 +1,6 @@
 const rf = require('../');
 
-const wrapper = new rf.wrapper({
+const wrapper = new rf.Wrapper({
   username: '***REMOVED***',
   password: '***REMOVED***'
 })

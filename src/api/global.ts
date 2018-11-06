@@ -134,14 +134,15 @@ export default class CGlobal {
     waitVersion: number = 0
   ): Promise<any> {
     try {
+      let res;
       if (waitVersion !== 0) {
-        const res = await axios(
+        res = await axios(
           `/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`,
           this.axios
         );
         return res.data;
       }
-      const res = await axios(
+      res = await axios(
         `/kv/keys/mapNotifLast:${mapid}:${kvsession}`,
         this.axios
       );

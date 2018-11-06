@@ -11,7 +11,7 @@ import { CNodeWrapper } from './Node';
 /**
  * Модуль для работы только с API RF
  */
-export class api {
+export class Api {
   private settings: IParams;
   private axios: IAxios;
 
@@ -52,7 +52,7 @@ export class api {
   }
 }
 
-export class wrapper {
+export class Wrapper {
   private settings: IParams;
   private axios: IAxios;
 

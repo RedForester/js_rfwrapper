@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IAxios } from '../interfaces';
+import { IMapAccessUser } from "./interfaces";
 
 export default class CMap {
   private axios: IAxios;
@@ -70,17 +71,18 @@ export default class CMap {
   public async getTree(
     mapid: string,
     nodeid: string = '',
-    level_count: number = 5
+    levelCount: number = 5
   ): Promise<any> {
     try {
+      let res;
       if (nodeid !== '') {
-        const res = await axios(
-          `/api/maps/${mapid}/nodes/level_count/${level_count}`,
+        res = await axios(
+          `/api/maps/${mapid}/nodes/level_count/${levelCount}`,
           this.axios
         );
         return res.data;
       }
-      const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
+      res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -144,10 +146,35 @@ export default class CMap {
    */
   public async users(mapid: string): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}/users`, this.axios);
+      const res = await axios.get(`/api/maps/${mapid}/users`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+  
+  /**
+   * Добавляет на карту нового пользоавтеля с указаными правами
+   * @param mapid
+   * @param access
+   * @param nodeId
+   * @param sendMail
+   * @param username
+   */
+  public async addUser(mapid: string, { access, nodeId, sendMail = true, username }: IMapAccessUser): Promise<any> {
+    try {
+      const res = await axios.post(`/api/maps/${mapid}/users`, {
+        username,
+        sendMail,
+        nodeId,
+        access
+      },this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
         throw err;
       }
       throw err.response.data;

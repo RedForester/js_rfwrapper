@@ -16,11 +16,12 @@ export default class CUser {
    */
   public async get(userid: string = 'self'): Promise<object> {
     try {
+      let res;
       if (userid === 'self') {
-        const res = await axios(`/api/user`, this.axios);
+        res = await axios(`/api/user`, this.axios);
         return res.data;
       }
-      const res = await axios(`/api/user/${userid}`, this.axios);
+      res = await axios(`/api/user/${userid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {

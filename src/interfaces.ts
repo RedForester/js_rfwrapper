@@ -19,12 +19,12 @@ export interface INodeInfo {
   id?: string;
   map_id: string;
   parent: string;
-  position: Array<string>;
+  position: string[];
   access: string;
   originalParent: string;
   body: INodeBody;
   hidden: string;
-  readers: Array<string>;
+  readers: string[];
   nodelevel: number;
   meta: any;
 }
@@ -36,7 +36,7 @@ export interface INodeBody {
   properties: any;
   parent: string;
   unread_comments_count: string;
-  children: Array<INodeInfo>;
+  children: INodeInfo[];
   access: any;
   meta: any;
   comments_count: string;
@@ -54,9 +54,9 @@ export interface IMapInfo {
   owner_avatar: string;
   owner_name: string;
   public: string;
-  role: Array<IMapRole>;
+  role: IMapRole[];
   root_node_id: string;
-  users: Array<IUserInfo>;
+  users: IUserInfo[];
 }
 
 export interface IMapRole {
@@ -74,5 +74,5 @@ export interface IUserInfo {
   avatar?: string;
   registration_date: number;
   birthday: number;
-  contacts?: Array<any>;
+  contacts?: any[];
 }
