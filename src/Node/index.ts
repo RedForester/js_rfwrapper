@@ -40,6 +40,7 @@ export class CNodeWrapper {
   public async init() {
     const data = await this.api.node.get(this.id);
     // заполняем свойства у класса
+    // warning: rewrite
     Object.assign(this, data);
     return this;
   }
@@ -49,5 +50,31 @@ export class CNodeWrapper {
     return this;
   }
 
-  // Getters and Setters
+  /**
+   * Поиск всех дочерних узлов по типу, условию, регулярке
+   * @param {string} typeid uuid типа узла
+   * @param {string} regex WIP регулрное условие для поиска по полям (Пользовательские, Типовые)
+   */
+  public async findAll(
+    typeid: string,
+    regex?: string
+  ): Promise<INodeInfo[]> {
+    const res = await this.api.map.getTree(this.map_id, this.id);
+
+    const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
+      const result: INodeInfo[] = [];
+
+      for await (const child of nodes) {
+        if (child.body.type_id === typeid) {
+          result.push(child);
+        } else {
+          result.concat(await dive(child.body.children));
+        }
+      }
+
+      return result;
+    };
+
+    return dive(res);
+  }
 }
