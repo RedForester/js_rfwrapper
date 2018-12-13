@@ -35,6 +35,8 @@ export class CMapWrapper {
   private longpool: boolean = false;
   // информация о карте
   private info: any = {};
+  // список загруженых узлов в виде дерева
+  private nodes: CNodeWrapper[] = [];
 
   /**
    * Создает экземпляр класса CMapWrapper
@@ -52,12 +54,18 @@ export class CMapWrapper {
 
   /**
    * Иницилизирует и загружает информацию о карте
+   * @param {boolean} loadtree загрузить узлы карты
+   * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(): Promise<CMapWrapper> {
-    const data = await this.api.map.get(this.id);
+  public async init(loadtree?: boolean, viewport?: string): Promise<CMapWrapper> {
+    this.info = await this.api.map.get(this.id);
 
     // заполняем свойства у класса
-    Object.assign(this, data);
+    Object.assign(this, this.info);
+
+    if (loadtree) {
+      await this.make_tree(viewport || this.id);
+    }
 
     this.start();
     return this;
@@ -180,6 +188,27 @@ export class CMapWrapper {
 
       return this.next(ctx, map, idx + 1);
     }
+  }
+
+  /**
+   * Загружает карту и узлы от указаного узла
+   * @param {string} viewport узел который будет началом
+   */
+  private async make_tree(viewport: string): Promise<CMapWrapper> {
+    const res = await this.api.map.getTree(this.id, viewport);
+
+    /**
+     * Функция для обхода всех узлов в дереве
+     * @param nodes список узолов
+     */
+    const dive = async (nodes: INodeInfo[]) => {
+      for await (const child of nodes) {
+        await dive(child.body.children);
+        this.nodes.push(new CNodeWrapper(this.axios, undefined, child));
+      }
+    };
+    await dive(res.body.children);
+    return this;
   }
 
   /*

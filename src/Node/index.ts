@@ -5,7 +5,7 @@ export class CNodeWrapper {
   public ready: any;
 
   // node info
-  public id: string;
+  public id: string = '';
   // noinspection TsLint
   public map_id: string = '';
   public parent: string = '';
@@ -23,25 +23,35 @@ export class CNodeWrapper {
 
   /**
    * Класс для работы с узлом
-   * @param {IAxios} params
-   * @param {string} id uuid узла
+   * @param params
+   * @param id
+   * @param body
    */
-  constructor(params: IAxios, id: string) {
+  constructor(params: IAxios, id?: string, { body?: INodeInfo }) {
     this.api = new CApi(params);
-    this.id = id;
-
-    this.ready = this.init();
+    if (id) {
+      this.id = id;
+      this.ready = this.init(true);
+    } else if (body) {
+      Object.assign(this, body);
+      this.ready = this.init(false);
+    } else {
+      throw new Error('Cannot load Node');
+    }
   }
 
   /**
    * Иницилизирует и загружает информацию о карте
+   * @param update флаг о необходимости загрузки
    * @returns {Promise<CNodeWrapper>} загруженый класс
    */
-  public async init() {
-    const data = await this.api.node.get(this.id);
-    // заполняем свойства у класса
-    // warning: rewrite
-    Object.assign(this, data);
+  public async init(update: boolean) {
+    if (update) {
+      const data = await this.api.node.get(this.id);
+      // заполняем свойства у класса
+      // warning: rewrite
+      Object.assign(this, data);
+    }
     return this;
   }
 
