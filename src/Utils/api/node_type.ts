@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
 
 export default class CNodeType {
   private axios: IAxios;

@@ -1,5 +1,5 @@
-import CApi from '../api';
 import { IAxios, INodeInfo } from '../interfaces';
+import CApi from '../Utils/api';
 
 export class CNodeWrapper {
   public ready: any;
@@ -50,6 +50,4 @@ export class CNodeWrapper {
   }
 
   // Getters and Setters
-
-
 }

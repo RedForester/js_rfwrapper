@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
-import { IMapAccessUser } from "./interfaces";
+import { IAxios } from '../../interfaces';
+import { IMapAccessUser } from './interfaces';
 
 export default class CMap {
   private axios: IAxios;
@@ -155,7 +155,7 @@ export default class CMap {
       throw err.response.data;
     }
   }
-  
+
   /**
    * Добавляет на карту нового пользоавтеля с указаными правами
    * @param mapid
@@ -164,14 +164,21 @@ export default class CMap {
    * @param sendMail
    * @param username
    */
-  public async addUser(mapid: string, { access, nodeId, sendMail = true, username }: IMapAccessUser): Promise<any> {
+  public async addUser(
+    mapid: string,
+    { access, nodeId, sendMail = true, username }: IMapAccessUser
+  ): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}/users`, {
-        username,
-        sendMail,
-        nodeId,
-        access
-      },this.axios);
+      const res = await axios.post(
+        `/api/maps/${mapid}/users`,
+        {
+          username,
+          sendMail,
+          nodeId,
+          access,
+        },
+        this.axios
+      );
       return res.data;
     } catch (err) {
       if (!err.response.data) {

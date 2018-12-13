@@ -1,6 +1,6 @@
-import CApi from '../api';
 import { IAxios, IMapRole, INodeInfo, IUserInfo } from '../interfaces';
 import { CNodeWrapper } from '../Node';
+import CApi from '../Utils/api';
 import Context from './contex';
 
 export class CMapWrapper {

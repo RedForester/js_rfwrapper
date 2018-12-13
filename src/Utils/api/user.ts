@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios, IUserInfo } from '../../interfaces';
 
 export default class CUser {
   private axios: IAxios;
@@ -25,9 +25,9 @@ export default class CUser {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(err.response.data);
     }
   }
 
@@ -38,7 +38,7 @@ export default class CUser {
    */
   public async update(body: any): Promise<object> {
     try {
-      const res = await axios.post(`/api/user`, body, this.axios);
+      const res = await axios.patch(`/api/user`, body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {

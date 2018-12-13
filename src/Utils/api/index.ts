@@ -1,4 +1,4 @@
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
 import CGlobal from './global';
 import CMap from './map';
 import CNode from './node';
