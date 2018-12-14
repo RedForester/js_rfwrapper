@@ -1,10 +1,7 @@
 import { INodeInfo } from '../Node/interfaces';
 import { IUserInfo } from '../User/interfaces';
 
-export {
-  INodeInfo,
-  IUserInfo
-};
+export { INodeInfo, IUserInfo };
 
 export interface IMapWrapper {
   id: string;

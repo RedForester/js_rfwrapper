@@ -1,5 +1,5 @@
 export interface INodeInfo {
-  id ? : string;
+  id?: string;
   map_id: string;
   parent: string;
   position: string[];
@@ -13,7 +13,7 @@ export interface INodeInfo {
 }
 
 export interface INodeBody {
-  id ? : string;
+  id?: string;
   map_id: string;
   type_id: string;
   properties: any;

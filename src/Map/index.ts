@@ -1,4 +1,4 @@
-import { IAxios} from '../interfaces';
+import { IAxios } from '../interfaces';
 import { CNodeWrapper } from '../Node';
 import CApi from '../Utils/api';
 import Context from './contex';
@@ -58,7 +58,10 @@ export class CMapWrapper {
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(loadtree?: boolean, viewport?: string): Promise<CMapWrapper> {
+  public async init(
+    loadtree?: boolean,
+    viewport?: string
+  ): Promise<CMapWrapper> {
     this.info = await this.api.map.get(this.id);
 
     // заполняем свойства у класса

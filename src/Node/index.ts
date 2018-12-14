@@ -1,13 +1,11 @@
 import { IAxios } from '../interfaces';
 import CApi from '../Utils/api';
-import { INodeInfo } from './interfaces';
+import { INodeInfo, INodeBody } from './interfaces';
 
 export class CNodeWrapper {
-  public ready: any;
+  public ready: Promise<CNodeWrapper>;
 
-  // node info
   public id: string = '';
-  // noinspection TsLint
   public map_id: string = '';
   public parent: string = '';
   public position: string[] = [];
@@ -17,6 +15,7 @@ export class CNodeWrapper {
   public readers: string[] = [];
   public nodelevel: number = 0;
   public meta: object = {};
+  public body?: INodeBody;
 
   // PRIVATE
   private api: CApi;
@@ -26,15 +25,15 @@ export class CNodeWrapper {
    * Класс для работы с узлом
    * @param params
    * @param id
-   * @param body
+   * @param node
    */
-  constructor(params: IAxios, id?: string, body?: INodeInfo) {
+  constructor(params: IAxios, id: string, node?: INodeInfo) {
     this.api = new CApi(params);
     if (id) {
       this.id = id;
       this.ready = this.init(true);
-    } else if (body) {
-      Object.assign(this, body);
+    } else if (node) {
+      Object.assign(this, node);
       this.ready = this.init(false);
     } else {
       throw new Error('Cannot load Node');
