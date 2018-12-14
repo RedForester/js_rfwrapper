@@ -23,8 +23,11 @@ test('Get unknown user by random uuid', async () => {
   expect(result).toEqual('Request params type error');
 });
 
-test('Update current user', async () => {
+test('Update username', async () => {
   await app.user.update({
     name: 'somename'
   });
+
+  const result = await app.user.get();
+  expect(result.name).toEqual('somename')
 });

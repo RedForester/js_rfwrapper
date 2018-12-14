@@ -12,9 +12,9 @@ export default class CUser {
    * Получение информации об пользователе
    * @async
    * @param {string} userid uuid пользователя
-   * @returns {Promise<object>} информация об пользователе
+   * @returns {Promise<any>} информация об пользователе
    */
-  public async get(userid: string = 'self'): Promise<object> {
+  public async get(userid: string = 'self'): Promise<any> {
     try {
       let res;
       if (userid === 'self') {
@@ -34,9 +34,9 @@ export default class CUser {
   /**
    * Обновление информации о пользователе
    * @param {any} body изменения
-   * @return {Promise<object>}
+   * @return {Promise<any>}
    */
-  public async update(body: any): Promise<object> {
+  public async update(body: any): Promise<any> {
     try {
       const res = await axios.patch(`/api/user`, body, this.axios);
       return res.data;
