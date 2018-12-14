@@ -1,7 +1,8 @@
-import { IAxios, IMapRole, INodeInfo, IUserInfo } from '../interfaces';
+import { IAxios} from '../interfaces';
 import { CNodeWrapper } from '../Node';
 import CApi from '../Utils/api';
 import Context from './contex';
+import { IMapRole, INodeInfo, IUserInfo } from './interface';
 
 export class CMapWrapper {
   // для проверки того что карта готова

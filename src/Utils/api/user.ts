@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { IAxios, IUserInfo } from '../../interfaces';
+import { IAxios } from '../../interfaces';
+import { IUserInfo } from '../../User/interfaces';
 
 export default class CUser {
   private axios: IAxios;

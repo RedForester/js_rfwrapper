@@ -1,5 +1,6 @@
-import { IAxios, INodeInfo } from '../interfaces';
+import { IAxios } from '../interfaces';
 import CApi from '../Utils/api';
+import { INodeInfo } from './interfaces';
 
 export class CNodeWrapper {
   public ready: any;
@@ -27,7 +28,7 @@ export class CNodeWrapper {
    * @param id
    * @param body
    */
-  constructor(params: IAxios, id?: string, { body?: INodeInfo }) {
+  constructor(params: IAxios, id?: string, body?: INodeInfo) {
     this.api = new CApi(params);
     if (id) {
       this.id = id;
