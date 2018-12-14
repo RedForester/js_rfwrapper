@@ -30,14 +30,15 @@ export interface IMapInfo {
   owner: string;
   owner_avatar: string;
   owner_name: string;
-  public: string;
-  role: IMapRole[];
+  public: boolean;
+  role: IMapRole | IMapRole[];
   root_node_id: string;
   users: IUserInfo[];
 }
 
 export interface IMapRole {
   role: string;
-  editable: string;
+  editable: boolean;
   alias: any;
+  description: string;
 }

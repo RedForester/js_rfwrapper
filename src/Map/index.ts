@@ -4,7 +4,7 @@ import CApi from '../Utils/api';
 import Context from './contex';
 import { IMapRole, INodeInfo, IUserInfo, IMapInfo } from './interface';
 
-export class CMapWrapper {
+export class CMapWrapper implements IMapInfo {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
@@ -19,8 +19,8 @@ export class CMapWrapper {
   public owner: string = '';
   public owner_avatar: string = '';
   public owner_name: string = '';
-  public public: string = '';
-  public role: IMapRole[] = [];
+  public public: boolean = false;
+  public role: IMapRole | IMapRole[] = [];
   public root_node_id: string = '';
   public users: IUserInfo[] = [];
 
