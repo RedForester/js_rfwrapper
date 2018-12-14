@@ -2,14 +2,14 @@ import { IAxios } from '../interfaces';
 import { CNodeWrapper } from '../Node';
 import CApi from '../Utils/api';
 import Context from './contex';
-import { IMapRole, INodeInfo, IUserInfo } from './interface';
+import { IMapRole, INodeInfo, IUserInfo, IMapInfo } from './interface';
 
 export class CMapWrapper {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
   // map info
-  public id: string;
+  public id: string = '';
   public name: string = '';
   public accessed: string = '';
   public layout: string = '';
@@ -39,16 +39,26 @@ export class CMapWrapper {
 
   /**
    * Создает экземпляр класса CMapWrapper
-   * @param params параметры для работы axios
-   * @param id uuid карты с которой будем работать
+   * @param {IAxios} params параметры для работы axios
+   * @param {string} id uuid карты с которой будем работать
+   * @param {IMapInfo} map информация о карте
+   * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
+   * @param {string} viewport 
    */
-  constructor(params: IAxios, id: string) {
+  constructor(params: IAxios, id?: string, map?: IMapInfo, loadmap?: boolean, viewport?: string) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
 
-    this.id = id;
-    this.ready = this.init();
+    if (id) {
+      this.id = id;
+      this.ready = this.init(loadmap, viewport, true);
+    } else if (map) {
+      Object.assign(this, map);
+      this.ready = this.init(loadmap, viewport, false);
+    } else {
+      throw new Error('Cannot load Map');
+    }
   }
 
   /**
@@ -58,9 +68,12 @@ export class CMapWrapper {
    */
   public async init(
     loadtree?: boolean,
-    viewport?: string
+    viewport?: string,
+    update?: boolean
   ): Promise<CMapWrapper> {
-    Object.assign(this, await this.api.map.get(this.id));
+    if (update) {
+      Object.assign(this, await this.api.map.get(this.id));
+    }
 
     if (loadtree) {
       await this.make_tree(viewport || this.id);

@@ -1,7 +1,7 @@
 import { IAxios, IParams } from './interfaces';
 import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
-import { INodeInfo } from './Map/interface';
+import { INodeInfo, IMapInfo } from './Map/interface';
 
 export default class Wrapper {
   private settings: IParams;
@@ -34,10 +34,11 @@ export default class Wrapper {
 
   /**
    * Создает экземпляр карты
-   * @param {string} mapid uuid карты
+   * @param {string} id uuid карты
+   * @param {IMapInfo} map информация о карте из которой буде тзагружена карты
    * @returns {Promise<CMapWrapper>}
    */
-  public Map(id: string): Promise<CMapWrapper> {
-    return new CMapWrapper(this.axios, id).ready;
+  public Map(id?: string, map?: IMapInfo, { viewport, loadmap }: any = {}): Promise<CMapWrapper> {
+    return new CMapWrapper(this.axios, id, map, loadmap, viewport).ready;
   }
 }
