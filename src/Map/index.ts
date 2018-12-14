@@ -34,8 +34,6 @@ export class CMapWrapper {
   private axios: IAxios;
   // для отслеживания статуса лонгпулинга
   private longpool: boolean = false;
-  // информация о карте
-  private info: any = {};
   // список загруженых узлов в виде дерева
   private nodes: CNodeWrapper[] = [];
 
@@ -62,10 +60,7 @@ export class CMapWrapper {
     loadtree?: boolean,
     viewport?: string
   ): Promise<CMapWrapper> {
-    this.info = await this.api.map.get(this.id);
-
-    // заполняем свойства у класса
-    Object.assign(this, this.info);
+    Object.assign(this, await this.api.map.get(this.id));
 
     if (loadtree) {
       await this.make_tree(viewport || this.id);
