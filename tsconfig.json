@@ -17,7 +17,7 @@
     ]
   },
   "include": [
-    "src/**/*", "test/Api/user.spec.ts"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

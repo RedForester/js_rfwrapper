@@ -5,25 +5,25 @@ const app = new api({
   password: '***REMOVED***',
 });
 
-test('Get self', async () => {
+test('Should return current user', async () => {
   const result = await app.user.get();
 
   expect(result);
 });
 
-test('Get user by uuid', async () => {
+test('Should return user by uuid', async () => {
   const result = await app.user.get('6dbfa213-defa-43d1-9215-c232e8485978');
 
   expect(result);
 });
 
-test('Get unknown user by random uuid', async () => {
+test('Should return unknown user by random uuid', async () => {
   const result = await app.user.get('randomuuid');
 
   expect(result).toEqual('Request params type error');
 });
 
-test('Update username', async () => {
+test('Should update username', async () => {
   await app.user.update({
     name: 'somename'
   });

@@ -1,6 +1,7 @@
 import { IAxios, IParams } from './interfaces';
 import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
+import { INodeInfo } from './Map/interface';
 
 export default class Wrapper {
   private settings: IParams;
@@ -27,8 +28,8 @@ export default class Wrapper {
    * @param {string} nodeid uuid узла
    * @returns {Promise<CNodeWrapper>}
    */
-  public Node(id: string): Promise<CNodeWrapper> {
-    return new CNodeWrapper(this.axios, id).ready;
+  public Node(id?: string, node?: INodeInfo): Promise<CNodeWrapper> {
+    return new CNodeWrapper(this.axios, id, node).ready;
   }
 
   /**

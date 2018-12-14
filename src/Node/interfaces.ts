@@ -6,7 +6,7 @@ export interface INodeInfo {
   access: string;
   originalParent: string;
   body: INodeBody;
-  hidden: string;
+  hidden: boolean;
   readers: string[];
   nodelevel: number;
   meta: any;
@@ -18,9 +18,9 @@ export interface INodeBody {
   type_id: string;
   properties: any;
   parent: string;
-  unread_comments_count: string;
+  unread_comments_count: number;
   children: INodeInfo[];
   access: any;
   meta: any;
-  comments_count: string;
+  comments_count: number;
 }

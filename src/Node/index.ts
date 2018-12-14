@@ -19,7 +19,6 @@ export class CNodeWrapper {
 
   // PRIVATE
   private api: CApi;
-  private info!: any;
 
   /**
    * Класс для работы с узлом
@@ -27,7 +26,7 @@ export class CNodeWrapper {
    * @param id
    * @param node
    */
-  constructor(params: IAxios, id: string, node?: INodeInfo) {
+  constructor(params: IAxios, id?: string, node?: INodeInfo) {
     this.api = new CApi(params);
     if (id) {
       this.id = id;
