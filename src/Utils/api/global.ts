@@ -89,9 +89,9 @@ export default class CGlobal {
   /**
    * Получение всех данных для RF KV
    * @async
-   * @return {Promise<object>} результат
+   * @return {Promise<any>} результат
    */
-  public async getKV(): Promise<object> {
+  public async getKV(): Promise<any> {
     try {
       const res = await axios(`/api/server/kv`, this.axios);
       return res.data;
