@@ -7,9 +7,9 @@ const app = new api({
 
 test('Should throw error with undefinded Node Type ID', async () => {
   try {
-    const result = await app.nodetype.get(undefined);  
+    const result = await app.nodetype.get('somerandomid');  
   } catch (err) {
     expect(err.code).toEqual('1901')
-    expect(err.message).toEqual('Типа узла: undefined не существует')
+    expect(err.message).toEqual('Типа узла: somerandomid не существует')
   }
 });

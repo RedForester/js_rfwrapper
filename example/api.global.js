@@ -1,4 +1,4 @@
-const rf = require('../lib/src');
+const rf = require('../');
 
 const api = new rf.Api({
   username: '***REMOVED***',

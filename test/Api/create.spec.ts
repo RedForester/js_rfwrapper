@@ -1,46 +1,47 @@
 import api from '../../src/api';
 import wrapper from '../../src/wrapper';
 
-test('Should create rfapi client', () => {
-  const app = new api({
-    username: '***REMOVED***',
-    password: '***REMOVED***',
-  })
-
-  expect(app).toBeInstanceOf(api)
-});
-
-test('Should create rfapi clien with unvalid user/pass', () => {
-  const app = new api({
-    username: '123',
-    password: '1',
-  })
-
-  expect(app).toBeInstanceOf(api)
-});
-
-test('Should throw error with undefinded user or pass', () => {
-  try {
+describe('#api create', () => {
+  test('Should create rfapi client', () => {
     const app = new api({
-      username: 'app@google.com',
-      password: undefined,
+      username: '***REMOVED***',
+      password: '***REMOVED***',
     })
-  } catch (e) {
-    expect(e.message).toEqual('You must set user email and password hash!');
-  }
-});
 
-test('Should throw error with undefinded user or pass', () => {
-  try {
+    expect(app).toBeInstanceOf(api)
+  });
+
+  test('Should create rfapi clien with unvalid user/pass', () => {
     const app = new api({
-      username: undefined,
-      password: 'asdasd',
+      username: '123',
+      password: '1',
     })
-  } catch (e) {
-    expect(e.message).toEqual('You must set user email and password hash!');
-  }
-});
 
+    expect(app).toBeInstanceOf(api)
+  });
+
+  test('Should throw error with undefinded user or pass', () => {
+    try {
+      const app = new api({
+        username: 'app@google.com',
+        password: undefined,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('You must set user email and password hash!');
+    }
+  });
+
+  test('Should throw error with undefinded user or pass', () => {
+    try {
+      const app = new api({
+        username: undefined,
+        password: 'asdasd',
+      })
+    } catch (e) {
+      expect(e.message).toEqual('You must set user email and password hash!');
+    }
+  });
+})
 
 test('Should create rf wrapper', () => {
   const app = new wrapper({

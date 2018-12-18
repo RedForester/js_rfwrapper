@@ -64,10 +64,7 @@ export class CNodeWrapper {
    * @param {string} typeid uuid типа узла
    * @param {string} regex WIP регулрное условие для поиска по полям (Пользовательские, Типовые)
    */
-  public async findAll(
-    typeid: string,
-    regex?: string
-  ): Promise<INodeInfo[]> {
+  public async findAll(typeid: string, regex?: string): Promise<INodeInfo[]> {
     const res = await this.api.map.getTree(this.map_id, this.id);
 
     const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {

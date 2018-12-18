@@ -7,7 +7,6 @@ const app = new api({
 
 test('Should return current user', async () => {
   const result = await app.user.get();
-
   expect(result);
 });
 
@@ -30,4 +29,14 @@ test('Should update username', async () => {
 
   const result = await app.user.get();
   expect(result.name).toEqual('somename')
+});
+
+test('Should throw error when update undefinded key', async () => {
+  try {
+    await app.user.update({
+      somekey: 'somename'
+    });
+  } catch (e) {
+    expect(e.message).toEqual('Отсутствуют данные для редактирования пользователя 6dbfa213-defa-43d1-9215-c232e8485978');
+  }
 });

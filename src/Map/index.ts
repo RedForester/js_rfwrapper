@@ -43,9 +43,15 @@ export class CMapWrapper implements IMapInfo {
    * @param {string} id uuid карты с которой будем работать
    * @param {IMapInfo} map информация о карте
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
-   * @param {string} viewport 
+   * @param {string} viewport
    */
-  constructor(params: IAxios, id?: string, map?: IMapInfo, loadmap?: boolean, viewport?: string) {
+  constructor(
+    params: IAxios,
+    id?: string,
+    map?: IMapInfo,
+    loadmap?: boolean,
+    viewport?: string
+  ) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -182,6 +188,13 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
+   * Получить массив загруженых узлов для данной карты
+   */
+  public getNodes() {
+    return this.nodes;
+  }
+
+  /**
    * Последовательно переключает обработчики
    * @param {Context} ctx Содержит new Context
    * @param {number} idx Порядковый номер обработчика
@@ -222,8 +235,4 @@ export class CMapWrapper implements IMapInfo {
     await dive(res.body.children);
     return this;
   }
-
-  /*
-    Getters and Setters
-  */
 }
