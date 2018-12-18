@@ -1,6 +1,7 @@
 import { IAxios } from '../interfaces';
 import CApi from '../Utils/api';
-import { INodeInfo, INodeBody } from './interfaces';
+import { INodeInfo, INodeBody, INodeFindOptions } from './interfaces';
+import { type } from 'os';
 
 export class CNodeWrapper {
   public ready: Promise<CNodeWrapper>;
@@ -61,21 +62,30 @@ export class CNodeWrapper {
 
   /**
    * Поиск всех дочерних узлов по типу, условию, регулярке
-   * @param {string} typeid uuid типа узла
-   * @param {string} regex WIP регулрное условие для поиска по полям (Пользовательские, Типовые)
+   * @param {INodeFindOptions} options параметры поиска
    */
-  public async findAll(typeid: string, regex?: string): Promise<INodeInfo[]> {
+  public async findAll(options: INodeFindOptions = { typeid: '*' }): Promise<INodeInfo[]> {
     const res = await this.api.map.getTree(this.map_id, this.id);
 
     const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
       const result: INodeInfo[] = [];
 
       for await (const child of nodes) {
-        if (child.body.type_id === typeid) {
+        // todo: добавить поиск по пользовательским полям
+        if (options.regex && options.regex.test(child.body.properties.global.title)) {
+          result.push(child);
+          continue;
+        }
+
+        if (child.body.type_id === options.typeid) {
+          result.push(child);
+        } else if (options.typeid === '*') {
           result.push(child);
         } else {
           result.concat(await dive(child.body.children));
+          continue;
         }
+
       }
 
       return result;
