@@ -24,3 +24,8 @@ export interface INodeBody {
   meta: any;
   comments_count: number;
 }
+
+export interface INodeFindOptions {
+  typeid?: string;
+  regex?: RegExp;
+}
