@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
-import { IUserInfo } from '../../User/interfaces';
+import { IUserInfo, IUser } from '../../User/interfaces';
 
 export default class CUser {
   private axios: IAxios;
@@ -15,7 +15,7 @@ export default class CUser {
    * @param {string} userid uuid пользователя
    * @returns {Promise<any>} информация об пользователе
    */
-  public async get(userid: string = 'self'): Promise<any> {
+  public async get(userid: string = 'self'): Promise<IUser> {
     try {
       let res;
       if (userid === 'self') {

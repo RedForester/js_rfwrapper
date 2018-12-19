@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { IMapAccessUser } from './interfaces';
+import { IMapInfo } from '../../Map/interface';
 
 export default class CMap {
   private axios: IAxios;
@@ -16,6 +17,18 @@ export default class CMap {
   public async get(mapid: string): Promise<any> {
     try {
       const res = await axios(`/api/maps/${mapid}`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  public async delete(mapid: string): Promise<any> {
+    try {
+      const res = await axios.delete(`/api/maps/${mapid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -120,7 +133,7 @@ export default class CMap {
    * @param {string} name название карты
    * @return {Promise<any>} Информация об карте
    */
-  public async create(name: string = 'New map'): Promise<any> {
+  public async create(name: string = 'New map'): Promise<IMapInfo> {
     try {
       const res = await axios.post(
         `/api/maps`,

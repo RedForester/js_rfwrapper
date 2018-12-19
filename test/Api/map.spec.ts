@@ -1,15 +1,32 @@
 import { Api } from '../../src';
+import { IMapInfo } from '../../lib/Map/interface';
 
-const app = new Api({
+const api = new Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
 });
 
+let testmap: IMapInfo;
+
+beforeAll(async () => {
+  testmap = await api.map.create('te1stmap');
+})
+
 test('Should throw error with undefinded Map ID', async () => {
   try {
-    await app.map.get('0c218265-fcc7-4257-a6b8-5674de7c9622');  
+    await api.map.get('someveryrandomuuid');  
   } catch (err) {
     expect(err.code).toEqual('0207')
-    expect(err.message).toEqual('Не существует карты 0c218265-fcc7-4257-a6b8-5674de7c9622')
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid')
   }
 });
+
+test('Should return Map info', async () => {
+  const result = await api.map.get(testmap.id);
+
+  expect(result)
+});
+
+afterAll(async () => {
+  await api.map.delete(testmap.id);
+})

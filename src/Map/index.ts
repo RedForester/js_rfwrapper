@@ -97,22 +97,6 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
-   * Добавление нового промежуточного обработчика
-   * @param {Array < Function >} middlewares Обработчик
-   * @returns {any}
-   */
-  public use(...middlewares: any[]): CMapWrapper {
-    const idx = this.middlewares.length;
-    middlewares.forEach(fn => {
-      this.middlewares.push({
-        fn: (ctx: Context) => fn(ctx, () => this.next(ctx, this, idx)),
-      });
-    });
-
-    return this;
-  }
-
-  /**
    * Подписка на события названию события
    * @param {string} trigger
    * @param {Array < Function >} middlewares

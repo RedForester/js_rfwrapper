@@ -1,5 +1,6 @@
 import Context from '../../src/Map/contex';
 import { Wrapper, Api } from '../../src';
+import { IMapInfo } from '../../lib/Map/interface';
 
 const params = {
   username: '***REMOVED***',
@@ -9,31 +10,30 @@ const params = {
 let rf: Wrapper;
 let api: Api;
 let event: { what: string; type: string; data: any; sessionId: string; who: any; };
-let testmap_id: string;
+let testmap: IMapInfo;
 
 beforeAll(async () => {
   rf = new Wrapper(params);
   api = new Api(params);
 
-  let { id } = await api.map.create('testmap');
-  testmap_id = id;
+  testmap = await api.map.create('testmap');
 })
 
 describe('MapEvent#LongPolling', () => {
   test('Should create loongpolling with callback', async () => {
-    const map = await rf.Map(testmap_id);
+    const map = await rf.Map(testmap.id);
   
     map.on('*', (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context)
-      expect(ctx.data).toBeTruthy()
-      expect(ctx.type).toBeTruthy()
-      expect(ctx.who).toBeTruthy()
-      expect(ctx.sessionId).toBeTruthy()
+      expect(ctx).toBeInstanceOf(Context);
+      expect(ctx.data).toBeTruthy();
+      expect(ctx.type).toBeTruthy();
+      expect(ctx.who).toBeTruthy();
+      expect(ctx.sessionId).toBeTruthy();
     });
   
     setTimeout(() => {
-      api.node.create(map.id, map.root_node_id, {})
-    }, 1)
+      api.node.create(map.id, map.root_node_id, {});
+    }, 1);
   });
 })
 
@@ -79,4 +79,8 @@ describe('MapEvent#Context', () => {
     expect(context.who.username).toBe(event.who.username);
     expect(context.who.avatar).toBe(event.who.avatar);
   })
+})
+
+afterAll(async () => {
+  await api.map.delete(testmap.id);
 })
