@@ -7,9 +7,9 @@ const app = new api({
 
 test('Should throw error with undefinded Node ID', async () => {
   try {
-    const result = await app.node.get('somerandomid');  
+    await app.node.get('somerandomid123123');  
   } catch (err) {
     expect(err.code).toEqual('0304')
-    expect(err.message).toEqual('Узла: somerandomid не существует')
+    expect(err.message).toEqual('Узла: somerandomid123123 не существует')
   }
 });

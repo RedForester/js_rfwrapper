@@ -22,7 +22,7 @@ describe('#api create', () => {
 
   test('Should throw error with undefinded user or pass', () => {
     try {
-      const app = new api({
+      new api({
         username: 'app@google.com',
         password: undefined,
       })
@@ -33,7 +33,7 @@ describe('#api create', () => {
 
   test('Should throw error with undefinded user or pass', () => {
     try {
-      const app = new api({
+      new api({
         username: undefined,
         password: 'asdasd',
       })

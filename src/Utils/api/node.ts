@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 
+axios.interceptors.request.use(request => {
+  console.log('Starting Request', request)
+  return request
+});
+
 export default class CNode {
   private axios: IAxios;
 
