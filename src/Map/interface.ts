@@ -42,3 +42,8 @@ export interface IMapRole {
   alias: any;
   description: string;
 }
+
+export interface IMapWrapperOptions {
+  map?: IMapInfo;
+  viewport?: string;
+}

@@ -27,18 +27,9 @@ const map = {
   id: '2b0fb3c2-20f0-4944-8bf1-9dac372a52e9',
 };
 
-test('Should throw error with doest exist uuid', async () => {
-  try {
-    await rf.Map('somerandomuuid');
-  } catch (e) {
-    expect(e.code).toEqual('0207');
-    expect(e.message).toEqual('Не существует карты somerandomuuid');
-  }
-});
-
 test('Should throw error with undefinded Node uuid', async () => {
   try {
-    await rf.Map();
+    await rf.Map('2b0fb3c2-20f0-4944-8bf1-9dac372a52e9');
   } catch (e) {
     expect(e.message).toEqual('Cannot load Map');
   }
@@ -55,7 +46,7 @@ test('Should load Map by uuid', async () => {
 });
 
 test('Should load Map from information', async () => {
-  const result = await rf.Map(undefined, map);
+  const result = await rf.Map(undefined, { map });
 
   expect(result.id).toEqual(map.id);
   expect(result.name).toEqual(map.name);

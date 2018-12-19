@@ -78,7 +78,7 @@ export default class CNode {
   ): Promise<any> {
     try {
       const res = await axios.post(
-        `/api/nodes/`,
+        `/api/nodes`,
         {
           map_id,
           parent,

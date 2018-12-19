@@ -4,15 +4,7 @@ import CMap from './map';
 import CNode from './node';
 import CNodeType from './node_type';
 import CUser from './user';
-
 import axios from 'axios';
-
-if (process.env.DEBUG === 'axios') {
-  axios.interceptors.request.use(request => {
-    console.log('New Request: ', request)
-    return request
-  });
-}
 
 export default class CApi {
   private axios: IAxios;

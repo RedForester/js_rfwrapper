@@ -1,6 +1,6 @@
-import api from '../../src/api';
+import { Api } from '../../src';
 
-const app = new api({
+const app = new Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
 });

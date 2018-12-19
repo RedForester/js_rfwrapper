@@ -1,28 +1,27 @@
-import api from '../../src/api';
-import wrapper from '../../src/wrapper';
+import { Api, Wrapper } from '../../src';
 
 describe('#api create', () => {
   test('Should create rfapi client', () => {
-    const app = new api({
+    const app = new Api({
       username: '***REMOVED***',
       password: '***REMOVED***',
     })
 
-    expect(app).toBeInstanceOf(api)
+    expect(app).toBeInstanceOf(Api)
   });
 
   test('Should create rfapi clien with unvalid user/pass', () => {
-    const app = new api({
+    const app = new Api({
       username: '123',
       password: '1',
     })
 
-    expect(app).toBeInstanceOf(api)
+    expect(app).toBeInstanceOf(Api)
   });
 
   test('Should throw error with undefinded user or pass', () => {
     try {
-      new api({
+      new Api({
         username: 'app@google.com',
         password: undefined,
       })
@@ -33,7 +32,7 @@ describe('#api create', () => {
 
   test('Should throw error with undefinded user or pass', () => {
     try {
-      new api({
+      new Api({
         username: undefined,
         password: 'asdasd',
       })
@@ -44,26 +43,26 @@ describe('#api create', () => {
 })
 
 test('Should create rf wrapper', () => {
-  const app = new wrapper({
+  const app = new Wrapper({
     username: '***REMOVED***',
     password: '***REMOVED***',
   })
 
-  expect(app).toBeInstanceOf(wrapper)
+  expect(app).toBeInstanceOf(Wrapper)
 });
 
 test('Should create rf wrapper with unvalid user/pass', () => {
-  const app = new api({
+  const app = new Api({
     username: '123',
     password: '1',
   })
 
-  expect(app).toBeInstanceOf(api)
+  expect(app).toBeInstanceOf(Api)
 });
 
 test('Should throw error with undefinded user or pass', () => {
   try {
-    const app = new wrapper({
+    const app = new Wrapper({
       username: 'app@google.com',
       password: undefined,
     })
@@ -74,7 +73,7 @@ test('Should throw error with undefinded user or pass', () => {
 
 test('Should throw error with undefinded user or pass', () => {
   try {
-    const app = new wrapper({
+    const app = new Wrapper({
       username: undefined,
       password: 'asdasd',
     })

@@ -1,7 +1,7 @@
 import { IAxios, IParams } from './interfaces';
 import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
-import { INodeInfo, IMapInfo } from './Map/interface';
+import { INodeInfo, IMapInfo, IMapWrapperOptions } from './Map/interface';
 
 export default class Wrapper {
   private settings: IParams;
@@ -40,10 +40,8 @@ export default class Wrapper {
    */
   public Map(
     id?: string,
-    map?: IMapInfo,
-    viewport?: string,
-    loadmap?: boolean
+    options?: IMapWrapperOptions 
   ): Promise<CMapWrapper> {
-    return new CMapWrapper(this.axios, id, map, loadmap, viewport).ready;
+    return new CMapWrapper(this.axios, id, options).ready;
   }
 }
