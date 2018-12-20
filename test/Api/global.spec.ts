@@ -10,7 +10,7 @@ let testmap: IMapInfo;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
-})
+});
 
 test('Should return current RF KV', async () => {
   const result = await api.global.getKV;
@@ -47,9 +47,9 @@ test('Should return list of events betwen timestamps', async () => {
         version: 1
       })
     ])
-  )
+  );
 });
 
 afterAll(async () => {
   await api.map.delete(testmap.id);
-})
+});

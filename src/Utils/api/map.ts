@@ -14,7 +14,7 @@ export default class CMap {
    * @param {string} mapid uuid карты
    * @return {Promise<any>} Информация об карте
    */
-  public async get(mapid: string): Promise<any> {
+  public async get(mapid: string): Promise<IMapInfo> {
     try {
       const res = await axios(`/api/maps/${mapid}`, this.axios);
       return res.data;
@@ -46,7 +46,7 @@ export default class CMap {
    */
   public async update(mapid: string, body: any): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}`, body, this.axios);
+      const res = await axios.patch(`/api/maps/${mapid}`, body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
