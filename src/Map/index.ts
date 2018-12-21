@@ -2,7 +2,13 @@ import { IAxios } from '../interfaces';
 import { CNodeWrapper } from '../Node';
 import CApi from '../Utils/api';
 import Context from './contex';
-import { IMapRole, INodeInfo, IUserInfo, IMapInfo, IMapWrapperOptions } from './interface';
+import {
+  IMapRole,
+  INodeInfo,
+  IUserInfo,
+  IMapInfo,
+  IMapWrapperOptions,
+} from './interface';
 
 export class CMapWrapper implements IMapInfo {
   // для проверки того что карта готова
@@ -45,11 +51,7 @@ export class CMapWrapper implements IMapInfo {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(
-    params: IAxios,
-    id?: string,
-    options: IMapWrapperOptions = {}
-  ) {
+  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = {}) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -70,10 +72,7 @@ export class CMapWrapper implements IMapInfo {
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(
-    viewport: string,
-    update: boolean
-  ): Promise<CMapWrapper> {
+  public async init(viewport: string, update: boolean): Promise<CMapWrapper> {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
     }

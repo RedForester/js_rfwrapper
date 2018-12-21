@@ -38,10 +38,7 @@ export default class Wrapper {
    * @param {IMapInfo} map информация о карте из которой буде тзагружена карты
    * @returns {Promise<CMapWrapper>}
    */
-  public Map(
-    id?: string,
-    options?: IMapWrapperOptions 
-  ): Promise<CMapWrapper> {
+  public Map(id?: string, options?: IMapWrapperOptions): Promise<CMapWrapper> {
     return new CMapWrapper(this.axios, id, options).ready;
   }
 }

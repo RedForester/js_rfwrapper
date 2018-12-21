@@ -32,13 +32,21 @@ export default class CNodeType {
    * @param properties свойства у типа узла
    * @returns {Promise<any>}
    */
-  public async create(map_id: string, name: string, properties: any = {}): Promise<any> {
+  public async create(
+    map_id: string,
+    name: string,
+    properties: any = {}
+  ): Promise<any> {
     try {
-      const res = await axios.post(`/api/node_types`, {
-        map_id,
-        name,
-        properties
-      }, this.axios);
+      const res = await axios.post(
+        `/api/node_types`,
+        {
+          map_id,
+          name,
+          properties,
+        },
+        this.axios
+      );
       return res.data;
     } catch (err) {
       if (!err.response) {

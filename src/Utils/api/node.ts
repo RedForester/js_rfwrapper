@@ -77,6 +77,7 @@ export default class CNode {
     parent: string,
     { position = '["R",-1]', properties = {} }: any
   ): Promise<any> {
+    // todo: добавить интерфейс и обязательно добавлять пустые поля style byType byUser
     try {
       const res = await axios.post(
         `/api/nodes`,

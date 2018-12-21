@@ -64,7 +64,9 @@ export class CNodeWrapper {
    * Поиск всех дочерних узлов по типу, условию, регулярке
    * @param {INodeFindOptions} options параметры поиска
    */
-  public async findAll(options: INodeFindOptions = { typeid: '*' }): Promise<INodeInfo[]> {
+  public async findAll(
+    options: INodeFindOptions = { typeid: '*' }
+  ): Promise<INodeInfo[]> {
     const res = await this.api.map.getTree(this.map_id, this.id);
 
     const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
@@ -72,7 +74,10 @@ export class CNodeWrapper {
 
       for await (const child of nodes) {
         // todo: добавить поиск по пользовательским полям
-        if (options.regex && options.regex.test(child.body.properties.global.title)) {
+        if (
+          options.regex &&
+          options.regex.test(child.body.properties.global.title)
+        ) {
           result.push(child);
           continue;
         }
@@ -85,7 +90,6 @@ export class CNodeWrapper {
           result.concat(await dive(child.body.children));
           continue;
         }
-
       }
 
       return result;

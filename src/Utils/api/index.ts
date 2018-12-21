@@ -4,7 +4,6 @@ import CMap from './map';
 import CNode from './node';
 import CNodeType from './node_type';
 import CUser from './user';
-import axios from 'axios';
 
 export default class CApi {
   private axios: IAxios;

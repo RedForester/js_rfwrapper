@@ -21,7 +21,7 @@ export interface IMapWrapper {
 }
 
 export interface IMapInfo {
-  id: string,
+  id: string;
   name: string;
   accessed: string;
   layout: string;

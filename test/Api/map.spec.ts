@@ -1,5 +1,5 @@
 import { Api } from '../../src';
-import { IMapInfo } from '../../lib/Map/interface';
+import { IMapInfo } from '../../src/Map/interface';
 
 const api = new Api({
   username: '***REMOVED***',
@@ -74,6 +74,25 @@ test('Should return all user on map', async () => {
   });
 });
 
+test('Should add user to map', async () => {
+  await api.map.addUser(testmap.id, { 
+    access: 'user_r',
+    nodeId: testmap.id,
+    sendMail: false,
+    username: 'test@mail.ru'
+  })
+  const result = await api.map.users(testmap.id);
+  
+  expect(result).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        role: 'user_r',
+        username: 'test@mail.ru',
+      })
+    ])
+  )
+});
+
 test('Should throw error when get users from undefinded map', async () => {
   try {
     await api.map.users('someveryrandomuuid');
@@ -81,6 +100,30 @@ test('Should throw error when get users from undefinded map', async () => {
     expect(err.code).toEqual('0207');
     expect(err.message).toEqual('Не существует карты someveryrandomuuid');
   }
+});
+
+test('Should throw error when delete undefinded map', async () => {
+  try {
+    await api.map.delete('someveryrandomuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid');
+  }
+});
+
+test('Should throw error when request access to map', async () => {
+  try {
+    await api.map.requestAccess('someveryrandomuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid');
+  }
+});
+
+test('Should request access to map', async () => {
+  const result = await api.map.requestAccess(testmap.id);
+
+  expect(result);
 });
 
 afterAll(async () => {

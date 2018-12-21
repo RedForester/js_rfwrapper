@@ -111,9 +111,18 @@ export default class CMap {
    * @param {string} mapid uuid карты
    * @return {Promise<any>} JSON
    */
-  public async requestAccess(mapid: string): Promise<any> {
+  public async requestAccess(
+    mapid: string,
+    role: string = 'user_r'
+  ): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}/request_access`, this.axios);
+      const res = await axios.post(
+        `/api/maps/${mapid}/request_access`,
+        {
+          role,
+        },
+        this.axios
+      );
       return res.data;
     } catch (err) {
       if (!err.response || !err.response.data) {

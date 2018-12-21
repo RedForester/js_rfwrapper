@@ -3,17 +3,22 @@ import {
 } from '../../src';
 import {
   IMapInfo
-} from '../../lib/Map/interface';
+} from '../../src/Map/interface';
 
 const api = new Api({
   username: '***REMOVED***',
-  password: '***REMOVED***',
+  password: '***REMOVED***'
 });
 
 let testmap: IMapInfo;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
+});
+
+test('Should return all avalible maps', async () => {
+  const result = await api.global.getMaps();
+  expect(result);
 });
 
 test('Should return current RF KV', async () => {
@@ -99,12 +104,17 @@ test('Should create search request and return one hits', async () => {
   const tempnode = await api.node.create(testmap.id, testmap.root_node_id, {
     properties: {
       global: {
-        title: 'Кликнит',
+        title: 'Somerandom',
       },
+      style: {},
+      byType: {},
+      byUser: []
     },
   })
-  const result = await api.global.search('Кликнит', [testmap.id]);
 
+  await (() => new Promise(res => setTimeout(res, 5)))()
+  const result = await api.global.search('Somerandom', [testmap.id]);
+  
   expect(result.hits).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
@@ -138,6 +148,15 @@ test('Should create batch request and return current user and map', async () => 
     name: testmap.name
   });
 
+});
+
+test('Should throw error when send batch with error', async () => {
+  try {
+    await api.map.users('someveryrandomuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid');
+  }
 });
 
 afterAll(async () => {
