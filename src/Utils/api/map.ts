@@ -113,13 +113,10 @@ export default class CMap {
    */
   public async requestAccess(mapid: string): Promise<any> {
     try {
-      const res = await axios.post(
-        `/api/maps/${mapid}/request_access`,
-        this.axios
-      );
+      const res = await axios.post(`/api/maps/${mapid}/request_access`, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
+      if (!err.response || !err.response.data) {
         throw err;
       }
       throw err.response.data;

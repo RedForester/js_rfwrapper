@@ -55,6 +55,34 @@ test('Should return Map types', async () => {
   expect(result).toEqual([]);
 });
 
+test('Should throw error when take node type from undefinded map', async () => {
+  try {
+    await api.map.getTypes('someveryrandomuuid');  
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid');
+  }
+});
+
+test('Should return all user on map', async () => {
+  const result = await api.map.users(testmap.id);
+  
+  expect(result[0]).toMatchObject({
+    name: 'somename',
+    role: 'admin',
+    username: '***REMOVED***',
+  });
+});
+
+test('Should throw error when get users from undefinded map', async () => {
+  try {
+    await api.map.users('someveryrandomuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты someveryrandomuuid');
+  }
+});
+
 afterAll(async () => {
   await api.map.delete(testmap.id);
 });

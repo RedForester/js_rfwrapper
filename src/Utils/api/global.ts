@@ -13,7 +13,7 @@ export default class CGlobal {
    * @async
    * @return {Promise<any>} результат
    */
-  public async getMaps(): Promise<any> {
+  public async getMaps(): Promise < any > {
     try {
       const res = await axios(`/api/maps`, this.axios);
       return res.data;
@@ -31,9 +31,9 @@ export default class CGlobal {
    * @param {array} body Список запросов
    * @return {Promise<any>} результат
    */
-  public async sendBatch(body: any): Promise<any> {
+  public async sendBatch(body: any): Promise < any > {
     try {
-      const res = await axios.post(`/api/batch`, body, this.axios);
+      const res = await axios.post('/api/batch', body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
@@ -50,13 +50,12 @@ export default class CGlobal {
    * @param {array} maps uuid карт
    * @return {Promise<any>} результат поиска
    */
-  public async search(query: string, maps: string[]): Promise<any> {
+  public async search(query: string, maps: string[]): Promise < any > {
     try {
       const res = await axios.post(
-        `/api/batch`,
-        {
+        "/api/search", {
           query,
-          map_ids: maps,
+          map_ids: maps
         },
         this.axios
       );
@@ -74,7 +73,7 @@ export default class CGlobal {
    * @async
    * @return {Promise<string>} результат
    */
-  public async getSID(): Promise<string> {
+  public async getSID(): Promise < string > {
     try {
       const res = await axios(`/api/server/sid`, this.axios);
       return res.data;
@@ -91,7 +90,7 @@ export default class CGlobal {
    * @async
    * @return {Promise<any>} результат
    */
-  public async getKV(): Promise<any> {
+  public async getKV(): Promise < any > {
     try {
       const res = await axios(`/api/server/kv`, this.axios);
       return res.data;
@@ -108,7 +107,7 @@ export default class CGlobal {
    * @async
    * @return {Promise<any>} результат
    */
-  public async getVersion(): Promise<any> {
+  public async getVersion(): Promise < any > {
     try {
       const res = await axios(`/api/version`, this.axios);
       return res.data;
@@ -132,7 +131,7 @@ export default class CGlobal {
     mapid: string,
     kvsession: string,
     waitVersion: number = 0
-  ): Promise<any> {
+  ): Promise < any > {
     try {
       let res;
       if (waitVersion !== 0) {
@@ -168,7 +167,7 @@ export default class CGlobal {
     kvsession: string,
     from: string,
     to: string
-  ): Promise<any> {
+  ): Promise < any > {
     try {
       const res = await axios(
         `/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`,
@@ -187,24 +186,17 @@ export default class CGlobal {
    * Список всех возможных ошибок RF
    * @return {Promise<any>} .
    */
-  public async exceptions(): Promise<any> {
+  public async exceptions(): Promise < any > {
     const errors: any = {};
-    try {
-      const res = await axios(`/exceptions`, this.axios);
+    const res = await axios(`/exceptions`, this.axios);
 
-      res.data.forEach((pref: any[]) => {
-        // pref - префикс
-        pref.forEach((error: any) => {
-          // error - ошибка
-          errors[error.prefix + error.code] = error;
-        });
+    res.data.forEach((pref: any[]) => {
+      // pref - префикс
+      pref.forEach((error: any) => {
+        // error - ошибка
+        errors[error.prefix + error.code] = error;
       });
-      return errors;
-    } catch (err) {
-      if (!err.response) {
-        throw err;
-      }
-      throw err.response.data;
-    }
+    });
+    return errors;
   }
 }
