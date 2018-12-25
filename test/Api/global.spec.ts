@@ -28,11 +28,11 @@ test('Should return current RF KV', async () => {
 
 test('Should return list of exceptions', async () => {
   const result = await api.global.exceptions();
-  expect(result).toBeTruthy()
+  expect(result).toBeTruthy();
 });
 
 test('Should return list of events betwen timestamps', async () => {
-  const node = await api.node.create(testmap.id, testmap.root_node_id, {})
+  const node = await api.node.create(testmap.id, testmap.root_node_id, {});
   const user = await api.user.get();
 
   const result = await api.global.mapNotif(testmap.id, user.kv_session, '0', '2000000');
@@ -50,7 +50,8 @@ test('Should return list of events betwen timestamps', async () => {
           who: {
             id: user.user_id,
             username: user.username,
-            name: user.name
+            name: user.name,
+            is_extension_user: false
           }
         },
         version: 1
@@ -83,7 +84,7 @@ test('Should return key/value db params', async () => {
   expect(result).toMatchObject({
     address: '/kv/',
     port: 12000,
-    prefix: null,
+    prefix: '',
     protocol: 'http'
   });
 });
@@ -91,13 +92,13 @@ test('Should return key/value db params', async () => {
 test('Should return KV db sid', async () => {
   const result = await api.global.getSID();
 
-  expect(result)
+  expect(result);
 });
 
 test('Should create search request and return null hits', async () => {
   const result = await api.global.search('Кликнит', [testmap.id]);
 
-  expect(result.hits).toEqual([])
+  expect(result.hits).toEqual([]);
 });
 
 test('Should create search request and return one hits', async () => {
@@ -110,11 +111,11 @@ test('Should create search request and return one hits', async () => {
       byType: {},
       byUser: []
     },
-  })
+  });
 
-  await (() => new Promise(res => setTimeout(res, 5)))()
+  await (() => new Promise(res => setTimeout(res, 150)))();
   const result = await api.global.search('Somerandom', [testmap.id]);
-  
+
   expect(result.hits).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
@@ -132,7 +133,7 @@ test('Should create batch request and return current user and map', async () => 
   }, {
     url: `/api/maps/${testmap.id}`,
     method: 'GET'
-  }])
+  }]);
 
   expect(result[0].status).toBe(200);
   expect(JSON.parse(result[0].body)).toMatchObject({

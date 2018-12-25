@@ -32,11 +32,14 @@ export class CNodeWrapper {
     if (id) {
       this.id = id;
       this.ready = this.init(true);
-    } else if (node) {
-      Object.assign(this, node);
-      this.ready = this.init(false);
     } else {
-      throw new Error('Cannot load Node');
+      // fix: this
+      if (node) {
+        Object.assign(this, node);
+        this.ready = this.init(false);
+      } else {
+        throw new Error(`Map ${id} cannot be load`);
+      }
     }
   }
 

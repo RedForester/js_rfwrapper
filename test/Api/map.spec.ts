@@ -10,7 +10,7 @@ let testmap: IMapInfo;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
-})
+});
 
 test('Should return map info by uuid', async () => {
   const result = await api.map.get(testmap.id);
@@ -20,7 +20,7 @@ test('Should return map info by uuid', async () => {
 
 test('Should throw error with undefinded Map ID', async () => {
   try {
-    await api.map.get('someveryrandomuuid');  
+    await api.map.get('someveryrandomuuid');
   } catch (err) {
     expect(err.code).toEqual('0207');
     expect(err.message).toEqual('Не существует карты someveryrandomuuid');
@@ -42,7 +42,7 @@ test('Should map map info by uuid', async () => {
 
 test('Should throw error with undefinded Map ID', async () => {
   try {
-    await api.map.update('someveryrandomuuid', {});  
+    await api.map.update('someveryrandomuuid', {});
   } catch (err) {
     expect(err.code).toEqual('0207');
     expect(err.message).toEqual('Не существует карты someveryrandomuuid');
@@ -57,7 +57,7 @@ test('Should return Map types', async () => {
 
 test('Should throw error when take node type from undefinded map', async () => {
   try {
-    await api.map.getTypes('someveryrandomuuid');  
+    await api.map.getTypes('someveryrandomuuid');
   } catch (err) {
     expect(err.code).toEqual('0207');
     expect(err.message).toEqual('Не существует карты someveryrandomuuid');
@@ -66,7 +66,7 @@ test('Should throw error when take node type from undefinded map', async () => {
 
 test('Should return all user on map', async () => {
   const result = await api.map.users(testmap.id);
-  
+
   expect(result[0]).toMatchObject({
     name: 'somename',
     role: 'admin',
@@ -75,14 +75,14 @@ test('Should return all user on map', async () => {
 });
 
 test('Should add user to map', async () => {
-  await api.map.addUser(testmap.id, { 
+  await api.map.addUser(testmap.id, {
     access: 'user_r',
     nodeId: testmap.id,
     sendMail: false,
     username: 'test@mail.ru'
-  })
+  });
   const result = await api.map.users(testmap.id);
-  
+
   expect(result).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
@@ -90,7 +90,7 @@ test('Should add user to map', async () => {
         username: 'test@mail.ru',
       })
     ])
-  )
+  );
 });
 
 test('Should throw error when get users from undefinded map', async () => {

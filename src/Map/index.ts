@@ -59,11 +59,14 @@ export class CMapWrapper implements IMapInfo {
     if (id) {
       this.id = id;
       this.ready = this.init(options.viewport || this.id, true);
-    } else if (options.map) {
-      Object.assign(this, options.map);
-      this.ready = this.init(options.viewport || this.id, false);
     } else {
-      throw new Error('Cannot load Map');
+      // fixme: this
+      if (options.map) {
+        Object.assign(this, options.map);
+        this.ready = this.init(options.viewport || this.id, false);
+      } else {
+        throw new Error(`Map ${id} cannot be load`);
+      }
     }
   }
 
