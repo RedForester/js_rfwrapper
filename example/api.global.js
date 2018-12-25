@@ -1,12 +1,15 @@
 const rf = require('../');
 
-const api = new rf.api({
+const api = new rf.Api({
   username: '***REMOVED***',
-  password: '***REMOVED***',
-})
+  password: '***REMOVED***'
+});
 
-api.global.getMaps().then((data) => {
-  console.log(data)
-}).catch((err) => {
-  console.log(err)
-})
+// delete all maps
+api.global.getMaps().then(async(result) => {
+  for await (let map of result) {
+    console.log(map.id);
+    
+    await api.map.delete(map.id);
+  }
+});

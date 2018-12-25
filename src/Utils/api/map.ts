@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
+import { IMapAccessUser } from './interfaces';
+import { IMapInfo } from '../../Map/interface';
 
 export default class CMap {
   private axios: IAxios;
@@ -10,11 +12,23 @@ export default class CMap {
   /**
    * Получение информации об карте
    * @param {string} mapid uuid карты
-   * @return {Promise<object>} Информация об карте
+   * @return {Promise<any>} Информация об карте
    */
-  public async get(mapid: string): Promise<object> {
+  public async get(mapid: string): Promise<IMapInfo> {
     try {
       const res = await axios(`/api/maps/${mapid}`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  public async delete(mapid: string): Promise<any> {
+    try {
+      const res = await axios.delete(`/api/maps/${mapid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -28,11 +42,11 @@ export default class CMap {
    * Обновление информации об карте
    * @param {string} mapid uuid карты
    * @param {any} body изменения
-   * @return {Promise<object>} Информация об карте
+   * @return {Promise<any>} Информация об карте
    */
-  public async update(mapid: string, body: any): Promise<object> {
+  public async update(mapid: string, body: any): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}`, body, this.axios);
+      const res = await axios.patch(`/api/maps/${mapid}`, body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -70,17 +84,18 @@ export default class CMap {
   public async getTree(
     mapid: string,
     nodeid: string = '',
-    level_count: number = 5
+    levelCount: number = 5
   ): Promise<any> {
     try {
+      let res;
       if (nodeid !== '') {
-        const res = await axios(
-          `/api/maps/${mapid}/nodes/level_count/${level_count}`,
+        res = await axios(
+          `/api/maps/${mapid}/nodes/level_count/${levelCount}`,
           this.axios
         );
         return res.data;
       }
-      const res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
+      res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -96,15 +111,21 @@ export default class CMap {
    * @param {string} mapid uuid карты
    * @return {Promise<any>} JSON
    */
-  public async requestAccess(mapid: string): Promise<any> {
+  public async requestAccess(
+    mapid: string,
+    role: string = 'user_r'
+  ): Promise<any> {
     try {
       const res = await axios.post(
         `/api/maps/${mapid}/request_access`,
+        {
+          role,
+        },
         this.axios
       );
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
+      if (!err.response || !err.response.data) {
         throw err;
       }
       throw err.response.data;
@@ -118,7 +139,7 @@ export default class CMap {
    * @param {string} name название карты
    * @return {Promise<any>} Информация об карте
    */
-  public async create(name: string = 'New map'): Promise<any> {
+  public async create(name: string = 'New map'): Promise<IMapInfo> {
     try {
       const res = await axios.post(
         `/api/maps`,
@@ -144,10 +165,42 @@ export default class CMap {
    */
   public async users(mapid: string): Promise<any> {
     try {
-      const res = await axios.post(`/api/maps/${mapid}/users`, this.axios);
+      const res = await axios.get(`/api/maps/${mapid}/users`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * Добавляет на карту нового пользоавтеля с указаными правами
+   * @param mapid
+   * @param access
+   * @param nodeId
+   * @param sendMail
+   * @param username
+   */
+  public async addUser(
+    mapid: string,
+    { access, nodeId, sendMail = true, username }: IMapAccessUser
+  ): Promise<any> {
+    try {
+      const res = await axios.post(
+        `/api/maps/${mapid}/users`,
+        {
+          username,
+          sendMail,
+          nodeId,
+          access,
+        },
+        this.axios
+      );
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
         throw err;
       }
       throw err.response.data;

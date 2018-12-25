@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
+import { IUserInfo, IUser } from '../../User/interfaces';
 
 export default class CUser {
   private axios: IAxios;
@@ -12,32 +13,33 @@ export default class CUser {
    * Получение информации об пользователе
    * @async
    * @param {string} userid uuid пользователя
-   * @returns {Promise<object>} информация об пользователе
+   * @returns {Promise<any>} информация об пользователе
    */
-  public async get(userid: string = 'self'): Promise<object> {
+  public async get(userid: string = 'self'): Promise<IUser> {
     try {
+      let res;
       if (userid === 'self') {
-        const res = await axios(`/api/user`, this.axios);
+        res = await axios(`/api/user`, this.axios);
         return res.data;
       }
-      const res = await axios(`/api/user/${userid}`, this.axios);
+      res = await axios(`/api/user/${userid}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(err.response.data);
     }
   }
 
   /**
    * Обновление информации о пользователе
    * @param {any} body изменения
-   * @return {Promise<object>}
+   * @return {Promise<any>}
    */
-  public async update(body: any): Promise<object> {
+  public async update(body: any): Promise<any> {
     try {
-      const res = await axios.post(`/api/user`, body, this.axios);
+      const res = await axios.patch(`/api/user`, body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {

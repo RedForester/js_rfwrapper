@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
 
 export default class CGlobal {
   private axios: IAxios;
@@ -33,7 +33,7 @@ export default class CGlobal {
    */
   public async sendBatch(body: any): Promise<any> {
     try {
-      const res = await axios.post(`/api/batch`, body, this.axios);
+      const res = await axios.post('/api/batch', body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
@@ -53,7 +53,7 @@ export default class CGlobal {
   public async search(query: string, maps: string[]): Promise<any> {
     try {
       const res = await axios.post(
-        `/api/batch`,
+        '/api/search',
         {
           query,
           map_ids: maps,
@@ -89,9 +89,9 @@ export default class CGlobal {
   /**
    * Получение всех данных для RF KV
    * @async
-   * @return {Promise<object>} результат
+   * @return {Promise<any>} результат
    */
-  public async getKV(): Promise<object> {
+  public async getKV(): Promise<any> {
     try {
       const res = await axios(`/api/server/kv`, this.axios);
       return res.data;
@@ -103,22 +103,22 @@ export default class CGlobal {
     }
   }
 
-  /**
-   * Получение версии RF
-   * @async
-   * @return {Promise<any>} результат
-   */
-  public async getVersion(): Promise<any> {
-    try {
-      const res = await axios(`/api/version`, this.axios);
-      return res.data;
-    } catch (err) {
-      if (!err.response) {
-        throw err;
-      }
-      throw err.response.data;
-    }
-  }
+  // /**
+  //  * Получение версии RF
+  //  * @async
+  //  * @return {Promise<any>} результат
+  //  */
+  // public async getVersion(): Promise < any > {
+  //   try {
+  //     const res = await axios(`/api/version`, this.axios);
+  //     return res.data;
+  //   } catch (err) {
+  //     if (!err.response) {
+  //       throw err;
+  //     }
+  //     throw err.response.data;
+  //   }
+  // }
 
   /**
    * Последнее действие над узлами
@@ -134,14 +134,15 @@ export default class CGlobal {
     waitVersion: number = 0
   ): Promise<any> {
     try {
+      let res;
       if (waitVersion !== 0) {
-        const res = await axios(
+        res = await axios(
           `/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`,
           this.axios
         );
         return res.data;
       }
-      const res = await axios(
+      res = await axios(
         `/kv/keys/mapNotifLast:${mapid}:${kvsession}`,
         this.axios
       );
@@ -188,22 +189,15 @@ export default class CGlobal {
    */
   public async exceptions(): Promise<any> {
     const errors: any = {};
-    try {
-      const res = await axios(`/exceptions`, this.axios);
+    const res = await axios(`/exceptions`, this.axios);
 
-      res.data.forEach((pref: any[]) => {
-        // pref - префикс
-        pref.forEach((error: any) => {
-          // error - ошибка
-          errors[error.prefix + error.code] = error;
-        });
+    res.data.forEach((pref: any[]) => {
+      // pref - префикс
+      pref.forEach((error: any) => {
+        // error - ошибка
+        errors[error.prefix + error.code] = error;
       });
-      return errors;
-    } catch (err) {
-      if (!err.response) {
-        throw err;
-      }
-      throw err.response.data;
-    }
+    });
+    return errors;
   }
 }

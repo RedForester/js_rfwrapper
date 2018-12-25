@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { IAxios } from '../interfaces';
+import { IAxios } from '../../interfaces';
+import { INodeInfo } from '../../Map/interface';
 
 export default class CNode {
   private axios: IAxios;
@@ -14,7 +15,7 @@ export default class CNode {
    * @param {string} nodeid uuid узла
    * @returns {Promise<any>} информация об узле
    */
-  public async get(nodeid: string): Promise<any> {
+  public async get(nodeid: string): Promise<INodeInfo> {
     try {
       const res = await axios.get(`/api/nodes/${nodeid}`, this.axios);
       return res.data;
@@ -35,7 +36,7 @@ export default class CNode {
    */
   public async update(nodeid: string, body: any): Promise<any> {
     try {
-      const res = await axios.post(`/api/nodes/${nodeid}`, body, this.axios);
+      const res = await axios.patch(`/api/nodes/${nodeid}`, body, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
@@ -76,9 +77,10 @@ export default class CNode {
     parent: string,
     { position = '["R",-1]', properties = {} }: any
   ): Promise<any> {
+    // todo: добавить интерфейс и обязательно добавлять пустые поля style byType byUser
     try {
       const res = await axios.post(
-        `/api/nodes/`,
+        `/api/nodes`,
         {
           map_id,
           parent,
