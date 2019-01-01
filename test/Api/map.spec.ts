@@ -3,7 +3,7 @@ import { IMapInfo } from '../../src/Map/interface';
 
 const api = new Api({
   username: '***REMOVED***',
-  password: '***REMOVED***',
+  password: '***REMOVED***'
 });
 
 let testmap: IMapInfo;
@@ -68,7 +68,6 @@ test('Should return all user on map', async () => {
   const result = await api.map.users(testmap.id);
 
   expect(result[0]).toMatchObject({
-    name: 'somename',
     role: 'admin',
     username: '***REMOVED***',
   });
@@ -76,7 +75,9 @@ test('Should return all user on map', async () => {
 
 test('Should add user to map', async () => {
   await api.map.addUser(testmap.id, {
-    access: 'user_r',
+    access: {
+      map: 'user_r'
+    },
     nodeId: testmap.id,
     sendMail: false,
     username: 'test@mail.ru'
