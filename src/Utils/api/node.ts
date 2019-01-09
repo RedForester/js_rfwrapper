@@ -32,9 +32,9 @@ export default class CNode {
    * @async
    * @param {string} nodeid uuid узла
    * @param {any} body
-   * @returns {Promise<any>} информация об узле
+   * @returns {Promise<INodeInfo>} информация об узле
    */
-  public async update(nodeid: string, body: any): Promise<any> {
+  public async update(nodeid: string, body: any): Promise<INodeInfo> {
     try {
       const res = await axios.patch(`/api/nodes/${nodeid}`, body, this.axios);
       return res.data;

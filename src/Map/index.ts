@@ -127,7 +127,7 @@ export class CMapWrapper implements IMapWrapper {
     const user: any = await this.api.user.get();
 
     this.longpool = true;
-    let version = 0;
+    let version = '';
     let lastevent = '';
 
     while (this.longpool === true) {

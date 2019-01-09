@@ -35,9 +35,9 @@ export default class CUser {
   /**
    * @description Обновление информации о пользователе
    * @param {any} body изменения
-   * @return {Promise<any>}
+   * @return {Promise<IUser>}
    */
-  public async update(body: any): Promise<any> {
+  public async update(body: any): Promise<IUser> {
     try {
       const res = await axios.patch(`/api/user`, body, this.axios);
       return res.data;

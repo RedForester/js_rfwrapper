@@ -1,31 +1,97 @@
+/**
+ * @description информация о пользователе
+ */
 export interface IUserInfo {
+  /**
+   * @description uuid пользователя
+   */
   user_id: string;
+  /**
+   * @description ник пользователя
+   */
   username: string;
+  /**
+   * @description имя пользователя
+   */
   name?: string;
+  /**
+   * @description фамилия пользователя
+   */
   surname?: string;
+  /**
+   * @description ссылка на аватарку пользователя
+   */
   avatar?: string;
+  /**
+   * @description дата регистрации
+   */
   registration_date: number;
+  /**
+   * @description день рождения
+   */
   birthday: number;
-  contacts?: any[];
+  /**
+   * @description список контактов
+   */
+  contacts?: IUserContacts[];
 }
 
+/**
+ * @description информация о текущем пользователе
+ */
 export interface IUser {
+  /**
+   * @description uuid пользователя
+   */
   user_id: string;
+  /**
+   * @description ник пользователя
+   */
   username: string;
-  name: string;
-  surname: string;
-  avatar: null;
+  /**
+   * @description имя пользователя
+   */
+  name?: string;
+  /**
+   * @description фамилия
+   */
+  surname?: string;
+  /**
+   * @description аватар
+   */
+  avatar?: null;
+  /**
+   * @description дата регистрации пользователя
+   */
   registration_date: string;
-  birthday: null;
-  contacts: IUserContacts;
+  /**
+   * @description день рождения пользователя
+   */
+  birthday?: null;
+  /**
+   * @description список контактов
+   */
+  contacts?: IUserContacts;
+  /**
+   * @description uuid kv сессии
+   */
   kv_session: string;
-  cmdBuffer: any[];
-  tags: IUserTagsItem[];
-  saved_search_queries: IUserSavedSearchQueriesItem[];
+  /**
+   * @description список сохраненых команд для пользователя
+   */
+  cmdBuffer?: any[];
+  /**
+   * @description пользовательские теги
+   */
+  tags?: IUserTagsItem[];
+  /**
+   * @description сохраненые пользовательские запросы
+   */
+  saved_search_queries?: IUserSavedSearchQueriesItem[];
 }
 
 interface IUserContacts {
-  skype: string;
+  [k: string]: string;
 }
 interface IUserTagsItem {
   id: string;

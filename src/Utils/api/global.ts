@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { IMapInfo } from '../../Map/interface';
-import { IBatch, IBatchResult, ISearchResult } from './interfaces';
+import { IBatch, IBatchResult, ISearchResult, IMapNotifLast, IMapNotif, IExceptions } from './interfaces';
 
 export default class CGlobal {
   /**
@@ -52,7 +52,7 @@ export default class CGlobal {
    * @description Поиск узлов по картам
    * @async
    * @param {string} query запрос
-   * @param {array} maps uuid карт
+   * @param {string[]} maps uuid карт
    * @return {Promise<ISearchResult>} результат поиска
    */
   public async search(query: string, maps: string[]): Promise<ISearchResult> {
@@ -131,16 +131,16 @@ export default class CGlobal {
    * @param {string} mapid UUID карты
    * @param {string} kvsession Уникальный индификатор пользователя
    * @param {string} waitVersion Номер нужной записи, если ее нету ее то соединение не будет завершено до тех пор пока не появится
-   * @return {Promise<any>} .
+   * @return {Promise<IMapNotifLast>} последнее действие на карте
    */
   public async mapNotifLast(
     mapid: string,
     kvsession: string,
-    waitVersion: number = 0
-  ): Promise<any> {
+    waitVersion: string = ''
+  ): Promise<IMapNotifLast> {
     try {
       let res;
-      if (waitVersion !== 0) {
+      if (waitVersion !== '') {
         res = await axios(
           `/kv/keys/mapNotifLast:${mapid}:${kvsession}?waitVersion=${waitVersion}`,
           this.axios
@@ -166,16 +166,16 @@ export default class CGlobal {
    * @param {string} kvsession Уникальный индификатор пользователя
    * @param {string} from Временная отметка откуда начать
    * @param {string} to Временная отметка до куда
-   * @return {Promise<any>} .
+   * @return {Promise<IMapNotif[]>} .
    */
   public async mapNotif(
     mapid: string,
     kvsession: string,
     from: string,
     to: string
-  ): Promise<any> {
+  ): Promise<IMapNotif[]> {
     try {
-      const res = await axios(
+      const res= await axios(
         `/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`,
         this.axios
       );
@@ -190,9 +190,9 @@ export default class CGlobal {
 
   /**
    * @description Список всех возможных ошибок RF
-   * @return {Promise<any>} .
+   * @return {Promise<IExceptions>} .
    */
-  public async exceptions(): Promise<any> {
+  public async exceptions(): Promise<IExceptions> {
     const errors: any = {};
     const res = await axios(`/exceptions`, this.axios);
 

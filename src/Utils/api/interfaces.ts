@@ -1,3 +1,7 @@
+import {
+  version
+} from "punycode";
+
 /**
  * @description Используется для добавления нового пользователя
  */
@@ -23,7 +27,7 @@ export interface IBatch {
   /**
    * @description тело запроса; необходимо если POST запрос
    */
-  body?: string;
+  body ? : string;
 }
 
 /**
@@ -65,7 +69,7 @@ export interface ISearchHit {
    */
   color: any;
   /**
-   * @description Свойства у узла в которых было найдена фраза, запрос
+   * @description Свойства у узла в которых было найдена фраза; запрос
    */
   props: any[];
   /**
@@ -98,4 +102,82 @@ export interface ISearchResult {
    * @description Оригинальный запрос
    */
   original_query: string;
+}
+
+/**
+ * @description Последнее действие на карте, временая метка
+ */
+export interface IMapNotifLast {
+  /**
+   * @description метка времени когда произошло событие
+   */
+  value: string;
+  /**
+   * @description версия
+   */
+  version: string;
+}
+
+/**
+ * @description Действие на карте
+ */
+export interface IMapNotif {
+  /**
+   * @description метки времени когда произошло событие
+   */
+  key: string[];
+  /**
+   * @description значение действия
+   */
+  value: {
+    /**
+     * @description uuid узла который создал событие
+     */
+    what: string;
+    /**
+     * @description тип события
+     */
+    type: string;
+    /**
+     * @description дополнительная информация
+     */
+    data: {
+      /**
+       * @description заголовок узла
+       */
+      node_title: string;
+      /**
+       * @description заголовок дочернего узла
+       */
+      parent_title: string;
+    };
+    /**
+     * @description кто совершил событие
+     */
+    who: {
+      /**
+       * @description uuid пользователя
+       */
+      id: string;
+      /**
+       * @description почта пользователя
+       */
+      username: string;
+      /**
+       * @description имя пользователя
+       */
+      name: string;
+      /**
+       * @description пользователь является ли расширением
+       */
+      is_extension_user: boolean
+    };
+  };
+}
+
+/**
+ * @description Содержит коды ошибок и текстовое описание для них
+ */
+export interface IExceptions {
+  [k: string]: string;
 }
