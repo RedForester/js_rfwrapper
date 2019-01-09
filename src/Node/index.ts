@@ -1,5 +1,5 @@
 import { IAxios } from '../interfaces';
-import CApi from '../Utils/api';
+import { CApi } from '../Utils/api';
 import { INodeInfo, INodeBody, INodeFindOptions } from './interfaces';
 import { type } from 'os';
 

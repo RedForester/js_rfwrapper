@@ -10,9 +10,9 @@ export default class CMap {
     this.axios = params;
   }
   /**
-   * Получение информации об карте
+   * @description Получение информации об карте
    * @param {string} mapid uuid карты
-   * @return {Promise<any>} Информация об карте
+   * @return {Promise<IMapInfo>} Информация об карте
    */
   public async get(mapid: string): Promise<IMapInfo> {
     try {
@@ -39,12 +39,12 @@ export default class CMap {
   }
 
   /**
-   * Обновление информации об карте
+   * @description Обновление информации об карте
    * @param {string} mapid uuid карты
    * @param {any} body изменения
-   * @return {Promise<any>} Информация об карте
+   * @return {Promise<IMapInfo>} Информация об карте
    */
-  public async update(mapid: string, body: any): Promise<any> {
+  public async update(mapid: string, body: any): Promise<IMapInfo> {
     try {
       const res = await axios.patch(`/api/maps/${mapid}`, body, this.axios);
       return res.data;
@@ -57,7 +57,7 @@ export default class CMap {
   }
 
   /**
-   * Получение всех типов узла
+   * @description Получение всех типов узла
    * @param {string} mapid uuid карты
    * @return {Promise<any>} Список типов
    */
@@ -74,7 +74,7 @@ export default class CMap {
   }
 
   /**
-   * Получение дерева узлов
+   * @description Получение дерева узлов
    * @async
    * @param {string} mapid uuid карты
    * @param {string} nodeid uuid узла, если не указан то от начала карты
@@ -106,7 +106,7 @@ export default class CMap {
   }
 
   /**
-   * Запрос доступа к карте
+   * @description Запрос доступа к карте
    * @async
    * @param {string} mapid uuid карты
    * @return {Promise<any>} JSON
@@ -134,10 +134,10 @@ export default class CMap {
 
   // FIX: исправить, неработает
   /**
-   * Создание новой карты
+   * @description Создание новой карты
    * @async
    * @param {string} name название карты
-   * @return {Promise<any>} Информация об карте
+   * @return {Promise<IMapInfo>} Информация об карте
    */
   public async create(name: string = 'New map'): Promise<IMapInfo> {
     try {
@@ -158,7 +158,7 @@ export default class CMap {
   }
 
   /**
-   * Получение списка пользователей на карте
+   * @description Получение списка пользователей на карте
    * @async
    * @param {string} mapid uuid карты
    * @return {Promise<any>} JSON
@@ -176,12 +176,13 @@ export default class CMap {
   }
 
   /**
-   * Добавляет на карту нового пользоавтеля с указаными правами
+   * @description Добавляет на карту нового пользоавтеля с указаными правами
    * @param mapid
    * @param access
    * @param nodeId
    * @param sendMail
    * @param username
+   * @returns {Promise<any>}
    */
   public async addUser(
     mapid: string,

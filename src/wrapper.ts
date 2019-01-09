@@ -3,7 +3,7 @@ import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
 import { INodeInfo, IMapInfo, IMapWrapperOptions } from './Map/interface';
 
-export default class Wrapper {
+export class Wrapper {
   private settings: IParams;
   private axios: IAxios;
 

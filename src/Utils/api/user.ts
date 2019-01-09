@@ -10,7 +10,7 @@ export default class CUser {
   }
 
   /**
-   * Получение информации об пользователе
+   * @description Получение информации об пользователе
    * @async
    * @param {string} userid uuid пользователя
    * @returns {Promise<any>} информация об пользователе
@@ -33,7 +33,7 @@ export default class CUser {
   }
 
   /**
-   * Обновление информации о пользователе
+   * @description Обновление информации о пользователе
    * @param {any} body изменения
    * @return {Promise<any>}
    */

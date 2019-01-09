@@ -8,7 +8,7 @@ import CUser from './Utils/api/user';
 /**
  * Модуль для работы только с API RF
  */
-export default class Api {
+export class Api {
   private settings: IParams;
   private axios: IAxios;
 

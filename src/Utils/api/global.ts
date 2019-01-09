@@ -1,7 +1,12 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
+import { IMapInfo } from '../../Map/interface';
+import { IBatch, IBatchResult, ISearchResult } from './interfaces';
 
 export default class CGlobal {
+  /**
+   * @description Axios params
+   */
   private axios: IAxios;
 
   constructor(params: IAxios) {
@@ -9,11 +14,11 @@ export default class CGlobal {
   }
 
   /**
-   * Получение всех доступных карт
+   * @description Получение всех доступных карт
    * @async
-   * @return {Promise<any>} результат
+   * @return {Promise<IMapInfo[]>} результат
    */
-  public async getMaps(): Promise<any> {
+  public async getMaps(): Promise<IMapInfo[]> {
     try {
       const res = await axios(`/api/maps`, this.axios);
       return res.data;
@@ -26,12 +31,12 @@ export default class CGlobal {
   }
 
   /**
-   * Последовательное выполнение запросов
+   * @description Последовательное выполнение запросов
    * @async
-   * @param {array} body Список запросов
-   * @return {Promise<any>} результат
+   * @param {IBatch[]} body Список запросов
+   * @return {Promise<IBatchResult[]>} результат
    */
-  public async sendBatch(body: any): Promise<any> {
+  public async sendBatch(body: IBatch[]): Promise<IBatchResult[]> {
     try {
       const res = await axios.post('/api/batch', body, this.axios);
       return res.data;
@@ -44,13 +49,13 @@ export default class CGlobal {
   }
 
   /**
-   * Поиск узлов по картам
+   * @description Поиск узлов по картам
    * @async
    * @param {string} query запрос
    * @param {array} maps uuid карт
-   * @return {Promise<any>} результат поиска
+   * @return {Promise<ISearchResult>} результат поиска
    */
-  public async search(query: string, maps: string[]): Promise<any> {
+  public async search(query: string, maps: string[]): Promise<ISearchResult> {
     try {
       const res = await axios.post(
         '/api/search',
@@ -70,7 +75,7 @@ export default class CGlobal {
   }
 
   /**
-   * Получение SID
+   * @description Получение SID
    * @async
    * @return {Promise<string>} результат
    */
@@ -87,7 +92,7 @@ export default class CGlobal {
   }
 
   /**
-   * Получение всех данных для RF KV
+   * @description Получение всех данных для RF KV
    * @async
    * @return {Promise<any>} результат
    */
@@ -121,7 +126,7 @@ export default class CGlobal {
   // }
 
   /**
-   * Последнее действие над узлами
+   * @description Последнее действие над узлами
    * @async
    * @param {string} mapid UUID карты
    * @param {string} kvsession Уникальный индификатор пользователя
@@ -156,7 +161,7 @@ export default class CGlobal {
   }
 
   /**
-   * Действия за определеный отрезок времени
+   * @description Действия за определеный отрезок времени
    * @param {string} mapid UUID карты
    * @param {string} kvsession Уникальный индификатор пользователя
    * @param {string} from Временная отметка откуда начать
@@ -184,7 +189,7 @@ export default class CGlobal {
   }
 
   /**
-   * Список всех возможных ошибок RF
+   * @description Список всех возможных ошибок RF
    * @return {Promise<any>} .
    */
   public async exceptions(): Promise<any> {

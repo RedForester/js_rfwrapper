@@ -1,5 +1,5 @@
-import Api from './api';
-import Wrapper from './wrapper';
+import { Api } from './api';
+import { Wrapper } from './wrapper';
 
 import axios from 'axios';
 

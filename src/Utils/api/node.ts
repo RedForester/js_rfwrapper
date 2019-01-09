@@ -10,7 +10,7 @@ export default class CNode {
   }
 
   /**
-   * Получение информации об узле
+   * @description Получение информации об узле
    * @async
    * @param {string} nodeid uuid узла
    * @returns {Promise<any>} информация об узле
@@ -28,7 +28,7 @@ export default class CNode {
   }
 
   /**
-   * Обновление информации об узле
+   * @description Обновление информации об узле
    * @async
    * @param {string} nodeid uuid узла
    * @param {any} body
@@ -47,7 +47,7 @@ export default class CNode {
   }
 
   /**
-   * Удаление узла
+   * @description Удаление узла
    * @async
    * @param {string} nodeid uuid узла
    * @returns {Promise<any>} информация об узле
@@ -65,7 +65,7 @@ export default class CNode {
   }
 
   /**
-   * Создание нового узла
+   * @description Создание нового узла
    * @param {string} map_id uuid карты
    * @param {string} parent родитель узла
    * @param {string} position позиция относительно родителя

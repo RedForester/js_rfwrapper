@@ -8,7 +8,7 @@ export default class CNodeType {
     this.axios = params;
   }
   /**
-   * Информация об типе узла
+   * @description Информация об типе узла
    * @async
    * @param {string} nodetypeid uuid типа узла
    * @return {Promise<any>} результат
@@ -26,7 +26,7 @@ export default class CNodeType {
   }
 
   /**
-   * Создание нового типа
+   * @description Создание нового типа
    * @param map_id map uuid
    * @param name название типа узла
    * @param properties свойства у типа узла
