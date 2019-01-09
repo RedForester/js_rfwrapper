@@ -14,10 +14,11 @@ export interface IMapWrapper {
   owner: string;
   owner_avatar: string;
   owner_name: string;
-  public: string;
-  role: IMapRole[];
+  public: boolean;
+  role: IMapRole | IMapRole[];
   root_node_id: string;
   users: IUserInfo[];
+  tree?: INodeInfo[];
 }
 
 export interface IMapInfo {

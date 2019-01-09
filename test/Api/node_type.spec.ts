@@ -1,15 +1,24 @@
 import { Api } from '../../src';
 import { IMapInfo } from '../../src/Map/interface';
+import CNodeType from '../../src/Utils/api/node_type';
 
 const api = new Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
+  host: process.env.DEBUG_RF_URL
 });
 
 let testmap: IMapInfo;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
+});
+
+test('Should return CNodeType class', () => {
+  const cls = api.nodetype;
+
+  expect(cls).toBeTruthy();
+  expect(cls).toBeInstanceOf(CNodeType);
 });
 
 test('Should create new Node Type', async () => {

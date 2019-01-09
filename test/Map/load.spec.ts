@@ -42,3 +42,7 @@ test('Should load Map from information', async () => {
   expect(result.layout).toEqual(map.layout || '');
   expect(result.owner).toEqual(map.owner);
 });
+
+afterAll(async () => {
+  await api.map.delete(map.id);
+});

@@ -5,7 +5,8 @@ import { IMapInfo } from '../../lib/Map/interface';
 const params = {
   username: '***REMOVED***',
   password: '***REMOVED***',
-}
+  host: process.env.DEBUG_RF_URL
+};
 
 let rf: Wrapper;
 let api: Api;
@@ -17,7 +18,7 @@ beforeAll(async () => {
   api = new Api(params);
 
   testmap = await api.map.create('testmap');
-})
+});
 
 describe('MapEvent#LongPolling', () => {
   test('Should create loongpolling with callback', async () => {
@@ -35,7 +36,7 @@ describe('MapEvent#LongPolling', () => {
       api.node.create(map.id, map.root_node_id, {});
     }, 1);
   });
-})
+});
 
 describe('MapEvent#Context', () => {
   event = {
@@ -78,9 +79,13 @@ describe('MapEvent#Context', () => {
     expect(context.who.id).toBe(event.who.id);
     expect(context.who.username).toBe(event.who.username);
     expect(context.who.avatar).toBe(event.who.avatar);
-  })
-})
+  });
+});
+
+test('', async () => {
+  //
+});
 
 afterAll(async () => {
   await api.map.delete(testmap.id);
-})
+});

@@ -1,72 +1,151 @@
 import { Api } from '../../src';
 import { IMapInfo } from '../../src/Map/interface';
+import { IUser } from '../../src/User/interfaces';
 
 const api = new Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
+  host: process.env.DEBUG_RF_URL
 });
 
 let testmap: IMapInfo;
+let userInfo: IUser;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
+  userInfo = await api.user.get();
 });
 
 test('Should create new Node', async () => {
   let result = await api.node.create(testmap.id, testmap.root_node_id, {});
-  expect(result)
+  expect(result);
 
   result = await api.node.get(result.id);
+  
 
-  expect(result)
+  expect(result).toBeTruthy();
+  expect(result).toMatchObject({
+    map_id: testmap.id,
+    parent: testmap.root_node_id,
+    position: [ 'R', '0' ],
+    access: 'user_all',
+    originalParent: testmap.root_node_id,
+    body: {
+      map_id: testmap.id,
+      type_id: null,
+      properties: {
+        style: {},
+        byType: {},
+        byUser: [],
+        global: {
+          title: ''
+        } 
+      },
+      parent: testmap.root_node_id,
+      unread_comments_count: 0,
+      comments_count: 0,
+      children: [],
+      access: 'user_all',
+      meta: {
+        last_modified_user: userInfo.user_id,
+        author: userInfo.user_id,
+        leaf: false,
+        editable: true,
+        commentable: true,
+        can_set_access: true } },
+    hidden: false,
+    readers: [ userInfo.user_id ],
+    nodelevel: 1,
+    meta: {
+      last_modified_user: userInfo.user_id,
+      author: userInfo.user_id,
+      leaf: false,
+      editable: true,
+      commentable: true,
+      can_set_access: true
+    }
+  });
 });
 
 test('Should throw error when get node type with invalid uuid', async () => {
   try {
-    await api.node.get('12x31x231x2awexawex12')
+    await api.node.get('12x31x231x2awexawex12');
   } catch (err) {
-    expect(err.code).toEqual('0304')
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует')
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
   }
 });
 
 test('Should delete Node', async () => {
-  let result = await api.node.create(testmap.id, testmap.root_node_id, {});
+  const result = await api.node.create(testmap.id, testmap.root_node_id, {});
 
   await api.node.delete(result.id);
 });
 
 test('Should throw error when delete Node', async () => {
   try {
-    await api.node.get('12x31x231x2awexawex12')
+    await api.node.get('12x31x231x2awexawex12');
   } catch (err) {
-    expect(err.code).toEqual('0304')
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует')
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
   }
 });
 
 test('Should update Node', async () => {
   const testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
 
-  // await api.node.update(testnode.id, {
-  //   properties: {
-  //     global: {
-  //       title: 'testing...'
-  //     }
-  //   }
-  // });
+  await api.node.update(testnode.id, {
+    properties: {
+      global: {
+        title: 'testing...'
+      }
+    }
+  });
 
   const result = await api.node.get(testnode.id);
 
+  expect(result).toBeTruthy();
   expect(result).toMatchObject({
+    map_id: testmap.id,
+    parent: testmap.root_node_id,
+    position: [ 'R', '1' ],
+    access: 'user_all',
+    originalParent: testmap.root_node_id,
     body: {
+      map_id: testmap.id,
+      type_id: null,
       properties: {
+        style: {},
+        byType: {},
+        byUser: [],
         global: {
-          title: ''
-        }
-      }
+          title: 'testing...'
+        } 
+      },
+      parent: testmap.root_node_id,
+      unread_comments_count: 0,
+      comments_count: 0,
+      children: [],
+      access: 'user_all',
+      meta: {
+        last_modified_user: userInfo.user_id,
+        author: userInfo.user_id,
+        leaf: false,
+        editable: true,
+        commentable: true,
+        can_set_access: true } },
+    hidden: false,
+    readers: [ userInfo.user_id ],
+    nodelevel: 1,
+    meta: {
+      last_modified_user: userInfo.user_id,
+      author: userInfo.user_id,
+      leaf: false,
+      editable: true,
+      commentable: true,
+      can_set_access: true
     }
-  })
+  });
 });
 
 test('Should throw error when update Node', async () => {
@@ -79,10 +158,10 @@ test('Should throw error when update Node', async () => {
           }
         }
       }
-    })
+    });
   } catch (err) {
-    expect(err.code).toEqual('0304')
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует')
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
   }
 });
 

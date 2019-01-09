@@ -3,7 +3,8 @@ import { IMapInfo } from '../../src/Map/interface';
 
 const api = new Api({
   username: '***REMOVED***',
-  password: '***REMOVED***'
+  password: '***REMOVED***',
+  host: process.env.DEBUG_RF_URL
 });
 
 let testmap: IMapInfo;

@@ -6,11 +6,11 @@ import {
   IMapRole,
   INodeInfo,
   IUserInfo,
-  IMapInfo,
   IMapWrapperOptions,
+  IMapWrapper,
 } from './interface';
 
-export class CMapWrapper implements IMapInfo {
+export class CMapWrapper implements IMapWrapper {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
@@ -41,7 +41,7 @@ export class CMapWrapper implements IMapInfo {
   // для отслеживания статуса лонгпулинга
   private longpool: boolean = false;
   // список загруженых узлов в виде дерева
-  private nodes: CNodeWrapper[] = [];
+  private nodes: INodeInfo[] = [];
 
   /**
    * Создает экземпляр класса CMapWrapper
@@ -170,8 +170,12 @@ export class CMapWrapper implements IMapInfo {
   /**
    * Получить массив загруженых узлов для данной карты
    */
-  public getNodes() {
+  public get tree(): INodeInfo[] {
     return this.nodes;
+  }
+
+  public set tree(value: INodeInfo[]) {
+    this.nodes = value;
   }
 
   /**
@@ -209,7 +213,7 @@ export class CMapWrapper implements IMapInfo {
     const dive = async (nodes: INodeInfo[]) => {
       for await (const child of nodes) {
         await dive(child.body.children);
-        this.nodes.push(new CNodeWrapper(this.axios, undefined, child));
+        this.nodes.push(child);
       }
     };
     await dive(res.body.children);
