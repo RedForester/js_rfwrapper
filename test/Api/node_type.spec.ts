@@ -22,7 +22,7 @@ test('Should return CNodeType class', () => {
 });
 
 test('Should create new Node Type', async () => {
-  await api.nodetype.create(testmap.id, 'sometype')
+  await api.nodetype.create(testmap.id, 'sometype');
   let result = await api.map.getTypes(testmap.id);
   const nodetype = result[0];
 
@@ -42,8 +42,8 @@ test('Should throw error when get node type with invalid uuid', async () => {
   try {
     await api.nodetype.get('12x31x231x2awexawex12');
   } catch (err) {
-    expect(err.code).toEqual('1901')
-    expect(err.message).toEqual('Типа узла: 12x31x231x2awexawex12 не существует')
+    expect(err.code).toEqual('1901'); 
+    expect(err.message).toEqual('Типа узла: 12x31x231x2awexawex12 не существует');
   }
 });
 

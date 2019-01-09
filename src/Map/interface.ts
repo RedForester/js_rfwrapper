@@ -1,5 +1,7 @@
 import { INodeInfo } from '../Node/interfaces';
 import { IUserInfo } from '../User/interfaces';
+import { CNodeWrapper } from '../Node';
+import { CMapWrapper } from '.';
 
 export { INodeInfo, IUserInfo };
 

@@ -65,7 +65,7 @@ export class CMapWrapper implements IMapWrapper {
         Object.assign(this, options.map);
         this.ready = this.init(options.viewport || this.id, false);
       } else {
-        throw new Error(`Map ${id} cannot be load`);
+        throw new Error(`Map cannot be load`);
       }
     }
   }
@@ -169,13 +169,10 @@ export class CMapWrapper implements IMapWrapper {
 
   /**
    * Получить массив загруженых узлов для данной карты
+   * @returns {INodeInfo[]} 
    */
   public get tree(): INodeInfo[] {
     return this.nodes;
-  }
-
-  public set tree(value: INodeInfo[]) {
-    this.nodes = value;
   }
 
   /**
