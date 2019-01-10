@@ -39,7 +39,7 @@ export class CMapWrapper implements IMapWrapper {
   // для хранения настроек
   private axios: IAxios;
   // для отслеживания статуса лонгпулинга
-  private longpool: boolean = false;
+  private longpool: boolean = true;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
 
@@ -126,7 +126,6 @@ export class CMapWrapper implements IMapWrapper {
 
     const user: any = await this.api.user.get();
 
-    this.longpool = true;
     let version = '';
     let lastevent = '';
 
@@ -169,7 +168,7 @@ export class CMapWrapper implements IMapWrapper {
 
   /**
    * Получить массив загруженых узлов для данной карты
-   * @returns {INodeInfo[]} 
+   * @returns {INodeInfo[]}
    */
   public get tree(): INodeInfo[] {
     return this.nodes;

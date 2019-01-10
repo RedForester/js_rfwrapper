@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { IMapInfo } from '../../Map/interface';
-import { IBatch, IBatchResult, ISearchResult, IMapNotifLast, IMapNotif, IExceptions } from './interfaces';
+import {
+  IBatch,
+  IBatchResult,
+  ISearchResult,
+  IMapNotifLast,
+  IMapNotif,
+  IExceptions,
+} from './interfaces';
 
 export default class CGlobal {
   /**
@@ -175,7 +182,7 @@ export default class CGlobal {
     to: string
   ): Promise<IMapNotif[]> {
     try {
-      const res= await axios(
+      const res = await axios(
         `/kv/partition/mapNotif:${mapid}:${kvsession}?from=${from}&to=${to}`,
         this.axios
       );

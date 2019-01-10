@@ -1,6 +1,11 @@
 import { IAxios } from '../interfaces';
 import { CApi } from '../Utils/api';
-import { INodeInfo, INodeBody, INodeFindOptions, INodeType } from './interfaces';
+import {
+  INodeInfo,
+  INodeBody,
+  INodeFindOptions,
+  INodeType,
+} from './interfaces';
 import { type } from 'os';
 
 export class CNodeWrapper implements INodeInfo {
@@ -26,7 +31,7 @@ export class CNodeWrapper implements INodeInfo {
       displayable: true,
       name: 'nontyped',
       icon: '',
-      default_child_node_type_id: ''
+      default_child_node_type_id: '',
     },
     properties: null,
     parent: '',
@@ -86,11 +91,9 @@ export class CNodeWrapper implements INodeInfo {
    * @param {INodeFindOptions} options параметры поиска
    * @returns {INodeInfo[]}
    */
-  public async findAll(
-    options: INodeFindOptions
-  ): Promise<INodeInfo[]> {
+  public async findAll(options: INodeFindOptions): Promise<INodeInfo[]> {
     const res = await this.api.map.getTree(this.map_id, this.id);
-    
+
     const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
       const result: INodeInfo[] = [];
       for await (const child of nodes) {
@@ -136,7 +139,7 @@ export class CNodeWrapper implements INodeInfo {
         ) {
           continue;
         }
-        
+
         if (options.typeid && options.typeid !== child.body.type_id) {
           continue;
         }

@@ -55,7 +55,7 @@ export interface INodeFindOptions {
 /**
  * @description информация об типе узла, добавляется дополнительно
  */
-export interface INodeType { 
+export interface INodeType {
   id: string;
   map_id: string;
   displayable: boolean;

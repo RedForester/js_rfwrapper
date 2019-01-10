@@ -118,7 +118,7 @@ test('Should create search request and return one hits', async () => {
     },
   });
 
-  await (() => new Promise(res => setTimeout(res, 10)))();
+  await (() => new Promise(res => setTimeout(res, 2000)))();
   const result = await api.global.search('Somerandom', [testmap.id]);
 
   expect(result.hits).toEqual(

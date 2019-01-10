@@ -1,7 +1,3 @@
-import {
-  version
-} from "punycode";
-
 /**
  * @description Используется для добавления нового пользователя
  */
@@ -27,7 +23,7 @@ export interface IBatch {
   /**
    * @description тело запроса; необходимо если POST запрос
    */
-  body ? : string;
+  body?: string;
 }
 
 /**
@@ -170,7 +166,7 @@ export interface IMapNotif {
       /**
        * @description пользователь является ли расширением
        */
-      is_extension_user: boolean
+      is_extension_user: boolean;
     };
   };
 }
