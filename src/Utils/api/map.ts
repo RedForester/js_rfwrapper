@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { IMapAccessUser } from './interfaces';
-import { IMapInfo } from '../../Map/interface';
+import { IMapInfo, INodeInfo } from '../../Map/interface';
 
 export default class CMap {
   private axios: IAxios;
@@ -85,7 +85,7 @@ export default class CMap {
     mapid: string,
     nodeid: string = '',
     levelCount: number = 5
-  ): Promise<any> {
+  ): Promise<INodeInfo> {
     try {
       let res;
       if (nodeid !== '') {

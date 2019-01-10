@@ -181,3 +181,12 @@ export interface IMapNotif {
 export interface IExceptions {
   [k: string]: string;
 }
+
+export interface INodeTypeInfo {
+  id: string;
+  map_id: string;
+  displayable: true;
+  name: string;
+  icon: string;
+  default_child_node_type_id: string;
+}

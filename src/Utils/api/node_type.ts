@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
+import { INodeTypeInfo } from './interfaces';
 
 export default class CNodeType {
   private axios: IAxios;
@@ -11,9 +12,9 @@ export default class CNodeType {
    * @description Информация об типе узла
    * @async
    * @param {string} nodetypeid uuid типа узла
-   * @return {Promise<any>} результат
+   * @return {Promise<INodeTypeInfo>} результат
    */
-  public async get(nodetypeid: string): Promise<any> {
+  public async get(nodetypeid: string): Promise<INodeTypeInfo> {
     try {
       const res = await axios(`/api/node_types/${nodetypeid}`, this.axios);
       return res.data;
@@ -30,13 +31,13 @@ export default class CNodeType {
    * @param map_id map uuid
    * @param name название типа узла
    * @param properties свойства у типа узла
-   * @returns {Promise<any>}
+   * @returns {Promise<INodeTypeInfo>}
    */
   public async create(
     map_id: string,
     name: string,
     properties: any = {}
-  ): Promise<any> {
+  ): Promise<INodeTypeInfo> {
     try {
       const res = await axios.post(
         `/api/node_types`,

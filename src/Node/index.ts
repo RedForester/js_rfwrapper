@@ -1,9 +1,9 @@
 import { IAxios } from '../interfaces';
 import { CApi } from '../Utils/api';
-import { INodeInfo, INodeBody, INodeFindOptions } from './interfaces';
+import { INodeInfo, INodeBody, INodeFindOptions, INodeType } from './interfaces';
 import { type } from 'os';
 
-export class CNodeWrapper {
+export class CNodeWrapper implements INodeInfo {
   public ready: Promise<CNodeWrapper>;
 
   public id: string = '';
@@ -16,13 +16,32 @@ export class CNodeWrapper {
   public readers: string[] = [];
   public nodelevel: number = 0;
   public meta: object = {};
-  public body?: INodeBody;
+  public body: INodeBody = {
+    id: '',
+    map_id: '',
+    type_id: '',
+    type: {
+      id: 'nontyped',
+      map_id: '',
+      displayable: true,
+      name: 'nontyped',
+      icon: '',
+      default_child_node_type_id: ''
+    },
+    properties: null,
+    parent: '',
+    unread_comments_count: 0,
+    children: [],
+    access: null,
+    meta: null,
+    comments_count: 0,
+  };
 
   // PRIVATE
   private api: CApi;
 
   /**
-   * Класс для работы с узлом
+   * @description Класс для работы с узлом
    * @param params
    * @param id
    * @param node
@@ -44,7 +63,7 @@ export class CNodeWrapper {
   }
 
   /**
-   * Иницилизирует и загружает информацию о карте
+   * @description Иницилизирует и загружает информацию о карте
    * @param update флаг о необходимости загрузки
    * @returns {Promise<CNodeWrapper>} загруженый класс
    */
@@ -54,50 +73,79 @@ export class CNodeWrapper {
       // заполняем свойства у класса
       // warning: rewrite
       Object.assign(this, data);
+
+      if (data.body.type_id) {
+        this.body.type = await this.api.nodetype.get(data.body.type_id);
+      }
     }
     return this;
   }
 
-  public async update(data: INodeInfo): Promise<CNodeWrapper> {
-    // todo
-    return this;
-  }
-
   /**
-   * Поиск всех дочерних узлов по типу, условию, регулярке
+   * @description Поиск всех дочерних узлов по типу, условию, регулярке
    * @param {INodeFindOptions} options параметры поиска
+   * @returns {INodeInfo[]}
    */
   public async findAll(
-    options: INodeFindOptions = { typeid: '*' }
+    options: INodeFindOptions
   ): Promise<INodeInfo[]> {
     const res = await this.api.map.getTree(this.map_id, this.id);
-
+    
     const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
       const result: INodeInfo[] = [];
-
       for await (const child of nodes) {
-        // todo: добавить поиск по пользовательским полям
+        if (child.body.children) {
+          Object.assign(result, await dive(child.body.children));
+        }
+        // указана регулярка для поиска но ничего не найдено
         if (
           options.regex &&
-          options.regex.test(child.body.properties.global.title)
+          !options.regex.test(child.body.properties.global.title)
         ) {
-          result.push(child);
           continue;
         }
 
-        if (child.body.type_id === options.typeid) {
-          result.push(child);
-        } else if (options.typeid === '*') {
-          result.push(child);
-        } else {
-          result.concat(await dive(child.body.children));
+        // указан тип узла, но он не подходит
+        if (options.typeid && options.typeid !== child.body.type_id) {
           continue;
         }
+
+        result.push(child);
       }
-
       return result;
     };
 
-    return dive(res);
+    return dive(res.body.children);
+  }
+
+  /**
+   * @description Позволяет находить первый поподающий под условия узел
+   * @param options Параметры поиска по узлам
+   * @returns {Promise<INodeInfo | boolean>} найденый узел или false если таких нету
+   */
+  public async findOne(
+    options: INodeFindOptions
+  ): Promise<INodeInfo | boolean> {
+    const res = await this.api.map.getTree(this.map_id, this.id);
+
+    const dive = async (nodes: INodeInfo[]): Promise<INodeInfo | boolean> => {
+      for await (const child of nodes) {
+        if (
+          options.regex &&
+          !options.regex.test(child.body.properties.global.title)
+        ) {
+          continue;
+        }
+        
+        if (options.typeid && options.typeid !== child.body.type_id) {
+          continue;
+        }
+
+        return child;
+      }
+      return false;
+    };
+
+    return dive(res.body.children);
   }
 }

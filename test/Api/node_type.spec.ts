@@ -27,6 +27,7 @@ test('Should create new Node Type', async () => {
   const nodetype = result[0];
 
   expect(Array.isArray(result)).toBe(true);
+  
   expect(nodetype).toMatchObject({
     map_id: testmap.id,
     name: 'sometype',

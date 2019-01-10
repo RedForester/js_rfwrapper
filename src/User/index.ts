@@ -1,4 +1,5 @@
 import { IUserInfo } from '../Map/interface';
+import { IUserContacts } from './interfaces';
 
 /**
  * Создает класс пользователя
@@ -11,7 +12,7 @@ export class CUserWrapper implements IUserInfo {
   public avatar: string = '';
   public registration_date: number = 0;
   public birthday: number = 0;
-  public contacts: string[] = [];
+  public contacts: IUserContacts = {};
 
   /**
    * @param id uuid пользователя

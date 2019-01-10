@@ -25,6 +25,7 @@
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
     "test": "jest --forceExit",
+    "test:dev": "DEBUG_RF_URL=http://***REMOVED*** jest --forceExit",
     "coverage": "jest --forceExit --coverage",
     "watch": "npm run build -- --watch",
     "watch:test": "jest --watch",

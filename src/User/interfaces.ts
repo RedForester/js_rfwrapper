@@ -33,7 +33,7 @@ export interface IUserInfo {
   /**
    * @description список контактов
    */
-  contacts?: IUserContacts[];
+  contacts?: IUserContacts;
 }
 
 /**
@@ -90,15 +90,15 @@ export interface IUser {
   saved_search_queries?: IUserSavedSearchQueriesItem[];
 }
 
-interface IUserContacts {
+export interface IUserContacts {
   [k: string]: string;
 }
-interface IUserTagsItem {
+export interface IUserTagsItem {
   id: string;
   name: string;
   removable: boolean;
 }
-interface IUserSavedSearchQueriesItem {
+export interface IUserSavedSearchQueriesItem {
   id: string;
   title: string;
   query: string;

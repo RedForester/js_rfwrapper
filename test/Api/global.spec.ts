@@ -73,7 +73,7 @@ test('Should return last event timestamps', async () => {
 
 test('Should wait event by version', async () => {
   const user = await api.user.get();
-  const result = await api.global.mapNotifLast(testmap.id, user.kv_session, 0);
+  const result = await api.global.mapNotifLast(testmap.id, user.kv_session);
 
   expect(result).toMatchObject({
     value: new Date(node.meta.creation_timestamp).getTime().toString(),

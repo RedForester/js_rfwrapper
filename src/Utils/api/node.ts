@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { INodeInfo } from '../../Map/interface';
+import { INodeBody } from '../../Node/interfaces';
 
 export default class CNode {
   private axios: IAxios;
@@ -76,7 +77,7 @@ export default class CNode {
     map_id: string,
     parent: string,
     { position = '["R",-1]', properties = {} }: any
-  ): Promise<any> {
+  ): Promise<INodeInfo> {
     // todo: добавить интерфейс и обязательно добавлять пустые поля style byType byUser
     try {
       const res = await axios.post(

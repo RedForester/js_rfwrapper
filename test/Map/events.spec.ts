@@ -1,6 +1,6 @@
 import Context from '../../src/Map/contex';
 import { Wrapper, Api } from '../../src';
-import { IMapInfo } from '../../lib/Map/interface';
+import { IMapInfo } from '../../src/Map/interface';
 
 const params = {
   username: '***REMOVED***',
