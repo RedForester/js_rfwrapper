@@ -128,6 +128,12 @@ test('Should request access to map', async () => {
   expect(result);
 });
 
+test('Should return empty nodes', async () => {
+  const result = await api.map.getTree(testmap.id, testmap.root_node_id);
+
+  expect(result.body.children).toEqual([]);
+});
+
 afterAll(async () => {
   await api.map.delete(testmap.id);
 });

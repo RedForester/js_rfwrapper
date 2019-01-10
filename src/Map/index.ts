@@ -58,12 +58,12 @@ export class CMapWrapper implements IMapWrapper {
 
     if (id) {
       this.id = id;
-      this.ready = this.init(options.viewport || this.id, true);
+      this.ready = this.init(options.viewport || '', true);
     } else {
       // fixme: this
       if (options.map) {
         Object.assign(this, options.map);
-        this.ready = this.init(options.viewport || this.id, false);
+        this.ready = this.init(options.viewport || '', false);
       } else {
         throw new Error(`Map cannot be load`);
       }
@@ -79,7 +79,9 @@ export class CMapWrapper implements IMapWrapper {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
     }
-    await this.make_tree(viewport);
+    if (viewport !== '') {
+      await this.make_tree(viewport);
+    }
 
     this.start();
     return this;
@@ -201,18 +203,19 @@ export class CMapWrapper implements IMapWrapper {
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
     const res = await this.api.map.getTree(this.id, viewport);
-
+    
     /**
      * Функция для обхода всех узлов в дереве
      * @param nodes список узолов
      */
     const dive = async (nodes: INodeInfo[]) => {
       for await (const child of nodes) {
-        await dive(child.body.children);
+        await dive(child.body.children || []);
         this.nodes.push(child);
       }
     };
-    await dive(res.body.children);
+    
+    await dive(res.body.children || []);
     return this;
   }
 }

@@ -98,7 +98,7 @@ export class CNodeWrapper implements INodeInfo {
       const result: INodeInfo[] = [];
       for await (const child of nodes) {
         if (child.body.children) {
-          Object.assign(result, await dive(child.body.children));
+          Object.assign(result, await dive(child.body.children || []));
         }
         // указана регулярка для поиска но ничего не найдено
         if (
@@ -118,7 +118,7 @@ export class CNodeWrapper implements INodeInfo {
       return result;
     };
 
-    return dive(res.body.children);
+    return dive(res.body.children || []);
   }
 
   /**
@@ -149,6 +149,6 @@ export class CNodeWrapper implements INodeInfo {
       return false;
     };
 
-    return dive(res.body.children);
+    return dive(res.body.children || []);
   }
 }

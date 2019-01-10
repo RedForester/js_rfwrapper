@@ -88,13 +88,7 @@ export default class CMap {
   ): Promise<INodeInfo> {
     try {
       let res;
-      if (nodeid !== '') {
-        res = await axios(
-          `/api/maps/${mapid}/nodes/level_count/${levelCount}`,
-          this.axios
-        );
-        return res.data;
-      }
+
       res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
