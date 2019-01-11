@@ -39,7 +39,7 @@ export class CMapWrapper implements IMapWrapper {
   // для хранения настроек
   private axios: IAxios;
   // для отслеживания статуса лонгпулинга
-  private longpool: boolean = true;
+  private longpool: boolean;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
 
@@ -51,19 +51,20 @@ export class CMapWrapper implements IMapWrapper {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = {}) {
+  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = { }) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
+    this.longpool = options.enablePolling || false;
 
     if (id) {
       this.id = id;
-      this.ready = this.init(options.viewport || '', true);
+      this.ready = this.init(options.viewport, true);
     } else {
       // fixme: this
       if (options.map) {
         Object.assign(this, options.map);
-        this.ready = this.init(options.viewport || '', false);
+        this.ready = this.init(options.viewport, false);
       } else {
         throw new Error(`Map cannot be load`);
       }
@@ -75,13 +76,11 @@ export class CMapWrapper implements IMapWrapper {
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(viewport: string, update: boolean): Promise<CMapWrapper> {
+  public async init(viewport?: string, update?: boolean): Promise<CMapWrapper> {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
     }
-    if (viewport !== '') {
-      await this.make_tree(viewport);
-    }
+    await this.make_tree(viewport || this.root_node_id);
 
     this.start();
     return this;

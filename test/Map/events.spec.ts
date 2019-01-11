@@ -21,10 +21,8 @@ beforeAll(async () => {
 });
 
 test('Shoud create map wrapper without longpolling', async (done) => {
-  const map = await rf.Map(testmap.id, {
-    enablePolling: false
-  });
-    
+  const map = await rf.Map(testmap.id);
+  
   map.on('*', (ctx: Context) => {
     throw new Error('Must not be longpolling');
   });
@@ -52,23 +50,26 @@ describe('MapEvent#Context', () => {
   };
 
   test('Should create loongpolling with callback and trigger to any events', async (done) => {
-    const map = await rf.Map(testmap.id);
+    const map = await rf.Map(testmap.id, {
+      enablePolling: true
+    });
     
     map.on('*', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
-      expect(ctx.sessionId).toBeTruthy();
       done();
     });
 
     // tslint:disable-next-line
-    map.next(new Context(event), map);
+    await api.node.create(map.id, map.root_node_id, {});
   });
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
-    const map = await rf.Map(testmap.id);
+    const map = await rf.Map(testmap.id, {
+      enablePolling: true
+    });
     
     map.on('node_created', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
@@ -84,7 +85,9 @@ describe('MapEvent#Context', () => {
   });
 
   test('Should create loongpolling without valid trigger', async (done) => {
-    const map = await rf.Map(testmap.id);
+    const map = await rf.Map(testmap.id, {
+      enablePolling: true
+    });
     
     map.on('node_empty', (ctx) => ctx);
     map.on('node_created', (ctx: Context) => {
@@ -103,7 +106,9 @@ describe('MapEvent#Context', () => {
 
 
   test('Should create loongpolling with callback to trigger any events', async (done) => {
-    const map = await rf.Map(testmap.id);
+    const map = await rf.Map(testmap.id, {
+      enablePolling: true
+    });
     
     map.on(null, (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);

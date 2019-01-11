@@ -1,5 +1,5 @@
 import { Wrapper, Api } from '../../src';
-import { IMapInfo } from '../../src/Map/interface';
+import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 
 const api = new Api({
   username: '***REMOVED***',
@@ -7,9 +7,11 @@ const api = new Api({
 });
 
 let map: IMapInfo;
+let node: INodeInfo;
 
 beforeAll(async () => {
   map = await api.map.create('te1stmap');
+  node = await api.node.create(map.id, map.root_node_id, {});
 });
 
 const rf = new Wrapper({
@@ -30,8 +32,8 @@ test('Should load Map by uuid', async () => {
 
   expect(result.id).toEqual(map.id);
   expect(result.name).toEqual(map.name);
-  expect(result.layout).toEqual(map.layout || 'R');
   expect(result.owner).toEqual(map.owner);
+  expect(result.root_node_id).toEqual(map.root_node_id);
 });
 
 test('Should load Map from information', async () => {
@@ -39,8 +41,17 @@ test('Should load Map from information', async () => {
 
   expect(result.id).toEqual(map.id);
   expect(result.name).toEqual(map.name);
-  expect(result.layout).toEqual(map.layout || '');
   expect(result.owner).toEqual(map.owner);
+  expect(result.root_node_id).toEqual(map.root_node_id);
+});
+
+test('Should load Map with custom viewport', async () => {
+  const result = await rf.Map(map.id, { viewport: node.id });
+  
+  expect(result.id).toEqual(map.id);
+  expect(result.name).toEqual(map.name);
+  expect(result.owner).toEqual(map.owner);
+  expect(result.root_node_id).toEqual(map.root_node_id);
 });
 
 afterAll(async () => {
