@@ -51,7 +51,7 @@ export class CMapWrapper implements IMapWrapper {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = { }) {
+  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = {}) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -202,7 +202,7 @@ export class CMapWrapper implements IMapWrapper {
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
     const res = await this.api.map.getTree(this.id, viewport);
-    
+
     /**
      * @description Функция для обхода всех узлов в дереве
      * @param nodes список узолов
@@ -213,7 +213,7 @@ export class CMapWrapper implements IMapWrapper {
         this.nodes.push(child);
       }
     };
-    
+
     await dive(res.body.children || []);
     return this;
   }

@@ -105,7 +105,8 @@ export default class CMap {
    * @param {string} nodeid uuid узла
    * @param {number} radius радиус в котором нужно получить узлы
    * @return {Promise<INodeInfo>} Дерево узлов
-   */ 
+   */
+
   public async getRadius(
     mapid: string,
     nodeid: string = '',
@@ -114,7 +115,10 @@ export default class CMap {
     try {
       let res;
 
-      res = await axios(`/api/maps/${mapid}/nodes/${nodeid}/level_radius/${radius}`, this.axios);
+      res = await axios(
+        `/api/maps/${mapid}/nodes/${nodeid}/level_radius/${radius}`,
+        this.axios
+      );
       return res.data;
     } catch (err) {
       if (!err.response.data) {

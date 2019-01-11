@@ -147,15 +147,12 @@ export default class CGlobal {
   ): Promise<IMapNotifLast> {
     try {
       let url: string = `/kv/keys/mapNotifLast:${mapid}:${kvsession}`;
-      
+
       if (waitVersion !== '') {
         url += `?waitVersion=${waitVersion}`;
       }
 
-      const res = await axios(
-        url,
-        this.axios
-      );
+      const res = await axios(url, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response) {
