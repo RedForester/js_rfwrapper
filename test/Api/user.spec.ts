@@ -37,7 +37,7 @@ test('Should update username', async () => {
   });
 
   const result = await app.user.get();
-  expect(result.name).toEqual('somename')
+  expect(result.name).toEqual('somename');
 });
 
 test('Should throw error when update undefinded key', async () => {

@@ -8,8 +8,12 @@ const api = new rf.Api({
 // delete all maps
 api.global.getMaps().then(async(result) => {
   for await (let map of result) {
-    console.log(map.id);
+    console.log(map.name, map.id);
     
-    await api.map.delete(map.id);
+    try {
+      await api.map.delete(map.id);
+    } catch (err) {
+      console.log(err);
+    }
   }
 });

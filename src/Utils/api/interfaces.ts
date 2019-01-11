@@ -3,7 +3,7 @@
  */
 export interface IMapAccessUser {
   access: any;
-  nodeId: string;
+  nodeId?: string;
   sendMail: boolean;
   username: string;
 }

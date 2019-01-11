@@ -11,6 +11,41 @@ export default class CNode {
   }
 
   /**
+   * @description
+   * @param nodeid uuid узла
+   * @param access параметры доступа
+   */
+  public async addAccess(nodeid: string, access: any) {
+    try {
+      const res = await axios.patch(`/api/nodes/${nodeid}/access`, {
+        access
+      }, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * @description
+   * @param {string} nodeid uuid узла
+   */
+  public async access(nodeid: string) {
+    try {
+      const res = await axios.get(`/api/nodes/${nodeid}/access`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
    * @description Получение информации об узле
    * @async
    * @param {string} nodeid uuid узла
