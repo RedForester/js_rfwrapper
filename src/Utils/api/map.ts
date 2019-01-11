@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
-import { IMapAccessUser } from './interfaces';
-import { IMapInfo, INodeInfo } from '../../Map/interface';
+import { IMapAccessUser, INodeTypeInfo } from './interfaces';
+import { IMapInfo, INodeInfo, IUserInfo } from '../../Map/interface';
 
 export default class CMap {
   private axios: IAxios;
@@ -59,9 +59,9 @@ export default class CMap {
   /**
    * @description Получение всех типов узла
    * @param {string} mapid uuid карты
-   * @return {Promise<any>} Список типов
+   * @return {Promise<INodeTypeInfo[]>} Список типов
    */
-  public async getTypes(mapid: string): Promise<any> {
+  public async getTypes(mapid: string): Promise<INodeTypeInfo[]> {
     try {
       const res = await axios(`/api/maps/${mapid}/node_types`, this.axios);
       return res.data;
@@ -79,7 +79,7 @@ export default class CMap {
    * @param {string} mapid uuid карты
    * @param {string} nodeid uuid узла, если не указан то от начала карты
    * @param {number} level_count максимальная глубина при получении узлов
-   * @return {Promise<any>} Дерево узлов
+   * @return {Promise<INodeInfo>} Дерево узлов
    */
   public async getTree(
     mapid: string,
@@ -90,6 +90,31 @@ export default class CMap {
       let res;
 
       res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * @description Получить все узлы дерева в радиусе
+   * @param {string} mapid uuid карты
+   * @param {string} nodeid uuid узла
+   * @param {number} radius радиус в котором нужно получить узлы
+   * @return {Promise<INodeInfo>} Дерево узлов
+   */ 
+  public async getRadius(
+    mapid: string,
+    nodeid: string = '',
+    radius: number = 2
+  ): Promise<INodeInfo> {
+    try {
+      let res;
+
+      res = await axios(`/api/maps/${mapid}/nodes/${nodeid}/level_radius/${radius}`, this.axios);
       return res.data;
     } catch (err) {
       if (!err.response.data) {
@@ -155,9 +180,9 @@ export default class CMap {
    * @description Получение списка пользователей на карте
    * @async
    * @param {string} mapid uuid карты
-   * @return {Promise<any>} JSON
+   * @return {Promise<IUserInfo[]>} JSON
    */
-  public async users(mapid: string): Promise<any> {
+  public async users(mapid: string): Promise<IUserInfo[]> {
     try {
       const res = await axios.get(`/api/maps/${mapid}/users`, this.axios);
       return res.data;
@@ -176,12 +201,12 @@ export default class CMap {
    * @param nodeId
    * @param sendMail
    * @param username
-   * @returns {Promise<any>}
+   * @returns {Promise<IUserInfo[]>}
    */
   public async addUser(
     mapid: string,
     { access, nodeId, sendMail = true, username }: IMapAccessUser
-  ): Promise<any> {
+  ): Promise<IUserInfo[]> {
     try {
       const res = await axios.post(
         `/api/maps/${mapid}/users`,

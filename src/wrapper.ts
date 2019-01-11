@@ -24,7 +24,7 @@ export class Wrapper {
   }
 
   /**
-   * Создает экземпляр узла
+   * @description Создает экземпляр узла
    * @param {string} nodeid uuid узла
    * @returns {Promise<CNodeWrapper>}
    */
@@ -33,7 +33,7 @@ export class Wrapper {
   }
 
   /**
-   * Создает экземпляр карты
+   * @description Создает экземпляр карты
    * @param {string} id uuid карты
    * @param {IMapInfo} map информация о карте из которой буде тзагружена карты
    * @returns {Promise<CMapWrapper>}

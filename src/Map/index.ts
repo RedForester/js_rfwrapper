@@ -44,7 +44,7 @@ export class CMapWrapper implements IMapWrapper {
   private nodes: INodeInfo[] = [];
 
   /**
-   * Создает экземпляр класса CMapWrapper
+   * @description Создает экземпляр класса CMapWrapper
    * @param {IAxios} params параметры для работы axios
    * @param {string} id uuid карты с которой будем работать
    * @param {IMapInfo} map информация о карте
@@ -71,7 +71,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Иницилизирует и загружает информацию о карте
+   * @description Иницилизирует и загружает информацию о карте
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
@@ -88,7 +88,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Создание нового узла
+   * @description Создание нового узла
    * @param {string} nodeid uuid узла, если не указан то создается от корня карты
    * @param {INodeInfo} data данные будут добавлены при создании карты
    */
@@ -101,7 +101,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Подписка на события названию события
+   * @description Подписка на события названию события
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
@@ -118,7 +118,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Используется для создания LongPoll соединения с RFKV
+   * @description Используется для создания LongPoll соединения с RFKV
    * @async
    * @returns {Promise<any>} Возвращяет промис
    */
@@ -169,7 +169,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Получить массив загруженых узлов для данной карты
+   * @description Получить массив загруженых узлов для данной карты
    * @returns {INodeInfo[]}
    */
   public get tree(): INodeInfo[] {
@@ -177,7 +177,7 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Последовательно переключает обработчики
+   * @description Последовательно переключает обработчики
    * @param {Context} ctx Содержит new Context
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
@@ -198,14 +198,14 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * Загружает карту и узлы от указаного узла
+   * @description Загружает карту и узлы от указаного узла
    * @param {string} viewport узел который будет началом
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
     const res = await this.api.map.getTree(this.id, viewport);
     
     /**
-     * Функция для обхода всех узлов в дереве
+     * @description Функция для обхода всех узлов в дереве
      * @param nodes список узолов
      */
     const dive = async (nodes: INodeInfo[]) => {

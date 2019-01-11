@@ -23,11 +23,10 @@ test('Should return CNodeType class', () => {
 
 test('Should create new Node Type', async () => {
   await api.nodetype.create(testmap.id, 'sometype');
-  let result = await api.map.getTypes(testmap.id);
+  let result: any = await api.map.getTypes(testmap.id);
   const nodetype = result[0];
 
   expect(Array.isArray(result)).toBe(true);
-  
   expect(nodetype).toMatchObject({
     map_id: testmap.id,
     name: 'sometype',

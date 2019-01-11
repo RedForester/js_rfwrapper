@@ -1,5 +1,5 @@
-import { Api } from './api';
-import { Wrapper } from './wrapper';
+export { Api } from './api';
+export { Wrapper } from './wrapper';
 
 /*
 import axios from 'axios';
@@ -13,5 +13,3 @@ axios.interceptors.response.use(response => {
   
   return response;
 });*/
-
-export { Api, Wrapper };

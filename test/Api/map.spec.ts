@@ -134,6 +134,51 @@ test('Should return empty nodes', async () => {
   expect(result.body.children).toEqual([]);
 });
 
+test('Should throw error when request tree', async () => {
+  try {
+    const result = await api.map.getTree('somerandommapuuid', testmap.root_node_id);
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты somerandommapuuid');
+  }
+
+  try {
+    const result = await api.map.getTree(testmap.id, 'somerandomnodeuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+  }
+});
+
+test('Should return map tree', async () => {
+  const result1 = await api.map.getRadius(testmap.id, testmap.root_node_id, 3);
+  const result2 = await api.map.getTree(testmap.id, testmap.root_node_id);
+
+  expect(result1).toEqual(result2);
+});
+
+test('Should return empty nodes', async () => {
+  const result = await api.map.getRadius(testmap.id, testmap.root_node_id, 3);
+
+  expect(result.body.children).toEqual([]);
+});
+
+test('Should throw error when request tree', async () => {
+  try {
+    const result = await api.map.getRadius('somerandommapuuid', testmap.root_node_id, 3);
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты somerandommapuuid');
+  }
+
+  try {
+    const result = await api.map.getRadius(testmap.id, 'somerandomnodeuuid', 3);
+  } catch (err) {
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+  }
+});
+
 afterAll(async () => {
   await api.map.delete(testmap.id);
 });
