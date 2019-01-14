@@ -230,28 +230,4 @@ export default class CMap {
       throw err.response.data;
     }
   }
-
-  /**
-   * @description Удаляет пользователя с карты
-   * @param {string} mapid 
-   * @param {string} userid
-   * @returns {Promise<any>}
-   */
-  public async deleteUser(
-    mapid: string,
-    userid: string
-  ): Promise<any> {
-    try {
-      const res = await axios.delete(
-        `/api/maps/${mapid}/users`,
-        this.axios
-      );
-      return res.data;
-    } catch (err) {
-      if (!err.response.data) {
-        throw err;
-      }
-      throw err.response.data;
-    }
-  }
 }
