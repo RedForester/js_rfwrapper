@@ -200,11 +200,11 @@ export default class CMap {
 
   /**
    * @description Добавляет на карту нового пользоавтеля с указаными правами
-   * @param mapid
-   * @param access
-   * @param nodeId
-   * @param sendMail
-   * @param username
+   * @param {string} mapid
+   * @param {string} access
+   * @param {string} nodeId
+   * @param {string} sendMail
+   * @param {string} username
    * @returns {Promise<IUserInfo[]>}
    */
   public async addUser(
@@ -220,6 +220,30 @@ export default class CMap {
           nodeId,
           access,
         },
+        this.axios
+      );
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * @description Удаляет пользователя с карты
+   * @param {string} mapid 
+   * @param {string} userid
+   * @returns {Promise<any>}
+   */
+  public async deleteUser(
+    mapid: string,
+    userid: string
+  ): Promise<any> {
+    try {
+      const res = await axios.delete(
+        `/api/maps/${mapid}/users`,
         this.axios
       );
       return res.data;

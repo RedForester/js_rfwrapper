@@ -81,13 +81,12 @@ describe('user1 is admin and user2 with only read access', () => {
     });
     await api.user1.node.addAccess(node.id, {
       [users.user2.user_id]: {
-        node: 'user_rc',
-        branch_in: 'user_r'
+        node: 'user_rc'
       }
     });
   });
 
-  test('user1 must add user2 as map readed', async () => {    
+  test('user2 can read node', async () => {    
     const result = await api.user2.node.get(node.id);
 
     expect(result).toMatchObject({
@@ -102,6 +101,63 @@ describe('user1 is admin and user2 with only read access', () => {
     } catch (err) {
       expect(err.code).toEqual('0306');
       expect(err.message).toEqual(`Доступ к узлу (read) ${map.root_node_id} для пользователя ${users.user2.user_id} запрещен`);
+    }
+  });
+  test('user2 cannot create new node', async () => {
+    try {
+      await api.user2.node.create(map.id, node.id, {});
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (parent) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+    }
+  });
+  test('user2 cannot update node', async () => {
+    try {
+      await api.user2.node.update(node.id, {});
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (write) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+    }
+  });
+
+  afterAll(async () => {
+    await api.user1.node.addAccess(node.id, {
+      [users.user2.user_id]: {
+        revoked: 'true'
+      }
+    });
+  });
+});
+
+describe('user1 is admin and user2 with only read branch access', () => {
+  let subnode: INodeInfo;
+  beforeAll(async () => {
+    subnode = await api.user1.node.create(map.id, node.id, {});
+  });
+
+  test('user1 must add user2 as map reader', async () => {
+    await api.user1.node.addAccess(node.id, {
+      [users.user2.user_id]: {
+        branch_in: 'user_r'
+      }
+    });
+  });
+
+  test('user1 must add user2 as map readed', async () => {    
+    const result = await api.user2.node.get(subnode.id);
+
+    expect(result).toMatchObject({
+      access: 'user_r',
+      id: subnode.id,
+      map_id: subnode.map_id
+    });
+  });
+  test('user2 cannot get node', async () => {
+    try {
+      await api.user2.node.get(node.id);
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (read) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
     }
   });
   test('user2 cannot create new node', async () => {
