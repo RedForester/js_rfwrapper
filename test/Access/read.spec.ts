@@ -72,13 +72,17 @@ describe('user1 is admin and user2 without access', async () => {
 describe('user1 is admin and user2 with only read access', async () => {
   test('user1 must add user2 as map readed', async () => {
     const node = await api.user1.node.create(map.id, map.root_node_id, {});
+    
     await api.user1.map.addUser(map.id, {
       access: {},
       username: users.user2.username,
       sendMail: false
     });
     await api.user1.node.addAccess(node.id, {
-      [users.user2.user_id]: 'user_r'
+      [users.user2.user_id]: {
+        node: 'user_rc',
+        branch_in: 'user_r'
+      }
     });
     
     await api.user2.node.get(node.id);

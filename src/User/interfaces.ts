@@ -104,3 +104,26 @@ export interface IUserSavedSearchQueriesItem {
   query: string;
   timestamp: number;
 }
+
+/**
+ * @description список пользователей и их права которые будут добавлены в узел
+ */
+export interface IAccessAddNewUser {
+  /**
+   * @description uuid пользователя который будет добавлен в узел
+   */
+  [s: string]: {
+    /**
+     * @description доступ к узлу
+     */
+    node?: string;
+    /**
+     * @description доступ к ветку
+     */
+    branch_in?: string;
+    /**
+     * @description права были удалены
+     */
+    revoked?: string;
+  };
+}
