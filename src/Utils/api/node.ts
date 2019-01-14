@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { INodeInfo } from '../../Map/interface';
 import { INodeBody } from '../../Node/interfaces';
+import { IAccessAddNewUser } from '../../User/interfaces';
 
 export default class CNode {
   private axios: IAxios;
@@ -15,7 +16,7 @@ export default class CNode {
    * @param nodeid uuid узла
    * @param access параметры доступа
    */
-  public async addAccess(nodeid: string, access: any) {
+  public async addAccess(nodeid: string, access: IAccessAddNewUser) {
     try {
       const res = await axios.patch(`/api/nodes/${nodeid}/access`, {
         access

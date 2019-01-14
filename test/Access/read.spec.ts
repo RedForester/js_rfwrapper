@@ -1,7 +1,8 @@
 import Context from '../../src/Map/contex';
 import { Wrapper, Api } from '../../src';
-import { IMapInfo } from '../../src/Map/interface';
+import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 import { IUser } from '../../src/User/interfaces';
+import { IExceptions } from '../../src/Utils/api/interfaces';
 
 const user1 = {
   username: '***REMOVED***',
@@ -17,6 +18,7 @@ const user2 = {
 
 let api: { user1: Api, user2: Api };
 let map: IMapInfo;
+let node: INodeInfo;
 let users: { user1: IUser, user2: IUser };
 
 beforeAll(async () => {
@@ -25,6 +27,7 @@ beforeAll(async () => {
     user2: new Api(user2)
   };
   map = await api.user1.map.create('testmap');
+  node = await api.user1.node.create(map.id, map.root_node_id, {});
 
   users = {
     user1: await api.user1.user.get(),
@@ -69,10 +72,8 @@ describe('user1 is admin and user2 without access', async () => {
   });
 });
 
-describe('user1 is admin and user2 with only read access', async () => {
-  test('user1 must add user2 as map readed', async () => {
-    const node = await api.user1.node.create(map.id, map.root_node_id, {});
-    
+describe('user1 is admin and user2 with only read access', () => {
+  test('user1 must add user2 as map reader', async () => {
     await api.user1.map.addUser(map.id, {
       access: {},
       username: users.user2.username,
@@ -84,8 +85,40 @@ describe('user1 is admin and user2 with only read access', async () => {
         branch_in: 'user_r'
       }
     });
-    
-    await api.user2.node.get(node.id);
+  });
+
+  test('user1 must add user2 as map readed', async () => {    
+    const result = await api.user2.node.get(node.id);
+
+    expect(result).toMatchObject({
+      access: 'user_rc',
+      id: node.id,
+      map_id: node.map_id
+    });
+  });
+  test('user2 cannot get root node', async () => {
+    try {
+      await api.user2.node.get(map.root_node_id);
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (read) ${map.root_node_id} для пользователя ${users.user2.user_id} запрещен`);
+    }
+  });
+  test('user2 cannot create new node', async () => {
+    try {
+      await api.user2.node.create(map.id, node.id, {});
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (parent) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+    }
+  });
+  test('user2 cannot update node', async () => {
+    try {
+      await api.user2.node.update(node.id, {});
+    } catch (err) {
+      expect(err.code).toEqual('0306');
+      expect(err.message).toEqual(`Доступ к узлу (write) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+    }
   });
 });
 
