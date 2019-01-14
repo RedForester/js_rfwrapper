@@ -165,6 +165,60 @@ test('Should throw error when update Node', async () => {
   }
 });
 
+test('Should change node access', async () => {
+  let testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
+  await api.node.addAccess(testnode.id, {
+    [userInfo.user_id]: {
+      node: 'user_r'
+    }
+  });
+
+  testnode = await api.node.get(testnode.id);
+  expect(testnode.access).toEqual('user_r');
+});
+
+test('Should throw error when change node access with unvalid data', async () => {
+  const testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
+
+  try {
+    const result = await api.node.addAccess(testnode.id, {
+      ['asdasdasdasd']: {
+        node: 'user_r'
+      }
+    });
+  } catch (e) {
+    expect(e.code).toEqual('0105');
+    expect(e.message).toEqual('Правила доступа для неизвестной роли user_r в зоне node');
+  }
+});
+
+test('Should return node access', async () => {
+  const testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
+  await api.node.addAccess(testnode.id, {
+    [userInfo.user_id]: {
+      node: 'user_all'
+    }
+  });
+
+  await api.node.access(testnode.id);
+});
+
+test('Should throw error when request access data', async () => {
+  const testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
+  await api.node.addAccess(testnode.id, {
+    [userInfo.user_id]: {
+      node: 'user_r'
+    }
+  });
+
+  try {
+    await api.node.access(testnode.id);
+  } catch (e) {
+    expect(e.code).toEqual('0306');
+    expect(e.message).toEqual(`Доступ к узлу (access) ${testnode.id} для пользователя ${userInfo.user_id} запрещен`);
+  }
+});
+
 afterAll(async () => {
   await api.map.delete(testmap.id);
 });
