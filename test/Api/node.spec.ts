@@ -219,6 +219,15 @@ test('Should throw error when request access data', async () => {
   }
 });
 
+test('Should throw error when delete node', async () => {
+  try {
+    await api.node.delete('asdasdasdasda');
+  } catch (e) {
+    expect(e.code).toEqual('0304');
+    expect(e.message).toEqual('Узла: asdasdasdasda не существует');
+  }
+});
+
 afterAll(async () => {
   await api.map.delete(testmap.id);
 });
