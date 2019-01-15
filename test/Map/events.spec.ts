@@ -22,7 +22,7 @@ beforeAll(async () => {
 
 test('Shoud create map wrapper without longpolling', async (done) => {
   const map = await rf.Map(testmap.id);
-  
+
   map.on('*', (ctx: Context) => {
     throw new Error('Must not be longpolling');
   });
@@ -53,7 +53,7 @@ describe('MapEvent#Context', () => {
     const map = await rf.Map(testmap.id, {
       enablePolling: true
     });
-    
+
     map.on('*', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
       expect(ctx.data).toBeTruthy();
@@ -64,13 +64,13 @@ describe('MapEvent#Context', () => {
 
     // tslint:disable-next-line
     await api.node.create(map.id, map.root_node_id, {});
-  });
+  }, 10000 /* максимальное время теста */);
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
     const map = await rf.Map(testmap.id, {
       enablePolling: true
     });
-    
+
     map.on('node_created', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
       expect(ctx.data).toBeTruthy();
@@ -88,7 +88,7 @@ describe('MapEvent#Context', () => {
     const map = await rf.Map(testmap.id, {
       enablePolling: true
     });
-    
+
     map.on('node_empty', (ctx) => ctx);
     map.on('node_created', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
@@ -109,7 +109,7 @@ describe('MapEvent#Context', () => {
     const map = await rf.Map(testmap.id, {
       enablePolling: true
     });
-    
+
     map.on(null, (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
       expect(ctx.data).toBeTruthy();
