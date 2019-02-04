@@ -52,6 +52,5 @@ export interface IMapWrapperOptions {
    * @description включать ли лонгпуллинг
    */
   enablePolling?: boolean;
-  map?: IMapInfo;
   viewport?: string;
 }

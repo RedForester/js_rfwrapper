@@ -11,8 +11,8 @@ const user1 = {
 };
 
 const user2 = {
-  username: '***REMOVED***',
-  password: '56016646f841e379a0782f5915475482',
+  username: 'fc3c423c4@mymailbest.com',
+  password: '***REMOVED***',
   host: process.env.DEBUG_RF_URL
 };
 

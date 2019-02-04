@@ -37,7 +37,7 @@ test('Should load Map by uuid', async () => {
 });
 
 test('Should load Map from information', async () => {
-  const result = await rf.Map(undefined, { map });
+  const result = await rf.Map(map);
 
   expect(result.id).toEqual(map.id);
   expect(result.name).toEqual(map.name);

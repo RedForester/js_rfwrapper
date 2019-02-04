@@ -34,11 +34,9 @@ export class Wrapper {
 
   /**
    * @description Создает экземпляр карты
-   * @param {string} id uuid карты
-   * @param {IMapInfo} map информация о карте из которой буде тзагружена карты
-   * @returns {Promise<CMapWrapper>}
+   * @param {string | IMapWrapperOptions} input ввод параметров
    */
-  public Map(id?: string, options?: IMapWrapperOptions): Promise<CMapWrapper> {
-    return new CMapWrapper(this.axios, id, options).ready;
+  public Map(input: string | IMapInfo, options: IMapWrapperOptions = {}): Promise<CMapWrapper> {
+    return new CMapWrapper(this.axios, input, options).ready;
   }
 }

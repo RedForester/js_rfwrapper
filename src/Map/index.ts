@@ -8,6 +8,7 @@ import {
   IUserInfo,
   IMapWrapperOptions,
   IMapWrapper,
+  IMapInfo,
 } from './interface';
 
 export class CMapWrapper implements IMapWrapper {
@@ -51,7 +52,7 @@ export class CMapWrapper implements IMapWrapper {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, input: string | IMapWrapperOptions) {
+  constructor(params: IAxios, input: string | IMapInfo, options: IMapWrapperOptions) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -62,9 +63,9 @@ export class CMapWrapper implements IMapWrapper {
       this.ready = this.init(undefined, true);
     } else {
       // fixme: this
-      if (input.map) {
-        Object.assign(this, input.map);
-        this.ready = this.init(input.viewport, false);
+      if (input) {
+        Object.assign(this, input);
+        this.ready = this.init(options.viewport || this.id, false);
       } else {
         throw new Error(`Map cannot be load`);
       }

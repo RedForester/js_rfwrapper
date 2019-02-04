@@ -49,7 +49,7 @@ test('Should create rf wrapper', () => {
     password: '***REMOVED***',
   });
 
-  expect(app).toBeInstanceOf(Wrapper)
+  expect(app).toBeInstanceOf(Wrapper);
 });
 
 test('Should create rf wrapper with unvalid user/pass', () => {

@@ -21,7 +21,7 @@ beforeAll(async () => {
 });
 
 test('Shoud create map wrapper without longpolling', async (done) => {
-  const map = await rf.Map(testmap.id);
+  const map = await rf.Map(testmap.id, { enablePolling: false });
 
   map.on('*', (ctx: Context) => {
     throw new Error('Must not be longpolling');
@@ -50,9 +50,7 @@ describe('MapEvent#Context', () => {
   };
 
   test('Should create loongpolling with callback and trigger to any events', async (done) => {
-    const map = await rf.Map(testmap.id, {
-      enablePolling: true
-    });
+    const map = await rf.Map(testmap.id);
 
     map.on('*', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
@@ -67,9 +65,7 @@ describe('MapEvent#Context', () => {
   }, 10000 /* максимальное время теста */);
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
-    const map = await rf.Map(testmap.id, {
-      enablePolling: true
-    });
+    const map = await rf.Map(testmap.id);
 
     map.on('node_created', (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
@@ -85,9 +81,7 @@ describe('MapEvent#Context', () => {
   });
 
   test('Should create loongpolling without valid trigger', async (done) => {
-    const map = await rf.Map(testmap.id, {
-      enablePolling: true
-    });
+    const map = await rf.Map(testmap.id);
 
     map.on('node_empty', (ctx) => ctx);
     map.on('node_created', (ctx: Context) => {
@@ -106,9 +100,7 @@ describe('MapEvent#Context', () => {
 
 
   test('Should create loongpolling with callback to trigger any events', async (done) => {
-    const map = await rf.Map(testmap.id, {
-      enablePolling: true
-    });
+    const map = await rf.Map(testmap.id);
 
     map.on(null, (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
