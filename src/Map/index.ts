@@ -51,20 +51,20 @@ export class CMapWrapper implements IMapWrapper {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = {}) {
+  constructor(params: IAxios, input: string | IMapWrapperOptions) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
     this.longpool = options.enablePolling || false;
 
-    if (id) {
-      this.id = id;
-      this.ready = this.init(options.viewport, true);
+    if (typeof input === 'string') {
+      this.id = input;
+      this.ready = this.init(undefined, true);
     } else {
       // fixme: this
-      if (options.map) {
-        Object.assign(this, options.map);
-        this.ready = this.init(options.viewport, false);
+      if (input.map) {
+        Object.assign(this, input.map);
+        this.ready = this.init(input.viewport, false);
       } else {
         throw new Error(`Map cannot be load`);
       }
