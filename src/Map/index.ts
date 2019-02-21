@@ -44,6 +44,8 @@ export class CMapWrapper implements IMapWrapper {
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
 
+  private viewport: string;
+
   /**
    * @description Создает экземпляр класса CMapWrapper
    * @param {IAxios} params параметры для работы axios
@@ -62,14 +64,16 @@ export class CMapWrapper implements IMapWrapper {
     this.middlewares = [];
     this.longpool = options.enablePolling || false;
 
+    this.viewport = options.viewport || '';
+
     if (typeof input === 'string') {
       this.id = input;
-      this.ready = this.init(undefined, true);
+      this.ready = this.init(true);
     } else {
       // fixme: this
       if (input) {
         Object.assign(this, input);
-        this.ready = this.init(options.viewport || this.id, false);
+        this.ready = this.init(false);
       } else {
         throw new Error(`Map cannot be load`);
       }
@@ -81,11 +85,11 @@ export class CMapWrapper implements IMapWrapper {
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(viewport?: string, update?: boolean): Promise<CMapWrapper> {
+  public async init(update?: boolean): Promise<CMapWrapper> {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
     }
-    await this.make_tree(viewport || this.root_node_id);
+    await this.make_tree(this.viewport || this.root_node_id);
 
     this.start();
     return this;
@@ -186,7 +190,7 @@ export class CMapWrapper implements IMapWrapper {
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  private next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
+  public next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
     // todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
@@ -218,7 +222,7 @@ export class CMapWrapper implements IMapWrapper {
         this.nodes.push(child);
       }
     };
-
+    
     await dive(res.body.children || []);
     return this;
   }

@@ -108,7 +108,6 @@ test('Should update Node', async () => {
   expect(result).toMatchObject({
     map_id: testmap.id,
     parent: testmap.root_node_id,
-    position: [ 'R', '1' ],
     access: 'user_all',
     originalParent: testmap.root_node_id,
     body: {
