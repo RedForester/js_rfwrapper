@@ -50,19 +50,20 @@ describe('MapEvent#Context', () => {
   };
 
   test('Should create loongpolling with callback and trigger to any events', async (done) => {
-    const map = await rf.Map(testmap.id);
+    const map = await rf.Map(testmap.id, { enablePolling: true });
 
-    map.on('*', (ctx: Context) => {
+    const handler = (ctx: Context) => {
       expect(ctx).toBeInstanceOf(Context);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
       done();
-    });
+    };
+    map.on('*', handler);
 
     // tslint:disable-next-line
-    await api.node.create(map.id, map.root_node_id, {});
-  }, 10000 /* максимальное время теста */);
+    await api.node.create(testmap.id, testmap.root_node_id, {})
+  }, 10000);
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
     const map = await rf.Map(testmap.id);
