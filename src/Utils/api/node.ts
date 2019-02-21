@@ -18,9 +18,13 @@ export default class CNode {
    */
   public async addAccess(nodeid: string, access: IAccessAddNewUser) {
     try {
-      const res = await axios.patch(`/api/nodes/${nodeid}/access`, {
-        access
-      }, this.axios);
+      const res = await axios.patch(
+        `/api/nodes/${nodeid}/access`,
+        {
+          access,
+        },
+        this.axios
+      );
       return res.data;
     } catch (err) {
       if (!err.response) {

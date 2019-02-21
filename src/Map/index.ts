@@ -52,7 +52,11 @@ export class CMapWrapper implements IMapWrapper {
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, input: string | IMapInfo, options: IMapWrapperOptions) {
+  constructor(
+    params: IAxios,
+    input: string | IMapInfo,
+    options: IMapWrapperOptions
+  ) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
