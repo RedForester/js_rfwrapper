@@ -75,7 +75,7 @@ test('Should return all user on map', async () => {
     "can_be_changed_by_role": false,
     "can_be_changed_export": false,
     "can_be_removed": false,
-    "can_export": false,
+    "can_export": true,
     "is_admin": true,
     "map_id": testmap.id,
     "new_owner": false,
@@ -103,13 +103,15 @@ test('Should add user to map', async () => {
         "can_be_changed_by_role": false,
         "can_be_changed_export": false,
         "can_be_removed": false,
-        "can_export": false,
+        "can_export": true,
         "is_admin": true,
         "map_id": testmap.id,
         "new_owner": false,
         "surname": null,
         "user_id": testuser.user_id,
-        "username": testuser.username
+        "username": testuser.username,
+        "name": testuser.name,
+        "role": testuser.role
       })
     ])
   );

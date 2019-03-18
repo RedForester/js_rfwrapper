@@ -53,6 +53,10 @@ export interface IUser {
    */
   name?: string;
   /**
+   * @description роль пользователя (при получении списка пользователей на карте)
+   */
+  role?: string;
+  /**
    * @description фамилия
    */
   surname?: string;

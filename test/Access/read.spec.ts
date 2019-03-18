@@ -11,8 +11,8 @@ const user1 = {
 };
 
 const user2 = {
-  username: 'fc3c423c4@mymailbest.com',
-  password: '***REMOVED***',
+  username: 'yusi@click-mail.net',
+  password: 'de8492b7971f6ded130a06cdd928fafe',
   host: process.env.DEBUG_RF_URL
 };
 
@@ -27,6 +27,7 @@ beforeAll(async () => {
     user2: new Api(user2)
   };
   map = await api.user1.map.create('testmap');
+  map = await api.user1.map.get(map.id);
   node = await api.user1.node.create(map.id, map.root_node_id, {});
 
   users = {
@@ -41,10 +42,15 @@ describe('user1 is admin and user2 without access', async () => {
 
     expect(res).toMatchObject({
       id: map.id,
-      name: map.name,
-      owner: map.owner
+      root_node_id: map.root_node_id,
+      owner: map.owner,
+      owner_name: map.owner_name,
+      owner_avatar: map.owner_avatar,
+      layout: map.layout,
+      public: map.public,
+      user_count: map.user_count,
+      name: map.name
     });
-    expect(res.role).toEqual(null);
   });
   test('user2 cannot get root node', async () => {
     try {
@@ -108,7 +114,7 @@ describe('user1 is admin and user2 with only read access', () => {
       await api.user2.node.create(map.id, node.id, {});
     } catch (err) {
       expect(err.code).toEqual('0306');
-      expect(err.message).toEqual(`Доступ к узлу (parent) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+      expect(err.message).toEqual(`Доступ к узлу (child) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
     }
   });
   test('user2 cannot update node', async () => {
@@ -165,7 +171,7 @@ describe('user1 is admin and user2 with only read branch access', () => {
       await api.user2.node.create(map.id, node.id, {});
     } catch (err) {
       expect(err.code).toEqual('0306');
-      expect(err.message).toEqual(`Доступ к узлу (parent) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
+      expect(err.message).toEqual(`Доступ к узлу (child) ${node.id} для пользователя ${users.user2.user_id} запрещен`);
     }
   });
   test('user2 cannot update node', async () => {

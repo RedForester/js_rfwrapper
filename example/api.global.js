@@ -3,12 +3,13 @@ const rf = require('../');
 const api = new rf.Api({
   username: '***REMOVED***',
   password: '***REMOVED***',
-  host: 'http://***REMOVED***'
+  // host: 'http://***REMOVED***'
 });
 
+api.node.create('c060bcb4-4c21-4a40-86ca-b4319252d073', { title: '123' });
 
 // show root node
-api.map.get('b64578f3-2db6-40a3-954e-9d97c3d86794')
+api.map.get('c060bcb4-4c21-4a40-86ca-b4319252d073')
   .then((map) => {
     return api.node.get(map.root_node_id)
   })
@@ -16,6 +17,7 @@ api.map.get('b64578f3-2db6-40a3-954e-9d97c3d86794')
   .catch(e => console.log(e));
 
 // delete all maps
+/*
 api.global.getMaps()
   .then(d => {
     console.log(d)
@@ -24,12 +26,14 @@ api.global.getMaps()
   .then(async(result) => {
     for await (let map of result) {
       console.log(map.name, map.id);
-      
+
       try {
-        await api.map.delete(map.id);
+        // await api.map.delete(map.id);
       } catch (err) {
         console.log(err);
       }
     }
   })
   .catch(e => console.log(e));
+
+*/

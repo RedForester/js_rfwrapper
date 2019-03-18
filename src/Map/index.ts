@@ -222,7 +222,7 @@ export class CMapWrapper implements IMapWrapper {
         this.nodes.push(child);
       }
     };
-    
+
     await dive(res.body.children || []);
     return this;
   }

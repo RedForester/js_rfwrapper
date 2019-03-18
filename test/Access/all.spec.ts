@@ -11,8 +11,8 @@ const user1 = {
 };
 
 const user2 = {
-  username: 'fc3c423c4@mymailbest.com',
-  password: '***REMOVED***',
+  username: 'yusi@click-mail.net',
+  password: 'de8492b7971f6ded130a06cdd928fafe',
   host: process.env.DEBUG_RF_URL
 };
 
