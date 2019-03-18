@@ -1,5 +1,5 @@
 import { Api } from '../../src';
-import { IMapInfo } from '../../src/Map/interface';
+import { IMapInfo, IUser } from '../../lib';
 
 const api = new Api({
   username: '***REMOVED***',
@@ -8,9 +8,11 @@ const api = new Api({
 });
 
 let testmap: IMapInfo;
+let testuser: IUser;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
+  testuser = await api.user.get();
 });
 
 test('Should return map info by uuid', async () => {
@@ -69,8 +71,17 @@ test('Should return all user on map', async () => {
   const result = await api.map.users(testmap.id);
 
   expect(result[0]).toMatchObject({
-    role: 'admin',
-    username: '***REMOVED***',
+    "avatar": null,
+    "can_be_changed_by_role": false,
+    "can_be_changed_export": false,
+    "can_be_removed": false,
+    "can_export": false,
+    "is_admin": true,
+    "map_id": testmap.id,
+    "new_owner": false,
+    "surname": null,
+    "user_id": testuser.user_id,
+    "username": testuser.username
   });
 });
 
@@ -88,8 +99,17 @@ test('Should add user to map', async () => {
   expect(result).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        role: 'user_r',
-        username: 'test@mail.ru',
+        "avatar": null,
+        "can_be_changed_by_role": false,
+        "can_be_changed_export": false,
+        "can_be_removed": false,
+        "can_export": false,
+        "is_admin": true,
+        "map_id": testmap.id,
+        "new_owner": false,
+        "surname": null,
+        "user_id": testuser.user_id,
+        "username": testuser.username
       })
     ])
   );
