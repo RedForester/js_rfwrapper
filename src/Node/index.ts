@@ -72,7 +72,7 @@ export class CNodeWrapper implements INodeInfo {
    * @param update флаг о необходимости загрузки
    * @returns {Promise<CNodeWrapper>} загруженый класс
    */
-  public async init(update: boolean) {
+  public async init(update: boolean): Promise<CNodeWrapper> {
     if (update) {
       const data = await this.api.node.get(this.id);
       // заполняем свойства у класса

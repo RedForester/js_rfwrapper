@@ -20,7 +20,7 @@ export interface IMapWrapper {
   role: IMapRole | IMapRole[];
   root_node_id: string;
   users: IUserInfo[];
-  tree?: INodeInfo[];
+  childrens?: INodeInfo[];
 }
 
 export interface IMapInfo {

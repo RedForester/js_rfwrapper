@@ -11,6 +11,8 @@ import {
   IMapInfo,
 } from './interface';
 
+export type IEventCallback = (context: Context, cb: CallableFunction) => void;
+
 export class CMapWrapper implements IMapWrapper {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
@@ -113,7 +115,7 @@ export class CMapWrapper implements IMapWrapper {
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public on(trigger: string, ...middlewares: any[]): CMapWrapper {
+  public on(trigger: string, ...middlewares: IEventCallback[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -180,7 +182,7 @@ export class CMapWrapper implements IMapWrapper {
    * @description Получить массив загруженых узлов для данной карты
    * @returns {INodeInfo[]}
    */
-  public get tree(): INodeInfo[] {
+  public get childrens(): INodeInfo[] {
     return this.nodes;
   }
 

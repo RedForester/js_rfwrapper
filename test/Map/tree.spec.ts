@@ -25,7 +25,7 @@ beforeAll(async () => {
 // =====================
 
 test('Should return empty map tree', async () => {
-  const tree = map.tree;
+  const tree = map.childrens;
 
   expect(tree).toBeTruthy();
   expect(tree).toEqual([]);
@@ -39,7 +39,7 @@ test('Should return map tree with nodes', async () => {
 
   // пересоздадим врапер и загрузим обновленую карту
   map = await rf.Map(map.id);
-  const tree = map.tree;
+  const tree = map.childrens;
   
   expect(tree).toBeTruthy();
   

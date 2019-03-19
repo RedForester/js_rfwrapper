@@ -2,11 +2,21 @@
  * Создает класс для обработки событий, передается с необходимыми параметрами
  */
 export default class Context {
-  public what: any;
-  public type: any;
-  public data: any;
-  public sessionId: any;
-  public who: any;
+  public what: {
+    node_title: string;
+    parent_title: string
+  };
+  public type: string;
+  public data: {
+    node_title: string;
+    parent_title: string
+  };
+  public sessionId: string;
+  public who: {
+    id: string;
+    username: string;
+    is_extension_user: boolean
+  };
 
   /**
    * @param {object} event Новое событие

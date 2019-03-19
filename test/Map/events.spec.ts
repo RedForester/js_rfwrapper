@@ -45,7 +45,7 @@ describe('MapEvent#Context', () => {
     who: {
       id: '94d43ed4-d05e-45df-9e5d-c9d1ba1c369b',
       username: 'kudryavtsev@nppsatek.ru',
-      avatar: 'https://ru.gravatar.com/userimage/85982417/2947fe117cf09d53ad6e3e2a36719163.png?size=200'
+      is_extension_user: true
     }
   };
 
@@ -140,7 +140,7 @@ describe('MapEvent#Context', () => {
     expect(context.who).toBeInstanceOf(Object);
     expect(context.who.id).toBe(event.who.id);
     expect(context.who.username).toBe(event.who.username);
-    expect(context.who.avatar).toBe(event.who.avatar);
+    expect(context.who.is_extension_user).toBe(event.who.is_extension_user);
   });
 });
 
