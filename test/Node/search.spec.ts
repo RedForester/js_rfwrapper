@@ -149,9 +149,11 @@ test('Should return empty result when search all by regex', async () => {
 test('Should return empty result when search all by type_id', async () => {
   const testnode1 = await api.node.create(map.id, node.id, {
     properties: {
-      global: {
-        title: 'somename1'
-      }
+      update: [{
+        group: 'global',
+        key: 'title',
+        value: 'somename2'
+      }]
     },
     type_id: type.id
   });
@@ -160,9 +162,11 @@ test('Should return empty result when search all by type_id', async () => {
   });
   const testnode2 = await api.node.create(map.id, node.id, {
     properties: {
-      global: {
-        title: 'somename2'
-      }
+      update: [{
+        group: 'global',
+        key: 'title',
+        value: 'somename2'
+      }]
     },
     type_id: type.id
   });

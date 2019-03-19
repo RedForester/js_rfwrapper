@@ -96,9 +96,11 @@ test('Should update Node', async () => {
 
   await api.node.update(testnode.id, {
     properties: {
-      global: {
-        title: 'testing...'
-      }
+      update: [{
+        group: 'global',
+        key: 'title',
+        value: 'testing...'
+      }]
     }
   });
 
@@ -152,9 +154,11 @@ test('Should throw error when update Node', async () => {
     await api.node.update('12x31x231x2awexawex12', {
       body: {
         properties: {
-          global: {
-            title: 'test'
-          }
+          update: [{
+            group: 'global',
+            key: 'title',
+            value: 'test'
+          }]
         }
       }
     });

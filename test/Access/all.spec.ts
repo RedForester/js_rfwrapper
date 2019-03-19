@@ -44,7 +44,6 @@ describe('user1 is admin and user2 without access', async () => {
       name: map.name,
       owner: map.owner
     });
-    expect(res.role).toEqual(null);
   });
   test('user2 cannot get root node', async () => {
     try {
