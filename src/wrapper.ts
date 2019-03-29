@@ -35,6 +35,7 @@ export class Wrapper {
   /**
    * @description Создает экземпляр карты
    * @param {string | IMapWrapperOptions} input ввод параметров
+   * @returns {Promise<CMapWrapper>}
    */
   public Map(
     input: string | IMapInfo,

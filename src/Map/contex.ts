@@ -2,15 +2,9 @@
  * Создает класс для обработки событий, передается с необходимыми параметрами
  */
 export default class Context {
-  public what: {
-    node_title: string;
-    parent_title: string;
-  };
+  public what: string;
   public type: string;
-  public data: {
-    node_title: string;
-    parent_title: string;
-  };
+  public data: IPropertiesDataEvent | IPropertiesDataEvent | INodeCopyedDataEvent| IEmptyDataEvent;
   public sessionId: string;
   public who: {
     id: string;
@@ -28,6 +22,36 @@ export default class Context {
     this.sessionId = event.sessionId;
     this.who = event.who;
   }
-
   // TODO: добавить методы для событий
+}
+
+export interface ICommentDataEvent {
+  author: string;
+  content: string;
+  id: string;
+  node: string;
+  timestamp: string;
+  node_title: string;
+  parent_title: string;
+}
+
+export interface IPropertiesDataEvent {
+  node_title: string;
+  parent_title: string;
+  changes: {
+    type_id?: string;
+    properties? : string
+  };
+}
+
+export interface IEmptyDataEvent {
+  node_title: string;
+  parent_title: string;
+}
+
+export interface INodeCopyedDataEvent {
+  node_title: string;
+  parent_title: string;
+  map_id_from: string;
+  node_id_from: string;
 }

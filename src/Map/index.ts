@@ -51,8 +51,6 @@ export class CMapWrapper implements IMapWrapper {
   private nodes: INodeInfo[] = [];
   // (виртуальная) начальная точка просмотра карты
   private viewport: string;
-  // параметры для передачи при создании новых классов
-  private params: IAxios;
 
   /**
    * @description Создает экземпляр класса CMapWrapper
@@ -67,7 +65,6 @@ export class CMapWrapper implements IMapWrapper {
     input: string | IMapInfo,
     options: IMapWrapperOptions
   ) {
-    this.params = params;
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -246,7 +243,7 @@ export class CMapWrapper implements IMapWrapper {
     }
 
     // Создает класс узла путем указания его тела
-    return new CNodeWrapper(this.params, undefined, node);
+    return new CNodeWrapper(this.axios, undefined, node);
   }
 
   /**
