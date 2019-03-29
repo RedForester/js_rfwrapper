@@ -49,8 +49,10 @@ export class CMapWrapper implements IMapWrapper {
   private longpool: boolean;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
-
+  // (виртуальная) начальная точка просмотра карты
   private viewport: string;
+  // параметры для передачи при создании новых классов
+  private params: IAxios;
 
   /**
    * @description Создает экземпляр класса CMapWrapper
@@ -65,6 +67,7 @@ export class CMapWrapper implements IMapWrapper {
     input: string | IMapInfo,
     options: IMapWrapperOptions
   ) {
+    this.params = params;
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
@@ -212,6 +215,38 @@ export class CMapWrapper implements IMapWrapper {
 
       return this.next(ctx, map, idx + 1);
     }
+  }
+
+  /**
+   * @description Поиск пользователй карты по uuid
+   * @param {String} id uuid пользователя
+   * @returns {CMapUserWrapper | undefined}
+   */
+  public find_by_id(id: string): CMapUserWrapper | undefined {
+    return this.users.find((u: CMapUserWrapper) => u.user_id === id);
+  }
+
+  /**
+   * @description Поиск пользователя по его нику (почте)
+   * @param {String} username Никнейм пользователя (почта)
+   * @returns {CMapUserWrapper | undefined}
+   */
+  public find_by_username(username: string): CMapUserWrapper | undefined {
+    return this.users.find((u: CMapUserWrapper) => u.username === username);
+  }
+
+  /**
+   * @description Получить узел карты по его id
+   * @param id 
+   */
+  public get(id: string): CNodeWrapper | undefined {
+    const node = this.nodes.find((n: INodeInfo) => n.id === id);
+    if(!node) {
+      return undefined;
+    }
+
+    // Создает класс узла путем указания его тела
+    return new CNodeWrapper(this.params, undefined, node);
   }
 
   /**
