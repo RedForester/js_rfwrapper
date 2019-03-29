@@ -10,8 +10,11 @@ import {
   IMapWrapper,
   IMapInfo,
 } from './interface';
+import { CUserWrapper } from '../User';
+import { CMapUserWrapper } from '../User/mapuser';
+import { IUserInfoFromMap } from '../User/interfaces';
 
-export type IEventCallback = (context: Context, cb: CallableFunction) => void;
+export type IEventCallback = (context: Context, cb: () => void) => void;
 
 export class CMapWrapper implements IMapWrapper {
   // для проверки того что карта готова
@@ -31,7 +34,8 @@ export class CMapWrapper implements IMapWrapper {
   public public: boolean = false;
   public role: IMapRole | IMapRole[] = [];
   public root_node_id: string = '';
-  public users: IUserInfo[] = [];
+  public users: CMapUserWrapper[] = [];
+  public tree: INodeInfo[] = [];
 
   /*
     Private
@@ -90,6 +94,9 @@ export class CMapWrapper implements IMapWrapper {
   public async init(update?: boolean): Promise<CMapWrapper> {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
+
+      const users = await this.api.map.users(this.id);
+      this.users = users.map((user: IUserInfoFromMap) => new CMapUserWrapper(user));
     }
     await this.make_tree(this.viewport || this.root_node_id);
 
@@ -213,6 +220,8 @@ export class CMapWrapper implements IMapWrapper {
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
     const res = await this.api.map.getTree(this.id, viewport);
+
+    this.tree = res.body.children;
 
     /**
      * @description Функция для обхода всех узлов в дереве

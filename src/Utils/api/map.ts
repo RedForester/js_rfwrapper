@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { IMapAccessUser, INodeTypeInfo } from './interfaces';
 import { IMapInfo, INodeInfo, IUserInfo } from '../../Map/interface';
+import { IUserInfoFromMap } from '../../User/interfaces';
 
 export default class CMap {
   private axios: IAxios;
@@ -184,9 +185,9 @@ export default class CMap {
    * @description Получение списка пользователей на карте
    * @async
    * @param {string} mapid uuid карты
-   * @return {Promise<IUserInfo[]>} JSON
+   * @return {Promise<IUserInfoFromMap[]>} JSON
    */
-  public async users(mapid: string): Promise<IUserInfo[]> {
+  public async users(mapid: string): Promise<IUserInfoFromMap[]> {
     try {
       const res = await axios.get(`/api/maps/${mapid}/users`, this.axios);
       return res.data;

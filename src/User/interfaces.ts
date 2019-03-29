@@ -131,3 +131,56 @@ export interface IAccessAddNewUser {
     revoked?: string;
   };
 }
+
+export interface IUserInfoFromMap {
+  /**
+   * @description uuid пользователя
+   */
+  user_id: string;
+  /**
+   * @description ник пользователя
+   */
+  username: string;
+  /**
+   * @description имя пользователя
+   */
+  name?: string;
+  /**
+   * @description фамилия пользователя
+   */
+  surname?: string;
+  /**
+   * @description ссылка на аватарку пользователя
+   */
+  avatar?: string;
+  /**
+   * @description дата регистрации
+   */
+  registration_date: number;
+  /**
+   * @description день рождения
+   */
+  birthday: number;
+  /**
+   * @description список контактов
+   */
+  contacts?: IUserContacts;
+  /**
+   * @description uuid карты к которой принадлежит пользователь
+   */
+  map_id: string;
+  /**
+   * @description роль пользователя на карте
+   */
+  role: string;
+
+  can_export: boolean;
+
+  can_be_removed: boolean;
+
+  can_be_changed_by_role: boolean;
+
+  can_be_changed_export: boolean;
+
+  new_owner: boolean;
+}
