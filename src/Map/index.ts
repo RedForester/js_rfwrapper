@@ -96,7 +96,9 @@ export class CMapWrapper implements IMapWrapper {
       Object.assign(this, await this.api.map.get(this.id));
 
       const users = await this.api.map.users(this.id);
-      this.users = users.map((user: IUserInfoFromMap) => new CMapUserWrapper(user));
+      this.users = users.map(
+        (user: IUserInfoFromMap) => new CMapUserWrapper(user)
+      );
     }
     await this.make_tree(this.viewport || this.root_node_id);
 
@@ -234,11 +236,11 @@ export class CMapWrapper implements IMapWrapper {
 
   /**
    * @description Получить узел карты по его id
-   * @param id 
+   * @param id
    */
   public get(id: string): CNodeWrapper | undefined {
     const node = this.nodes.find((n: INodeInfo) => n.id === id);
-    if(!node) {
+    if (!node) {
       return undefined;
     }
 

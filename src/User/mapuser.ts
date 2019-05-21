@@ -19,7 +19,7 @@ export class CMapUserWrapper extends CUserWrapper implements IUserInfoFromMap {
    */
   constructor(user: IUserInfoFromMap) {
     super(user);
-    
+
     this.map_id = user.map_id;
     this.role = user.role;
     this.can_export = user.can_export;

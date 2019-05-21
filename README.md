@@ -24,8 +24,8 @@ Wrapper
 
 ```js
 const wrapper = new rf.wrapper({
-  username: '***REMOVED***',
-  password: '***REMOVED***'
+  username: 'admin@google.com',
+  password: '123123'
 })
 
 // Информация об узле по uuid
@@ -50,9 +50,8 @@ Api
 
 ```js
 const api = new rf.Api({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
-  host: 'http://***REMOVED***'
+  username: 'admin@google.com',
+  password: '123123'
 });
 
 // Получить информацию о карте по uuid

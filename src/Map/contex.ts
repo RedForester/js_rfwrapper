@@ -4,7 +4,11 @@
 export default class Context {
   public what: string;
   public type: string;
-  public data: IPropertiesDataEvent | IPropertiesDataEvent | INodeCopyedDataEvent| IEmptyDataEvent;
+  public data:
+    | IPropertiesDataEvent
+    | IPropertiesDataEvent
+    | INodeCopyedDataEvent
+    | IEmptyDataEvent;
   public sessionId: string;
   public who: {
     id: string;
@@ -40,7 +44,7 @@ export interface IPropertiesDataEvent {
   parent_title: string;
   changes: {
     type_id?: string;
-    properties? : string
+    properties?: string;
   };
 }
 
