@@ -43,7 +43,7 @@ test('Should create new node in this map', async () => {
   expect(node).toMatchObject({
     map_id: map.id,
     parent: map.root_node_id,
-    position: [ 'R', '0' ],
+    position: [ 'R', 0 ],
     access: 'user_all',
     originalParent: map.root_node_id,
     body: {
@@ -55,7 +55,7 @@ test('Should create new node in this map', async () => {
         byUser: [],
         global: {
           title: ''
-        } 
+        }
       },
       parent: map.root_node_id,
       unread_comments_count: 0,

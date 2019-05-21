@@ -21,13 +21,12 @@ test('Should create new Node', async () => {
   expect(result);
 
   result = await api.node.get(result.id);
-  
 
   expect(result).toBeTruthy();
   expect(result).toMatchObject({
     map_id: testmap.id,
     parent: testmap.root_node_id,
-    position: [ 'R', '0' ],
+    position: [ 'R', 0 ],
     access: 'user_all',
     originalParent: testmap.root_node_id,
     body: {
@@ -39,7 +38,7 @@ test('Should create new Node', async () => {
         byUser: [],
         global: {
           title: ''
-        } 
+        }
       },
       parent: testmap.root_node_id,
       unread_comments_count: 0,
@@ -121,7 +120,7 @@ test('Should update Node', async () => {
         byUser: [],
         global: {
           title: 'testing...'
-        } 
+        }
       },
       parent: testmap.root_node_id,
       unread_comments_count: 0,

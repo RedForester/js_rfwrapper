@@ -58,7 +58,7 @@ test('Should return list of events betwen timestamps', async () => {
             is_extension_user: false
           }
         },
-        version: '1'
+        version: 1
       })
     ])
   );
@@ -77,7 +77,7 @@ test('Should wait event by version', async () => {
 
   expect(result).toMatchObject({
     value: new Date(node.meta.creation_timestamp).getTime().toString(),
-    version: '1'
+    version: 1
   });
 
   expect(result);

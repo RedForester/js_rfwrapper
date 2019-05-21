@@ -14,7 +14,7 @@ export class CNodeWrapper implements INodeInfo {
   public id: string = '';
   public map_id: string = '';
   public parent: string = '';
-  public position: string[] = [];
+  public position: any[] = [];
   public access: string = '';
   public originalParent: string = '';
   public hidden: boolean = false;
