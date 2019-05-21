@@ -1,11 +1,12 @@
 import Context from '../../src/Map/contex';
 import { Wrapper, Api } from '../../src';
-import { IMapInfo } from '../../lib/Map/interface';
+import { IMapInfo } from '../../src/Map/interface';
 
 const params = {
   username: '***REMOVED***',
   password: '***REMOVED***',
-}
+  host: process.env.DEBUG_RF_URL
+};
 
 let rf: Wrapper;
 let api: Api;
@@ -17,25 +18,20 @@ beforeAll(async () => {
   api = new Api(params);
 
   testmap = await api.map.create('testmap');
-})
+});
 
-describe('MapEvent#LongPolling', () => {
-  test('Should create loongpolling with callback', async () => {
-    const map = await rf.Map(testmap.id);
-  
-    map.on('*', (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context);
-      expect(ctx.data).toBeTruthy();
-      expect(ctx.type).toBeTruthy();
-      expect(ctx.who).toBeTruthy();
-      expect(ctx.sessionId).toBeTruthy();
-    });
-  
-    setTimeout(() => {
-      api.node.create(map.id, map.root_node_id, {});
-    }, 1);
+test('Shoud create map wrapper without longpolling', async (done) => {
+  const map = await rf.Map(testmap.id, { enablePolling: false });
+
+  map.on('*', (ctx: Context) => {
+    throw new Error('Must not be longpolling');
   });
-})
+
+  await api.node.create(map.id, map.root_node_id, {});
+  setTimeout(() => {
+    done();
+  }, 100);
+});
 
 describe('MapEvent#Context', () => {
   event = {
@@ -49,9 +45,76 @@ describe('MapEvent#Context', () => {
     who: {
       id: '94d43ed4-d05e-45df-9e5d-c9d1ba1c369b',
       username: 'kudryavtsev@nppsatek.ru',
-      avatar: 'https://ru.gravatar.com/userimage/85982417/2947fe117cf09d53ad6e3e2a36719163.png?size=200'
+      is_extension_user: true
     }
   };
+
+  test('Should create loongpolling with callback and trigger to any events', async (done) => {
+    const map = await rf.Map(testmap.id, { enablePolling: true });
+
+    const handler = (ctx: Context) => {
+      expect(ctx).toBeInstanceOf(Context);
+      expect(ctx.data).toBeTruthy();
+      expect(ctx.type).toBeTruthy();
+      expect(ctx.who).toBeTruthy();
+      done();
+    };
+    map.on('*', handler);
+
+    // tslint:disable-next-line
+    await api.node.create(testmap.id, testmap.root_node_id, {})
+  }, 10000);
+
+  test('Should create loongpolling with callback and trigger to event type', async (done) => {
+    const map = await rf.Map(testmap.id);
+
+    map.on('node_created', (ctx: Context) => {
+      expect(ctx).toBeInstanceOf(Context);
+      expect(ctx.data).toBeTruthy();
+      expect(ctx.type).toBeTruthy();
+      expect(ctx.who).toBeTruthy();
+      expect(ctx.sessionId).toBeTruthy();
+      done();
+    });
+
+    // tslint:disable-next-line
+    map.next(new Context(event), map);
+  });
+
+  test('Should create loongpolling without valid trigger', async (done) => {
+    const map = await rf.Map(testmap.id);
+
+    map.on('node_empty', (ctx) => ctx);
+    map.on('node_created', (ctx: Context) => {
+      expect(ctx).toBeInstanceOf(Context);
+      expect(ctx.data).toBeTruthy();
+      expect(ctx.type).toBeTruthy();
+      expect(ctx.who).toBeTruthy();
+      expect(ctx.sessionId).toBeTruthy();
+      done();
+    });
+
+    // tslint:disable-next-line
+    map.next(new Context(event), map);
+    return;
+  });
+
+
+  test('Should create loongpolling with callback to trigger any events', async (done) => {
+    const map = await rf.Map(testmap.id);
+
+    map.on(null, (ctx: Context) => {
+      expect(ctx).toBeInstanceOf(Context);
+      expect(ctx.data).toBeTruthy();
+      expect(ctx.type).toBeTruthy();
+      expect(ctx.who).toBeTruthy();
+      expect(ctx.sessionId).toBeTruthy();
+      done();
+    });
+
+    // tslint:disable-next-line
+    map.next(new Context(event), map);
+  });
 
   test('Should contain event body', () => {
     const context = new Context(event);
@@ -77,10 +140,14 @@ describe('MapEvent#Context', () => {
     expect(context.who).toBeInstanceOf(Object);
     expect(context.who.id).toBe(event.who.id);
     expect(context.who.username).toBe(event.who.username);
-    expect(context.who.avatar).toBe(event.who.avatar);
-  })
-})
+    expect(context.who.is_extension_user).toBe(event.who.is_extension_user);
+  });
+});
+
+test('', async () => {
+  //
+});
 
 afterAll(async () => {
   await api.map.delete(testmap.id);
-})
+});

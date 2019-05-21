@@ -3,7 +3,7 @@ import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
 import { INodeInfo, IMapInfo, IMapWrapperOptions } from './Map/interface';
 
-export default class Wrapper {
+export class Wrapper {
   private settings: IParams;
   private axios: IAxios;
 
@@ -24,7 +24,7 @@ export default class Wrapper {
   }
 
   /**
-   * Создает экземпляр узла
+   * @description Создает экземпляр узла
    * @param {string} nodeid uuid узла
    * @returns {Promise<CNodeWrapper>}
    */
@@ -33,12 +33,14 @@ export default class Wrapper {
   }
 
   /**
-   * Создает экземпляр карты
-   * @param {string} id uuid карты
-   * @param {IMapInfo} map информация о карте из которой буде тзагружена карты
+   * @description Создает экземпляр карты
+   * @param {string | IMapWrapperOptions} input ввод параметров
    * @returns {Promise<CMapWrapper>}
    */
-  public Map(id?: string, options?: IMapWrapperOptions): Promise<CMapWrapper> {
-    return new CMapWrapper(this.axios, id, options).ready;
+  public Map(
+    input: string | IMapInfo,
+    options: IMapWrapperOptions = {}
+  ): Promise<CMapWrapper> {
+    return new CMapWrapper(this.axios, input, options).ready;
   }
 }

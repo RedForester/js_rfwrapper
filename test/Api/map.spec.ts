@@ -1,15 +1,18 @@
 import { Api } from '../../src';
-import { IMapInfo } from '../../src/Map/interface';
+import { IMapInfo, IUser } from '../../lib';
 
 const api = new Api({
   username: '***REMOVED***',
-  password: '***REMOVED***'
+  password: '***REMOVED***',
+  host: process.env.DEBUG_RF_URL
 });
 
 let testmap: IMapInfo;
+let testuser: IUser;
 
 beforeAll(async () => {
   testmap = await api.map.create('te1stmap');
+  testuser = await api.user.get();
 });
 
 test('Should return map info by uuid', async () => {
@@ -68,8 +71,16 @@ test('Should return all user on map', async () => {
   const result = await api.map.users(testmap.id);
 
   expect(result[0]).toMatchObject({
-    role: 'admin',
-    username: '***REMOVED***',
+    "avatar": null,
+    "can_be_changed_by_role": false,
+    "can_be_changed_export": false,
+    "can_be_removed": false,
+    "is_admin": true,
+    "map_id": testmap.id,
+    "new_owner": false,
+    "surname": null,
+    "user_id": testuser.user_id,
+    "username": testuser.username
   });
 });
 
@@ -87,8 +98,17 @@ test('Should add user to map', async () => {
   expect(result).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        role: 'user_r',
-        username: 'test@mail.ru',
+        "avatar": null,
+        "can_be_changed_by_role": false,
+        "can_be_changed_export": false,
+        "can_be_removed": false,
+        "is_admin": true,
+        "map_id": testmap.id,
+        "new_owner": false,
+        "surname": null,
+        "user_id": testuser.user_id,
+        "username": testuser.username,
+        "name": testuser.name,
       })
     ])
   );
@@ -122,9 +142,60 @@ test('Should throw error when request access to map', async () => {
 });
 
 test('Should request access to map', async () => {
-  const result = await api.map.requestAccess(testmap.id);
+  // const result = await api.map.requestAccess(testmap.id);
 
-  expect(result);
+  // expect(result);
+});
+
+test('Should return empty nodes', async () => {
+  const result = await api.map.getTree(testmap.id, testmap.root_node_id);
+
+  expect(result.body.children).toEqual([]);
+});
+
+test('Should throw error when request tree', async () => {
+  try {
+    const result = await api.map.getTree('somerandommapuuid', testmap.root_node_id);
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты somerandommapuuid');
+  }
+
+  try {
+    const result = await api.map.getTree(testmap.id, 'somerandomnodeuuid');
+  } catch (err) {
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+  }
+});
+
+test('Should return map tree', async () => {
+  const result1 = await api.map.getRadius(testmap.id, testmap.root_node_id, 3);
+  const result2 = await api.map.getTree(testmap.id, testmap.root_node_id);
+
+  expect(result1).toEqual(result2);
+});
+
+test('Should return empty nodes', async () => {
+  const result = await api.map.getRadius(testmap.id, testmap.root_node_id, 3);
+
+  expect(result.body.children).toEqual([]);
+});
+
+test('Should throw error when request tree', async () => {
+  try {
+    const result = await api.map.getRadius('somerandommapuuid', testmap.root_node_id, 3);
+  } catch (err) {
+    expect(err.code).toEqual('0207');
+    expect(err.message).toEqual('Не существует карты somerandommapuuid');
+  }
+
+  try {
+    const result = await api.map.getRadius(testmap.id, 'somerandomnodeuuid', 3);
+  } catch (err) {
+    expect(err.code).toEqual('0304');
+    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+  }
 });
 
 afterAll(async () => {

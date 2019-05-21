@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { INodeInfo } from '../../Map/interface';
+import { INodeBody } from '../../Node/interfaces';
+import { IAccessAddNewUser } from '../../User/interfaces';
 
 export default class CNode {
   private axios: IAxios;
@@ -10,7 +12,46 @@ export default class CNode {
   }
 
   /**
-   * Получение информации об узле
+   * @description
+   * @param nodeid uuid узла
+   * @param access параметры доступа
+   */
+  public async addAccess(nodeid: string, access: IAccessAddNewUser) {
+    try {
+      const res = await axios.patch(
+        `/api/nodes/${nodeid}/access`,
+        {
+          access,
+        },
+        this.axios
+      );
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * @description
+   * @param {string} nodeid uuid узла
+   */
+  public async access(nodeid: string) {
+    try {
+      const res = await axios.get(`/api/nodes/${nodeid}/access`, this.axios);
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
+   * @description Получение информации об узле
    * @async
    * @param {string} nodeid uuid узла
    * @returns {Promise<any>} информация об узле
@@ -28,13 +69,13 @@ export default class CNode {
   }
 
   /**
-   * Обновление информации об узле
+   * @description Обновление информации об узле
    * @async
    * @param {string} nodeid uuid узла
    * @param {any} body
-   * @returns {Promise<any>} информация об узле
+   * @returns {Promise<INodeInfo>} информация об узле
    */
-  public async update(nodeid: string, body: any): Promise<any> {
+  public async update(nodeid: string, body: any): Promise<INodeInfo> {
     try {
       const res = await axios.patch(`/api/nodes/${nodeid}`, body, this.axios);
       return res.data;
@@ -47,7 +88,7 @@ export default class CNode {
   }
 
   /**
-   * Удаление узла
+   * @description Удаление узла
    * @async
    * @param {string} nodeid uuid узла
    * @returns {Promise<any>} информация об узле
@@ -65,7 +106,7 @@ export default class CNode {
   }
 
   /**
-   * Создание нового узла
+   * @description Создание нового узла
    * @param {string} map_id uuid карты
    * @param {string} parent родитель узла
    * @param {string} position позиция относительно родителя
@@ -76,7 +117,7 @@ export default class CNode {
     map_id: string,
     parent: string,
     { position = '["R",-1]', properties = {} }: any
-  ): Promise<any> {
+  ): Promise<INodeInfo> {
     // todo: добавить интерфейс и обязательно добавлять пустые поля style byType byUser
     try {
       const res = await axios.post(

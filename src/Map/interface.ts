@@ -1,5 +1,7 @@
 import { INodeInfo } from '../Node/interfaces';
 import { IUserInfo } from '../User/interfaces';
+import { CNodeWrapper } from '../Node';
+import { CMapWrapper } from '.';
 
 export { INodeInfo, IUserInfo };
 
@@ -14,10 +16,11 @@ export interface IMapWrapper {
   owner: string;
   owner_avatar: string;
   owner_name: string;
-  public: string;
-  role: IMapRole[];
+  public: boolean;
+  role: IMapRole | IMapRole[];
   root_node_id: string;
   users: IUserInfo[];
+  childrens?: INodeInfo[];
 }
 
 export interface IMapInfo {
@@ -45,6 +48,10 @@ export interface IMapRole {
 }
 
 export interface IMapWrapperOptions {
-  map?: IMapInfo;
+  /**
+   * @description включать ли лонгпуллинг
+   */
+  enablePolling?: boolean;
   viewport?: string;
+  treeview?: boolean;
 }

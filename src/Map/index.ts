@@ -1,16 +1,22 @@
 import { IAxios } from '../interfaces';
 import { CNodeWrapper } from '../Node';
-import CApi from '../Utils/api';
+import { CApi } from '../Utils/api';
 import Context from './contex';
 import {
   IMapRole,
   INodeInfo,
   IUserInfo,
-  IMapInfo,
   IMapWrapperOptions,
+  IMapWrapper,
+  IMapInfo,
 } from './interface';
+import { CUserWrapper } from '../User';
+import { CMapUserWrapper } from '../User/mapuser';
+import { IUserInfoFromMap } from '../User/interfaces';
 
-export class CMapWrapper implements IMapInfo {
+export type IEventCallback = (context: Context, cb: () => void) => void;
+
+export class CMapWrapper implements IMapWrapper {
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
@@ -28,7 +34,8 @@ export class CMapWrapper implements IMapInfo {
   public public: boolean = false;
   public role: IMapRole | IMapRole[] = [];
   public root_node_id: string = '';
-  public users: IUserInfo[] = [];
+  public users: CMapUserWrapper[] = [];
+  public tree: INodeInfo[] = [];
 
   /*
     Private
@@ -39,54 +46,66 @@ export class CMapWrapper implements IMapInfo {
   // для хранения настроек
   private axios: IAxios;
   // для отслеживания статуса лонгпулинга
-  private longpool: boolean = false;
+  private longpool: boolean;
   // список загруженых узлов в виде дерева
-  private nodes: CNodeWrapper[] = [];
+  private nodes: INodeInfo[] = [];
+  // (виртуальная) начальная точка просмотра карты
+  private viewport: string;
 
   /**
-   * Создает экземпляр класса CMapWrapper
+   * @description Создает экземпляр класса CMapWrapper
    * @param {IAxios} params параметры для работы axios
    * @param {string} id uuid карты с которой будем работать
    * @param {IMapInfo} map информация о карте
    * @param {CNodeWrapper} loadmap загружать карту в виде CNodeWrapper
    * @param {string} viewport
    */
-  constructor(params: IAxios, id?: string, options: IMapWrapperOptions = {}) {
+  constructor(
+    params: IAxios,
+    input: string | IMapInfo,
+    options: IMapWrapperOptions
+  ) {
     this.api = new CApi(params);
     this.axios = params;
     this.middlewares = [];
+    this.longpool = options.enablePolling || false;
 
-    if (id) {
-      this.id = id;
-      this.ready = this.init(options.viewport || this.id, true);
+    this.viewport = options.viewport || '';
+
+    if (typeof input === 'string') {
+      this.id = input;
+      this.ready = this.init(true);
     } else {
       // fixme: this
-      if (options.map) {
-        Object.assign(this, options.map);
-        this.ready = this.init(options.viewport || this.id, false);
+      if (input) {
+        Object.assign(this, input);
+        this.ready = this.init(false);
       } else {
-        throw new Error(`Map ${id} cannot be load`);
+        throw new Error(`Map cannot be load`);
       }
     }
   }
 
   /**
-   * Иницилизирует и загружает информацию о карте
+   * @description Иницилизирует и загружает информацию о карте
    * @param {boolean} loadtree загрузить узлы карты
    * @param {string} viewport загрузить дерево узлов от указаного узла
    */
-  public async init(viewport: string, update: boolean): Promise<CMapWrapper> {
+  public async init(update?: boolean): Promise<CMapWrapper> {
     if (update) {
       Object.assign(this, await this.api.map.get(this.id));
+
+      const users = await this.api.map.users(this.id);
+      this.users = users.map((user: IUserInfoFromMap) => new CMapUserWrapper(user));
     }
-    await this.make_tree(viewport);
+    await this.make_tree(this.viewport || this.root_node_id);
 
     this.start();
     return this;
   }
 
   /**
-   * Создание нового узла
+   * @description Создание нового узла
    * @param {string} nodeid uuid узла, если не указан то создается от корня карты
    * @param {INodeInfo} data данные будут добавлены при создании карты
    */
@@ -99,11 +118,11 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
-   * Подписка на события названию события
+   * @description Подписка на события названию события
    * @param {string} trigger
    * @param {Array < Function >} middlewares
    */
-  public on(trigger: string, ...middlewares: any[]): CMapWrapper {
+  public on(trigger: string, ...middlewares: IEventCallback[]): CMapWrapper {
     const idx = this.middlewares.length;
     middlewares.forEach(fn => {
       this.middlewares.push({
@@ -116,7 +135,7 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
-   * Используется для создания LongPoll соединения с RFKV
+   * @description Используется для создания LongPoll соединения с RFKV
    * @async
    * @returns {Promise<any>} Возвращяет промис
    */
@@ -126,8 +145,7 @@ export class CMapWrapper implements IMapInfo {
 
     const user: any = await this.api.user.get();
 
-    this.longpool = true;
-    let version = 0;
+    let version = '';
     let lastevent = '';
 
     while (this.longpool === true) {
@@ -168,19 +186,20 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
-   * Получить массив загруженых узлов для данной карты
+   * @description Получить массив загруженых узлов для данной карты
+   * @returns {INodeInfo[]}
    */
-  public getNodes() {
+  public get childrens(): INodeInfo[] {
     return this.nodes;
   }
 
   /**
-   * Последовательно переключает обработчики
+   * @description Последовательно переключает обработчики
    * @param {Context} ctx Содержит new Context
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  private next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
+  public next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
     // todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
@@ -196,23 +215,58 @@ export class CMapWrapper implements IMapInfo {
   }
 
   /**
-   * Загружает карту и узлы от указаного узла
+   * @description Поиск пользователй карты по uuid
+   * @param {String} id uuid пользователя
+   * @returns {CMapUserWrapper | undefined}
+   */
+  public find_by_id(id: string): CMapUserWrapper | undefined {
+    return this.users.find((u: CMapUserWrapper) => u.user_id === id);
+  }
+
+  /**
+   * @description Поиск пользователя по его нику (почте)
+   * @param {String} username Никнейм пользователя (почта)
+   * @returns {CMapUserWrapper | undefined}
+   */
+  public find_by_username(username: string): CMapUserWrapper | undefined {
+    return this.users.find((u: CMapUserWrapper) => u.username === username);
+  }
+
+  /**
+   * @description Получить узел карты по его id
+   * @param id 
+   */
+  public get(id: string): CNodeWrapper | undefined {
+    const node = this.nodes.find((n: INodeInfo) => n.id === id);
+    if(!node) {
+      return undefined;
+    }
+
+    // Создает класс узла путем указания его тела
+    return new CNodeWrapper(this.axios, undefined, node);
+  }
+
+  /**
+   * @description Загружает карту и узлы от указаного узла
    * @param {string} viewport узел который будет началом
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
     const res = await this.api.map.getTree(this.id, viewport);
 
+    this.tree = res.body.children;
+
     /**
-     * Функция для обхода всех узлов в дереве
+     * @description Функция для обхода всех узлов в дереве
      * @param nodes список узолов
      */
     const dive = async (nodes: INodeInfo[]) => {
       for await (const child of nodes) {
-        await dive(child.body.children);
-        this.nodes.push(new CNodeWrapper(this.axios, undefined, child));
+        await dive(child.body.children || []);
+        this.nodes.push(child);
       }
     };
-    await dive(res.body.children);
+
+    await dive(res.body.children || []);
     return this;
   }
 }
