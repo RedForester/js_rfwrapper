@@ -20,6 +20,8 @@ npm i rfwrapper
 
 ## Пример использования
 
+Больше примеров можно найти в папке с тестами
+
 Wrapper
 
 ```js
@@ -33,16 +35,14 @@ wrapper.Node('c84d974f-44e3-4e54-9f26-03a493c33586')
   .then((node) => console.log(node)
   .catch((err) => console.log(err));
 
-// Подписка на события карты
-const map = wrapper.Map('2b0fb3c2-20f0-4944-8bf1-9dac372a52e9', {
-  enablePolling: true
-});
+// подписка на события карты сразу после того как будут получены данные карты
+wrapper.Map('c060bcb4-4c21-4a40-86ca-b4319252d073', { enablePolling: true }).then((map) => {  
+  // пример события
+  map.on('*', (ctx) => {
+    console.log(ctx)
+  })
 
-// Подписка на все события где был создан новый узел и вывод uuid создателя
-// someMidlewere - промежуточный обработчик, например проверка на то что создатель узла являеться администратором карты
-map.on('node_created', /* someMidlewere, */ (event) => {
-  console.log(event.who);
-});
+})
 
 ```
 
