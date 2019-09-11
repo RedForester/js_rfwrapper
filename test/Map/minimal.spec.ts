@@ -65,7 +65,7 @@ test('Should create new node in this map', async () => {
       meta: {
         last_modified_user: userInfo.user_id,
         author: userInfo.user_id,
-        leaf: false,
+        // leaf: true,
         editable: true,
         commentable: true,
         can_set_access: true } },
@@ -75,7 +75,7 @@ test('Should create new node in this map', async () => {
     meta: {
       last_modified_user: userInfo.user_id,
       author: userInfo.user_id,
-      leaf: false,
+      leaf: true,
       editable: true,
       commentable: true,
       can_set_access: true

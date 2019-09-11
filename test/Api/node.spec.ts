@@ -48,7 +48,7 @@ test('Should create new Node', async () => {
       meta: {
         last_modified_user: userInfo.user_id,
         author: userInfo.user_id,
-        leaf: false,
+        // leaf: false,
         editable: true,
         commentable: true,
         can_set_access: true } },
@@ -58,7 +58,7 @@ test('Should create new Node', async () => {
     meta: {
       last_modified_user: userInfo.user_id,
       author: userInfo.user_id,
-      leaf: false,
+      leaf: true,
       editable: true,
       commentable: true,
       can_set_access: true
@@ -130,7 +130,7 @@ test('Should update Node', async () => {
       meta: {
         last_modified_user: userInfo.user_id,
         author: userInfo.user_id,
-        leaf: false,
+        // leaf: false,
         editable: true,
         commentable: true,
         can_set_access: true } },
@@ -140,7 +140,7 @@ test('Should update Node', async () => {
     meta: {
       last_modified_user: userInfo.user_id,
       author: userInfo.user_id,
-      leaf: false,
+      leaf: true,
       editable: true,
       commentable: true,
       can_set_access: true
