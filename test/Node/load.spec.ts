@@ -16,6 +16,21 @@ beforeAll(async () => {
   map = await api.map.create('te1stmap');
   node = await api.node.get(map.root_node_id);
   type = await api.nodetype.create(map.id, 'testtype');
+
+  await api.node.create(map.id, node.id, {
+    properties: {
+      global: {
+        title: 'Some node 1'
+      }
+    }
+  });
+  await api.node.create(map.id, node.id, {
+    properties: {
+      global: {
+        title: 'Some node 2'
+      }
+    }
+  });
 });
 const rf = new Wrapper({
   username: '***REMOVED***',
@@ -50,7 +65,6 @@ test('Should load Node by valid uuid', async () => {
   expect(result.id).toEqual(node.id);
   expect(result.map_id).toEqual(node.map_id);
   expect(result.parent).toEqual(node.parent);
-  expect(result.meta).toEqual(node.meta);
 });
 
 test('Should load Node by information', async () => {
@@ -59,8 +73,18 @@ test('Should load Node by information', async () => {
   expect(result.id).toEqual(node.id);
   expect(result.map_id).toEqual(node.map_id);
   expect(result.parent).toEqual(node.parent);
-  expect(result.meta).toEqual(node.meta);
 });
+
+
+test('Should load childrens', async () => {
+  const result = await rf.Node(node.id);
+
+  expect(result.id).toEqual(node.id);
+  expect(result.map_id).toEqual(node.map_id);
+  expect(result.parent).toEqual(node.parent);
+  expect(result.body.children.length).toEqual(2);
+});
+
 
 test('Should load node with Node Type info', async () => {
   const testnode = await api.node.create(map.id, map.root_node_id, {});

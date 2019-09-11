@@ -130,6 +130,35 @@ export default class CMap {
   }
 
   /**
+   * @description Получить все дочерние узлы с уровнем вложености не более указаной
+   * @param {string} mapid uuid карты
+   * @param {string} nodeid uuid узла
+   * @param {number} level максимальная глубина
+   * @return {Promise<INodeInfo>} Дерево узлов
+   */
+
+  public async getByLevelCount(
+    mapid: string,
+    nodeid: string = '',
+    level: number = 2
+  ): Promise<INodeInfo> {
+    try {
+      let res;
+
+      res = await axios(
+        `/api/maps/${mapid}/nodes/${nodeid}/level_count/${level}`,
+        this.axios
+      );
+      return res.data;
+    } catch (err) {
+      if (!err.response.data) {
+        throw err;
+      }
+      throw err.response.data;
+    }
+  }
+
+  /**
    * @description Запрос доступа к карте
    * @async
    * @param {string} mapid uuid карты

@@ -14,6 +14,7 @@ export class CNodeWrapper implements INodeInfo {
   public id: string = '';
   public map_id: string = '';
   public parent: string = '';
+  public parent_node: CNodeWrapper | undefined = undefined;
   public position: any[] = [];
   public access: string = '';
   public originalParent: string = '';
@@ -44,6 +45,7 @@ export class CNodeWrapper implements INodeInfo {
 
   // PRIVATE
   private api: CApi;
+  private axios: IAxios;
 
   /**
    * @description Класс для работы с узлом
@@ -52,7 +54,8 @@ export class CNodeWrapper implements INodeInfo {
    * @param node
    */
   constructor(params: IAxios, id?: string, node?: INodeInfo) {
-    this.api = new CApi(params);
+    this.axios = params;
+    this.api = new CApi(this.axios);
     if (id) {
       this.id = id;
       this.ready = this.init(true);
@@ -74,7 +77,10 @@ export class CNodeWrapper implements INodeInfo {
    */
   public async init(update: boolean): Promise<CNodeWrapper> {
     if (update) {
-      const data = await this.api.node.get(this.id);
+      // fixme: batch request
+      const node = await this.api.node.get(this.id);
+      const data = await this.api.map.getByLevelCount(node.map_id, this.id, 1);
+
       // заполняем свойства у класса
       // warning: rewrite
       Object.assign(this, data);
@@ -83,6 +89,11 @@ export class CNodeWrapper implements INodeInfo {
         this.body.type = await this.api.nodetype.get(data.body.type_id);
       }
     }
+
+    this.body.children = this.body.children.map(child => (
+      new CNodeWrapper(this.axios, child.id)
+    ));
+
     return this;
   }
 

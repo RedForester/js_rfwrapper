@@ -34,7 +34,7 @@
     "release:patch": "npm version patch && git push origin && git push origin --tags"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.1"
   },
   "devDependencies": {
     "@types/jest": "^22.0.1",

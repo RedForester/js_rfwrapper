@@ -22,17 +22,16 @@ export {
   IUserTagsItem,
 } from './User/interfaces';
 
-/*
+
 // debug axios requests
-import axios from 'axios';
-axios.interceptors.response.use(response => {
-  // tslint:disable-next-line:no-console
-  console.log(
-    response.status,
-    response.request.method,
-    response.request.path
-  );
+// import axios from 'axios';
+// axios.interceptors.response.use(response => {
+//   // tslint:disable-next-line:no-console
+//   console.log(
+//     response.status,
+//     response.request.method,
+//     response.request.path
+//   );
   
-  return response;
-});
-*/
+//   return response;
+// });
