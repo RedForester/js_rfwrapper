@@ -1,7 +1,7 @@
 {
   "name": "rfwrapper",
-  "version": "1.4.1",
-  "description": "rfapi",
+  "version": "1.4.2",
+  "description": "Пакет для работы с API RedForester",
   "license": "MIT",
   "repository": "",
   "author": {
