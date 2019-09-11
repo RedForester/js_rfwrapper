@@ -69,7 +69,7 @@ test('Should return map tree with nodes', async () => {
         meta: {
           last_modified_user: userInfo.user_id,
           author: userInfo.user_id,
-          leaf: false,
+          // leaf: false,
           editable: true,
           commentable: true,
           can_set_access: true } },

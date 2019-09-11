@@ -264,7 +264,7 @@ export class CMapWrapper implements IMapWrapper {
     const dive = async (nodes: INodeInfo[]) => {
       for await (const child of nodes) {
         await dive(child.body.children || []);
-        this.nodes.push(child);
+        this.nodes.push(new CNodeWrapper(this.axios, undefined, child));
       }
     };
 
