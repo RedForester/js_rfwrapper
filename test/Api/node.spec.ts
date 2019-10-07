@@ -171,12 +171,12 @@ test('Should change node access', async () => {
   let testnode = await api.node.create(testmap.id, testmap.root_node_id, {});
   await api.node.addAccess(testnode.id, {
     [userInfo.user_id]: {
-      node: 'user_r'
+      node: 'user_all'
     }
   });
 
   testnode = await api.node.get(testnode.id);
-  expect(testnode.access).toEqual('user_r');
+  expect(testnode.access).toEqual('user_all');
 });
 
 test('Should throw error when change node access with unvalid data', async () => {
