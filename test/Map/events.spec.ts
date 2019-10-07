@@ -62,8 +62,8 @@ describe('MapEvent#Context', () => {
     map.on('*', handler);
 
     // tslint:disable-next-line
-    await api.node.create(testmap.id, testmap.root_node_id, {})
-  }, 10000);
+    map.next(new Context({...event, type: 'some_custom_event'}), map);
+  });
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
     const map = await rf.Map(testmap.id);
