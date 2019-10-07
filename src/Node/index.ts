@@ -43,6 +43,8 @@ export class CNodeWrapper implements INodeInfo {
     comments_count: 0,
   };
 
+  private children: CNodeWrapper[] = [];
+
   // PRIVATE
   private api: CApi;
   private axios: IAxios;
@@ -59,14 +61,15 @@ export class CNodeWrapper implements INodeInfo {
     if (id) {
       this.id = id;
       this.ready = this.init(true);
-    } else {
-      // fix: this
-      if (node) {
+    } else if (node) {
         Object.assign(this, node);
         this.ready = this.init(false);
-      } else {
-        throw new Error(`Map ${id} cannot be load`);
-      }
+
+        this.children = node.body.children.map(
+          child => new CNodeWrapper(this.axios, undefined, child)
+        );
+    } else {
+      throw new Error(`Map ${id} cannot be load`);
     }
   }
 
@@ -79,22 +82,37 @@ export class CNodeWrapper implements INodeInfo {
     if (update) {
       // fixme: batch request
       const node = await this.api.node.get(this.id);
-      const data = await this.api.map.getByLevelCount(node.map_id, this.id, 1);
 
       // заполняем свойства у класса
       // warning: rewrite
-      Object.assign(this, data);
+      Object.assign(this, node);
 
-      if (data.body.type_id) {
-        this.body.type = await this.api.nodetype.get(data.body.type_id);
+      if (node.body.type_id) {
+        this.body.type = await this.api.nodetype.get(node.body.type_id);
       }
     }
 
-    this.body.children = this.body.children.map(child => (
-      new CNodeWrapper(this.axios, child.id)
-    ));
-
     return this;
+  }
+
+  public get "body.children"() {
+    return this.children;
+  }
+
+  /**
+   * @description Загрузка потомков если узел был создан по UUID
+   * @returns {Promise<CNodeWrapper[]>} список узлов
+   */
+  public async getChildren(): Promise<CNodeWrapper[]> {
+    const data = await this.api.map.getByLevelCount(this.map_id, this.id, 1);
+    Object.assign(this, data);
+
+    // подгружаем узлы
+    this.children = this.body.children.map(
+      child => new CNodeWrapper(this.axios, undefined, child)
+    );
+    
+    return this.children;
   }
 
   /**
@@ -102,14 +120,12 @@ export class CNodeWrapper implements INodeInfo {
    * @param {INodeFindOptions} options параметры поиска
    * @returns {INodeInfo[]}
    */
-  public async findAll(options: INodeFindOptions): Promise<INodeInfo[]> {
-    const res = await this.api.map.getTree(this.map_id, this.id);
-
-    const dive = async (nodes: INodeInfo[]): Promise<INodeInfo[]> => {
+  public findAll(options: INodeFindOptions): INodeInfo[] {
+    const dive = (nodes: INodeInfo[]): INodeInfo[] => {
       const result: INodeInfo[] = [];
-      for await (const child of nodes) {
+      for (const child of nodes) {
         if (child.body.children) {
-          Object.assign(result, await dive(child.body.children || []));
+          Object.assign(result, dive(child.body.children || []));
         }
         // указана регулярка для поиска но ничего не найдено
         if (
@@ -129,7 +145,7 @@ export class CNodeWrapper implements INodeInfo {
       return result;
     };
 
-    return dive(res.body.children || []);
+    return dive(this.body.children);
   }
 
   /**
@@ -137,13 +153,11 @@ export class CNodeWrapper implements INodeInfo {
    * @param options Параметры поиска по узлам
    * @returns {Promise<INodeInfo | boolean>} найденый узел или false если таких нету
    */
-  public async findOne(
+  public findOne(
     options: INodeFindOptions
-  ): Promise<INodeInfo | boolean> {
-    const res = await this.api.map.getTree(this.map_id, this.id);
-
-    const dive = async (nodes: INodeInfo[]): Promise<INodeInfo | boolean> => {
-      for await (const child of nodes) {
+  ): INodeInfo | boolean {
+    const dive = (nodes: INodeInfo[]): INodeInfo | boolean => {
+      for (const child of nodes) {
         if (
           options.regex &&
           !options.regex.test(child.body.properties.global.title)
@@ -160,6 +174,6 @@ export class CNodeWrapper implements INodeInfo {
       return false;
     };
 
-    return dive(res.body.children || []);
+    return dive(this.body.children || []);
   }
 }
