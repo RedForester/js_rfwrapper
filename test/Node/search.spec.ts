@@ -63,8 +63,9 @@ test('Should return result when search one by regex', async () => {
   });
 
   const tree = await rf.Node(node.id);
+  await tree.getChildren();
 
-  const res = await tree.findOne({
+  const res = tree.findOne({
     regex: /SomeRegex/,
   });
 
@@ -97,8 +98,9 @@ test('Should return result when search one by type_id', async () => {
   });
 
   const tree = await rf.Node(node.id);
+  await tree.getChildren();
 
-  const res = await tree.findOne({
+  const res = tree.findOne({
     typeid: type.id
   });
 
@@ -135,8 +137,9 @@ test('Should return empty result when search all by regex', async () => {
     }
   });
   const tree = await rf.Node(node.id);
+  await tree.getChildren();
 
-  const res = await tree.findAll({
+  const res = tree.findAll({
     regex: /a{3}.+/,
   });
 
@@ -175,8 +178,9 @@ test('Should return empty result when search all by type_id', async () => {
   });
 
   const tree = await rf.Node(node.id);
+  await tree.getChildren();
 
-  const res = await tree.findAll({
+  const res = tree.findAll({
     typeid: type.id,
   });
 

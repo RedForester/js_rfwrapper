@@ -82,6 +82,10 @@ test('Should load childrens', async () => {
   expect(result.id).toEqual(node.id);
   expect(result.map_id).toEqual(node.map_id);
   expect(result.parent).toEqual(node.parent);
+  expect(result.body.children.length).toEqual(0);
+
+  await result.getChildren();
+
   expect(result.body.children.length).toEqual(2);
 });
 
