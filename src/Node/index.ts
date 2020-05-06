@@ -62,12 +62,12 @@ export class CNodeWrapper implements INodeInfo {
       this.id = id;
       this.ready = this.init(true);
     } else if (node) {
-        Object.assign(this, node);
-        this.ready = this.init(false);
+      Object.assign(this, node);
+      this.ready = this.init(false);
 
-        this.children = node.body.children.map(
-          child => new CNodeWrapper(this.axios, undefined, child)
-        );
+      this.children = node.body.children.map(
+        child => new CNodeWrapper(this.axios, undefined, child)
+      );
     } else {
       throw new Error(`Map ${id} cannot be load`);
     }
@@ -95,7 +95,7 @@ export class CNodeWrapper implements INodeInfo {
     return this;
   }
 
-  public get "body.children"() {
+  public get 'body.children'() {
     return this.children;
   }
 
@@ -111,7 +111,7 @@ export class CNodeWrapper implements INodeInfo {
     this.children = this.body.children.map(
       child => new CNodeWrapper(this.axios, undefined, child)
     );
-    
+
     return this.children;
   }
 
@@ -153,9 +153,7 @@ export class CNodeWrapper implements INodeInfo {
    * @param options Параметры поиска по узлам
    * @returns {Promise<INodeInfo | boolean>} найденый узел или false если таких нету
    */
-  public findOne(
-    options: INodeFindOptions
-  ): INodeInfo | boolean {
+  public findOne(options: INodeFindOptions): INodeInfo | boolean {
     const dive = (nodes: INodeInfo[]): INodeInfo | boolean => {
       for (const child of nodes) {
         if (

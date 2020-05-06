@@ -47,7 +47,7 @@ test('Should throw error with doest exist uuid', async () => {
     await rf.Node('0c218265-fcc7-4257-a6b8-5674de7c9622');
   } catch (e) {
     expect(e.code).toEqual('0304');
-    expect(e.message).toEqual('Узла: 0c218265-fcc7-4257-a6b8-5674de7c9622 не существует');
+    expect(e.message).toEqual('Узла 0c218265-fcc7-4257-a6b8-5674de7c9622 не существует');
   }
 });
 

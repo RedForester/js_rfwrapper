@@ -43,7 +43,7 @@ test('Should throw error when get node type with invalid uuid', async () => {
     await api.nodetype.get('2e73d279-6f37-4270-be28-022b622c5187');
   } catch (err) {
     expect(err.code).toEqual('1901'); 
-    expect(err.message).toEqual('Типа узла: 2e73d279-6f37-4270-be28-022b622c5187 не существует');
+    expect(err.message).toEqual('Типа узла 2e73d279-6f37-4270-be28-022b622c5187 не существует');
   }
 });
 

@@ -71,7 +71,7 @@ test('Should throw error when get node type with invalid uuid', async () => {
     await api.node.get('12x31x231x2awexawex12');
   } catch (err) {
     expect(err.code).toEqual('0304');
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
+    expect(err.message).toEqual('Узла 12x31x231x2awexawex12 не существует');
   }
 });
 
@@ -86,7 +86,7 @@ test('Should throw error when delete Node', async () => {
     await api.node.get('12x31x231x2awexawex12');
   } catch (err) {
     expect(err.code).toEqual('0304');
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
+    expect(err.message).toEqual('Узла 12x31x231x2awexawex12 не существует');
   }
 });
 
@@ -163,7 +163,7 @@ test('Should throw error when update Node', async () => {
     });
   } catch (err) {
     expect(err.code).toEqual('0304');
-    expect(err.message).toEqual('Узла: 12x31x231x2awexawex12 не существует');
+    expect(err.message).toEqual('Узла 12x31x231x2awexawex12 не существует');
   }
 });
 
@@ -226,7 +226,7 @@ test('Should throw error when delete node', async () => {
     await api.node.delete('asdasdasdasda');
   } catch (e) {
     expect(e.code).toEqual('0304');
-    expect(e.message).toEqual('Узла: asdasdasdasda не существует');
+    expect(e.message).toEqual('Узла asdasdasdasda не существует');
   }
 });
 

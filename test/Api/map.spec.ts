@@ -165,7 +165,7 @@ test('Should throw error when request tree', async () => {
     const result = await api.map.getTree(testmap.id, 'somerandomnodeuuid');
   } catch (err) {
     expect(err.code).toEqual('0304');
-    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+    expect(err.message).toEqual('Узла somerandomnodeuuid не существует');
   }
 });
 
@@ -194,7 +194,7 @@ test('Should throw error when request tree', async () => {
     const result = await api.map.getRadius(testmap.id, 'somerandomnodeuuid', 3);
   } catch (err) {
     expect(err.code).toEqual('0304');
-    expect(err.message).toEqual('Узла: somerandomnodeuuid не существует');
+    expect(err.message).toEqual('Узла somerandomnodeuuid не существует');
   }
 });
 
