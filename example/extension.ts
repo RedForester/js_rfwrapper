@@ -9,10 +9,10 @@ ext
     .setBaseUrl('https://49c74371.ngrok.io:443')
     .on('*', (ctx) => console.log(ctx))
 
-    .addCmd({ id: 'somefunc', name: 'Какая то функция' }, (ctx) => {
+    .command({ id: 'somefunc', name: 'Какая то функция' }, (ctx) => {
         return ctx
     })
-    .addCmd({ id: 'otherfunct', name: 'Отчет', description: 'описание' }, (ctx) => {
+    .command({ id: 'otherfunct', name: 'Отчет', description: 'описание' }, (ctx) => {
         return null
     })
 

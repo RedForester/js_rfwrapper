@@ -63,7 +63,7 @@ export class CExtention {
         return this;
     }
 
-    public addCmd(data: IExtCommand, callback: (ctx: IExtCommandCtx) => any) {
+    public command(data: IExtCommand, callback: (ctx: IExtCommandCtx) => any) {
         this.commands.push(data)
         this.cmdHandlers.set(data.id, callback);
 
