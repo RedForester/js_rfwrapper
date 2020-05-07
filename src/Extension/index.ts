@@ -97,6 +97,11 @@ export class CExtention {
         return this;
     }
 
+    public setRfBase(url: string): CExtention {
+        this.rfBaseUrl = url;
+        return this;
+    }
+
     /**
      * The address where the extension is launched in the format of protocol: // host: port / url.
      * Only necessary if the extension has action type commands
