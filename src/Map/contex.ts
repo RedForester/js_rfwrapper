@@ -44,23 +44,22 @@ export interface ICommentDataEvent {
   parent_title: string;
 }
 
-
 export interface IPropertiesDataEvent {
   node_title: string;
   node_type: string;
   parent_title: string;
   properties: {
     byType?: {
-      removed: any[],
-      updated: {
+      removed: any[];
+      updated: Array<{
         group: string;
         key: string;
         old_type_id: number;
         old_value: any;
         type: string;
         value: any;
-      }[]
-    }
+      }>;
+    };
   };
 }
 

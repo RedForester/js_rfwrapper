@@ -17,6 +17,13 @@ import { IUserInfoFromMap } from '../User/interfaces';
 export type IEventCallback = (context: Context, cb: () => void) => void;
 
 export class CMapWrapper implements IMapWrapper {
+  /**
+   * @description Получить массив загруженых узлов для данной карты
+   * @returns {INodeInfo[]}
+   */
+  public get childrens(): INodeInfo[] {
+    return this.nodes;
+  }
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
@@ -36,6 +43,8 @@ export class CMapWrapper implements IMapWrapper {
   public root_node_id: string = '';
   public users: CMapUserWrapper[] = [];
   public tree: INodeInfo[] = [];
+  // для отслеживания статуса лонгпулинга
+  public longpool: boolean;
 
   /*
     Private
@@ -45,8 +54,6 @@ export class CMapWrapper implements IMapWrapper {
   private api: CApi;
   // для хранения настроек
   private axios: IAxios;
-  // для отслеживания статуса лонгпулинга
-  public longpool: boolean;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
   // (виртуальная) начальная точка просмотра карты
@@ -190,14 +197,6 @@ export class CMapWrapper implements IMapWrapper {
   }
 
   /**
-   * @description Получить массив загруженых узлов для данной карты
-   * @returns {INodeInfo[]}
-   */
-  public get childrens(): INodeInfo[] {
-    return this.nodes;
-  }
-
-  /**
    * @description Последовательно переключает обработчики
    * @param {Context} ctx Содержит new Context
    * @param {number} idx Порядковый номер обработчика
@@ -255,7 +254,9 @@ export class CMapWrapper implements IMapWrapper {
    * @param {string} viewport узел который будет началом
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
-    if (!this.loadmap) return this;
+    if (!this.loadmap) {
+      return this;
+    }
 
     const res = await this.api.map.getTree(this.id, viewport);
 

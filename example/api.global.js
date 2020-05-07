@@ -1,6 +1,6 @@
 const rf = require('../');
 
-const api = new rf.Api({
+const api = new rf.Wrapper({
   username: '***REMOVED***',
   password: '***REMOVED***',
   // host: 'http://***REMOVED***'
