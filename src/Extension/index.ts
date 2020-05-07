@@ -1,7 +1,12 @@
 import * as Express from 'express';
+import * as fs from 'fs';
+import * as util from 'util';
 import Context from "../Map/contex";
 import { CMapWrapper, IEventCallback } from "../Map";
 import { Wrapper } from '..';
+
+const writeFile = util.promisify(fs.writeFile);
+const readFile = util.promisify(fs.readFile);
 
 
 interface IExtCommand {
@@ -19,8 +24,43 @@ interface IExtCommandCtx {
     sessionId: string;
 }
 
+export interface IExtStore<T=any> {
+    init(): Promise<void>;
+    set(key: string, value: T): Promise<void>;
+    get(key: string): Promise<T|undefined>
+    getAll(): Promise<T[]>
+    delete(key: string): Promise<void>
+}
+
 export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => void;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
+
+
+class FileStore<T=any> implements IExtStore {
+    private filename: string = '/Users/deissh/work/satek/redforester/rfwrapper/example/data.json'
+    private data: Map<string, T> = new Map();
+
+    async init(): Promise<void> {
+        const records = require(this.filename);
+        for (const record of records) {
+            this.data.set(record[0], record[1]);
+        }
+    }
+    async set(key: string, value: any): Promise<void> {
+        this.data.set(key, value);
+        await writeFile(this.filename, JSON.stringify(Array.from(this.data.entries())), 'utf-8');
+    }
+    async get(key: string): Promise<T|undefined> {
+        return this.data.get(key);
+    }
+    async getAll(): Promise<string[]> {
+        return Array.from(this.data.keys());
+    }
+    async delete(key: string): Promise<void> {
+        this.data.delete(key);
+        await writeFile(this.filename, JSON.stringify(Array.from(this.data.entries())), 'utf-8');
+    }
+}
 
 export class CExtention {
     private name: string = '';
@@ -32,12 +72,15 @@ export class CExtention {
     private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
     private requiredTypes: any[] = [];
 
+    private store: IExtStore<string>;
     private connectedMaps: Map<string, CMapWrapper> = new Map();
     private eventHandlers: {event: string, callback: ExtEventCallback}[] = [];
 
     private rfBaseUrl: string = 'https://***REMOVED***/';
 
-    constructor() {}
+    constructor(store?: IExtStore) {
+        this.store = store || new FileStore();
+    }
 
     public setName(name: string): CExtention {
         this.name = name;
@@ -114,7 +157,42 @@ export class CExtention {
             app.all(`/api/commands/${id}`, this.wrappRequest(cmd))
         }
 
-        return app.listen(port, callback);
+        this.init()
+            .then(() => app.listen(port, callback));
+    }
+
+    private async init(): Promise<this> {
+        await this.store.init();
+
+        for (const map_id of await this.store.getAll()) {
+            const token = await this.store.get(map_id)
+            if (!token) continue;
+
+            await this.addMap(map_id, token);
+        }
+
+        return this;
+    }
+
+    private async addMap(mapId: string, serviceToken: string) {
+        const wrapper = new Wrapper({
+            username: 'extension',
+            password: serviceToken,
+            host: this.rfBaseUrl
+        });
+
+        const map = await wrapper.Map(mapId, { loadmap: false, enablePolling: true });
+
+        for (const e of this.eventHandlers) {
+            map.on(e.event, (ctx, done) => {
+                e.callback(wrapper, ctx);
+                done();
+            })
+        }
+
+        this.connectedMaps.set(mapId, map)
+
+        map.start();
     }
 
     private async connectRequest(req: Express.Request, res: Express.Response) {
@@ -122,24 +200,8 @@ export class CExtention {
         const mapId = req.params.mapid
 
         try {
-            const wrapper = new Wrapper({
-                username: 'extension',
-                password: serviceToken,
-                host: this.rfBaseUrl
-            });
-    
-            const map = await wrapper.Map(mapId, { loadmap: false, enablePolling: true });
-
-            for (const e of this.eventHandlers) {
-                map.on(e.event, (ctx, done) => {
-                    e.callback(wrapper, ctx);
-                    done();
-                })
-            }
-
-            this.connectedMaps.set(mapId, map)
-
-            map.start();
+            await this.store.set(mapId, serviceToken)
+            await this.addMap(mapId, serviceToken);
         } catch (error) {
             console.error(error)
             res.status(400).json({})
@@ -159,7 +221,8 @@ export class CExtention {
 
         map.longpool = false;
 
-        this.connectedMaps.delete(mapId);
+        await this.store.delete(mapId)
+        this.store.delete(mapId);
     }
 
     private wrappRequest(callback: ExtCmdCallback): Express.Handler {
