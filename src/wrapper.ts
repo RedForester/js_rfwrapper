@@ -2,6 +2,11 @@ import { IAxios, IParams } from './interfaces';
 import { CMapWrapper } from './Map';
 import { CNodeWrapper } from './Node';
 import { INodeInfo, IMapInfo, IMapWrapperOptions } from './Map/interface';
+import CGlobal from './Utils/api/global';
+import CMap from './Utils/api/map';
+import CNode from './Utils/api/node';
+import CNodeType from './Utils/api/node_type';
+import CUser from './Utils/api/user';
 
 export class Wrapper {
   private settings: IParams;
@@ -42,5 +47,25 @@ export class Wrapper {
     options: IMapWrapperOptions = {}
   ): Promise<CMapWrapper> {
     return new CMapWrapper(this.axios, input, options).ready;
+  }
+
+  public get global(): CGlobal {
+    return new CGlobal(this.axios);
+  }
+
+  public get map(): CMap {
+    return new CMap(this.axios);
+  }
+
+  public get node(): CNode {
+    return new CNode(this.axios);
+  }
+
+  public get nodetype(): CNodeType {
+    return new CNodeType(this.axios);
+  }
+
+  public get user(): CUser {
+    return new CUser(this.axios);
   }
 }

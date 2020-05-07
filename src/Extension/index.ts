@@ -2,7 +2,7 @@ import * as Express from 'express';
 import Context from "../Map/contex";
 import { CMapWrapper, IEventCallback } from "../Map";
 import { Wrapper } from '..';
-import { Api } from '../api';
+
 
 interface IExtCommand {
     id: string;
@@ -19,6 +19,9 @@ interface IExtCommandCtx {
     sessionId: string;
 }
 
+export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => void;
+export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
+
 export class CExtention {
     private name: string = '';
     private description: string = '';
@@ -26,11 +29,13 @@ export class CExtention {
     private baseUrl: string = '';
 
     private commands: IExtCommand[] = [];
-    private cmdHandlers: Map<string, (ctx: IExtCommandCtx) => void> = new Map();
+    private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
     private requiredTypes: any[] = [];
 
     private connectedMaps: Map<string, CMapWrapper> = new Map();
-    private eventHandlers: {event: string, callback: IEventCallback}[] = [];
+    private eventHandlers: {event: string, callback: ExtEventCallback}[] = [];
+
+    private rfBaseUrl: string = 'https://***REMOVED***/';
 
     constructor() {}
 
@@ -58,12 +63,12 @@ export class CExtention {
         return this;
     }
 
-    public on(event: string, callback: IEventCallback) {
+    public on(event: string, callback: ExtEventCallback) {
         this.eventHandlers.push({event, callback})
         return this;
     }
 
-    public command(data: IExtCommand, callback: (ctx: IExtCommandCtx) => any) {
+    public command(data: IExtCommand, callback: ExtCmdCallback) {
         this.commands.push(data)
         this.cmdHandlers.set(data.id, callback);
 
@@ -88,6 +93,10 @@ export class CExtention {
             baseUrl: this.baseUrl,
             commands: cmds
         }
+    }
+
+    public map(id: string): CMapWrapper | undefined {
+        return this.connectedMaps.get(id);
     }
 
     public register(username: string, hash: string): void {
@@ -116,12 +125,17 @@ export class CExtention {
             const wrapper = new Wrapper({
                 username: 'extension',
                 password: serviceToken,
-                host: 'https://***REMOVED***/'
+                host: this.rfBaseUrl
             });
     
             const map = await wrapper.Map(mapId, { loadmap: false, enablePolling: true });
 
-            this.eventHandlers.forEach(e => map.on(e.event, e.callback));
+            for (const e of this.eventHandlers) {
+                map.on(e.event, (ctx, done) => {
+                    e.callback(wrapper, ctx);
+                    done();
+                })
+            }
 
             this.connectedMaps.set(mapId, map)
 
@@ -148,7 +162,7 @@ export class CExtention {
         this.connectedMaps.delete(mapId);
     }
 
-    private wrappRequest(callback: (ctx: IExtCommandCtx) => any): Express.Handler {
+    private wrappRequest(callback: ExtCmdCallback): Express.Handler {
         return (req, res) => {
             const context: IExtCommandCtx = {
                 mapId: String(req.query.map_id),
@@ -158,7 +172,13 @@ export class CExtention {
                 sessionId: String(req.headers['Session-Id']),
             }
 
-            const result = callback(context);
+            const wrapper = new Wrapper({
+                username: 'extension',
+                password: context.userToken,
+                host: this.rfBaseUrl
+            });
+
+            const result = callback(wrapper, context);
 
             res.json(result);
         }

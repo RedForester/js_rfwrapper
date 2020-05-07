@@ -174,7 +174,7 @@ export class CMapWrapper implements IMapWrapper {
           lastevent = newevent.value;
 
           events.forEach((event: any) => {
-            this.next(new Context(event.value), this);
+            this.next(new Context(this.id, event.value), this);
           });
         }
       } catch (err) {
