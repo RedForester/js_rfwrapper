@@ -46,11 +46,13 @@ export class CMapWrapper implements IMapWrapper {
   // для хранения настроек
   private axios: IAxios;
   // для отслеживания статуса лонгпулинга
-  private longpool: boolean;
+  public longpool: boolean;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
   // (виртуальная) начальная точка просмотра карты
   private viewport: string;
+  // загружать ли дерево
+  private loadmap: boolean;
 
   /**
    * @description Создает экземпляр класса CMapWrapper
@@ -69,7 +71,7 @@ export class CMapWrapper implements IMapWrapper {
     this.axios = params;
     this.middlewares = [];
     this.longpool = options.enablePolling || false;
-
+    this.loadmap = options.loadmap ? true : false;
     this.viewport = options.viewport || '';
 
     if (typeof input === 'string') {
@@ -253,6 +255,8 @@ export class CMapWrapper implements IMapWrapper {
    * @param {string} viewport узел который будет началом
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
+    if (!this.loadmap) return this;
+
     const res = await this.api.map.getTree(this.id, viewport);
 
     this.tree = res.body.children;

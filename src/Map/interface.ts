@@ -54,4 +54,5 @@ export interface IMapWrapperOptions {
   enablePolling?: boolean;
   viewport?: string;
   treeview?: boolean;
+  loadmap?: boolean;
 }
