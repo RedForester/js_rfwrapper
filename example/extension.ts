@@ -25,12 +25,12 @@ ext
         await self.node.addComment(ctx.what, reply);
     })
 
-    .command({ id: 'simple-handler', name: 'Текст кнопки' }, async (conn, ctx) => {
+    .command({ id: 'simple-handler', name: 'Текст кнопки', showRules: [{allNodes: true}] }, async (conn, ctx) => {
         const user = await conn.user.get(ctx.userId)
 
         return new NotifyReply()
             .setContent(`Привет ${user.name} ${user.surname}!`)
-            .setStyle(NotifyStyle.DEFAULT)
+            .setStyle(NotifyStyle.SUCCESS)
     })
 
 
