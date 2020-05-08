@@ -51,6 +51,9 @@ const ext = new CExtention()
 
     .command(new SimpleCommand())
     .subscribe(new TaskStatusWatcher())
+    .on('*', async (_, ctx) => {
+        return console.log(ctx);
+    })
 
 ext.register('owner@emai.com', 'somemd5');
 ext.start(1233, () => console.log('app listening on port 1233'));

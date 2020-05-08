@@ -9,7 +9,7 @@ import { Command } from './command';
 import { Event } from './event';
 
 export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<CommandReply|null>;
-export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
+export type ExtEventCallback = (conn: Wrapper, ctx: Context) => Promise<void>;
 
 export class CExtention {
   public toJSON() {
@@ -67,6 +67,11 @@ export class CExtention {
    */
   public setBaseUrl(baseUrl: string): CExtention {
     this.baseUrl = baseUrl;
+    return this;
+  }
+
+  public on(event: string, callback: ExtEventCallback) {
+    this.eventHandlers.push({ run: callback, eventName: event });
     return this;
   }
 
