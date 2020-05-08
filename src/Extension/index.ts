@@ -4,8 +4,9 @@ import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
 import { IExtStore, IExtCommandCtx, IExtCommand } from './interface';
 import { FileStore } from './store';
+import { CommandReply, NotifyReply, NotifyStyle } from './reply';
 
-export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => void;
+export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<CommandReply|null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
 
 export class CExtention {
@@ -197,15 +198,22 @@ export class CExtention {
         sessionId: String(req.headers['Session-Id']),
       };
 
-      const wrapper = new Wrapper({
-        username: 'extension',
-        password: context.userToken,
-        host: this.rfBaseUrl,
-      });
+      let result = null;
+      try {
+        const wrapper = new Wrapper({
+          username: 'extension',
+          password: context.userToken,
+          host: this.rfBaseUrl,
+        });
 
-      const result = callback(wrapper, context);
-
-      res.json(result);
+        result = callback(wrapper, context);
+      } catch (e) {
+        console.error(e)
+        result = new NotifyReply()
+          .setContent(`Ошибка во время выполнения`)
+          .setStyle(NotifyStyle.DANGER)
+      }
+      res.json(JSON.stringify(result));
     };
   }
 }

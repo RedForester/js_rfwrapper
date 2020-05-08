@@ -1,6 +1,8 @@
 export { Wrapper } from './wrapper';
 export { CExtention } from './Extension';
 
+export { NotifyReply, NotifyStyle } from './Extension/reply';
+
 export {
   IMapInfo,
   IMapRole,
