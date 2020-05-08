@@ -1,10 +1,10 @@
-import { CExtention, NotifyReply, NotifyStyle, Wrapper } from '../src';
-import { ICommandReply } from '../src/Extension/reply';
-import { IExtCommandCtx } from '../src/Extension/interface';
-import { Id, Name, Description, ShowRules, On } from '../src/Extension/decorators';
-import { Command } from '../src/Extension/command';
-import { Event } from '../src/Extension/event';
-import Context from '../src/Map/contex';
+import { CExtention, NotifyReply, NotifyStyle, Wrapper } from '../';
+import { ICommandReply } from '../lib/Extension/reply';
+import { IExtCommandCtx } from '../lib/Extension/interface';
+import { Id, Name, Description, ShowRules, On } from '../lib/Extension/decorators';
+import { Command } from '../lib/Extension/command';
+import { Event } from '../lib/Extension/event';
+import Context from '../lib/Map/contex';
 
 
 @Id('unique-id')
@@ -47,10 +47,13 @@ const ext = new CExtention()
     .setName('somename')
     .setDescription(`some value with ${1 + 3}`)
     .setEmail('deissh@yandex.ru')
-    .setBaseUrl('https://e1fbfd8e.ngrok.io:443')
+    .setBaseUrl('https://83518d86.ngrok.io:443')
 
     .command(new SimpleCommand())
-    .subscribe(new TaskStatusWatcher())
+    .subscribe(new TaskStatusWatcher());
 
-ext.register('owner@emai.com', 'somemd5');
-ext.start(1233, () => console.log('app listening on port 1233'));
+
+ext.start(1233, async () => {
+    await ext.register('kudryavtsev@nppsatek.ru', '2f6d33b8b0f94acfce14d8ec8b4f224f');
+    console.log('Плагин успешно зарегистрирован и подключен')
+});

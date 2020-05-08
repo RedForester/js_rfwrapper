@@ -42,10 +42,10 @@ export default class CUser {
       const res = await axios.patch(`/api/user`, body, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 }

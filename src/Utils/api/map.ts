@@ -20,10 +20,10 @@ export default class CMap {
       const res = await axios(`/api/maps/${mapid}`, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -32,10 +32,10 @@ export default class CMap {
       const res = await axios.delete(`/api/maps/${mapid}`, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -50,10 +50,10 @@ export default class CMap {
       const res = await axios.patch(`/api/maps/${mapid}`, body, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -67,10 +67,10 @@ export default class CMap {
       const res = await axios(`/api/maps/${mapid}/node_types`, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -93,10 +93,10 @@ export default class CMap {
       res = await axios(`/api/maps/${mapid}/nodes/${nodeid}`, this.axios);
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -122,10 +122,10 @@ export default class CMap {
       );
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -151,10 +151,10 @@ export default class CMap {
       );
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -204,9 +204,9 @@ export default class CMap {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -222,9 +222,9 @@ export default class CMap {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -254,10 +254,10 @@ export default class CMap {
       );
       return res.data;
     } catch (err) {
-      if (!err.response.data) {
-        throw err;
+      if (!err.response) {
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 }

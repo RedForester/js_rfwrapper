@@ -4,6 +4,7 @@ import CMap from './map';
 import CNode from './node';
 import CNodeType from './node_type';
 import CUser from './user';
+import CExtentionAPI from './extention';
 
 export class CApi {
   /**
@@ -51,5 +52,12 @@ export class CApi {
    */
   public get user(): CUser {
     return new CUser(this.axios);
+  }
+
+  /**
+   * @description user api methods
+   */
+  public get extention(): CExtentionAPI {
+    return new CExtentionAPI(this.axios);
   }
 }

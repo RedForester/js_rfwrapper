@@ -7,6 +7,7 @@ import CMap from './Utils/api/map';
 import CNode from './Utils/api/node';
 import CNodeType from './Utils/api/node_type';
 import CUser from './Utils/api/user';
+import CExtentionAPI from './Utils/api/extention';
 
 export class Wrapper {
   private settings: IParams;
@@ -67,5 +68,9 @@ export class Wrapper {
 
   public get user(): CUser {
     return new CUser(this.axios);
+  }
+
+  public get extention(): CExtentionAPI {
+    return new CExtentionAPI(this.axios);
   }
 }

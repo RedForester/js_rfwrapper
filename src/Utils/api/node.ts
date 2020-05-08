@@ -27,9 +27,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -50,9 +50,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -66,9 +66,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -84,9 +84,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -103,9 +103,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -121,9 +121,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -155,9 +155,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 }

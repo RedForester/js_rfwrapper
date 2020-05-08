@@ -40,6 +40,7 @@ export class CExtention {
       email: this.email,
       baseUrl: this.baseUrl,
       commands: this.commands,
+      requiredTypes: this.requiredTypes,
     };
   }
 
@@ -116,8 +117,18 @@ export class CExtention {
     return this.connectedMaps.get(id);
   }
 
-  public register(username: string, hash: string): void {
-    console.log(JSON.stringify(this));
+  public async register(username: string, password: string): Promise<void> {
+    const w = new Wrapper({ username, password, host: this.rfBaseUrl });
+
+    const plugins = await w.extention.getOwned();
+    for (const plugin of plugins) {
+      if (plugin.name !== this.name) continue;
+
+      await w.extention.update(plugin.id!, this.toJSON())
+      return;
+    }
+
+    await w.extention.create(this.toJSON())
   }
 
   public start(port: number, callback?: (...args: any[]) => void) {
