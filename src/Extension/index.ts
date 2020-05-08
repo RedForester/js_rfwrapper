@@ -6,6 +6,7 @@ import { IExtStore, IExtCommandCtx } from './interface';
 import { FileStore } from './store';
 import { CommandReply, NotifyReply, NotifyStyle } from './reply';
 import { Command } from './command';
+import { Event } from './event';
 
 export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<CommandReply|null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
@@ -29,14 +30,12 @@ export class CExtention {
 
   private commands: Command[] = [];
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
+  private eventHandlers: Array<Event> = [];
+
   private requiredTypes: any[] = [];
 
   private store: IExtStore<string>;
   private connectedMaps: Map<string, CMapWrapper> = new Map();
-  private eventHandlers: Array<{
-    event: string;
-    callback: ExtEventCallback;
-  }> = [];
 
   constructor(store?: IExtStore) {
     this.store = store || new FileStore();
@@ -71,10 +70,14 @@ export class CExtention {
     return this;
   }
 
-  public on(event: string) {
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-      this.eventHandlers.push({ event, callback: target[propertyKey] });
-    }
+  /**
+   * Подписывает на события на всех картах
+   * @param handler 
+   */
+  public subscribe(handler: Event) {
+    this.eventHandlers.push(handler);
+
+    return this;
   }
 
   public command(cmd: Command): CExtention {
@@ -147,8 +150,8 @@ export class CExtention {
     });
 
     for (const e of this.eventHandlers) {
-      map.on(e.event, (ctx, done) => {
-        e.callback(wrapper, ctx);
+      map.on(e.eventName, (ctx, done) => {
+        e.run(wrapper, ctx);
         done();
       });
     }

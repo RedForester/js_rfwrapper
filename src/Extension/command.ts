@@ -51,7 +51,7 @@ export abstract class Command {
      * @abstract
      * @public
      */
-    public abstract async run(conn: Wrapper, ctx: IExtCommandCtx): Promise<CommandReply|null>;
+    public abstract async run(self: Wrapper, ctx: IExtCommandCtx): Promise<CommandReply|null>;
 
     constructor(options?: ICommandOptions) {
         if (!options) return;

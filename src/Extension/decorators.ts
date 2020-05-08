@@ -27,3 +27,7 @@ export function Description(desc: string): ClassDecorator {
 export function ShowRules(rules: ICommandShowRule[]): ClassDecorator {
     return setMetaData('showRules', rules);
 }
+
+export function On(event: string): ClassDecorator {
+    return setMetaData('eventName', event);
+}
