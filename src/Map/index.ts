@@ -156,7 +156,10 @@ export class CMapWrapper implements IMapWrapper {
 
     const user: any = await this.api.user.get();
 
-    let lastNotify = await this.api.global.mapNotifLast(this.id, user.kv_session);
+    let lastNotify = await this.api.global.mapNotifLast(
+      this.id,
+      user.kv_session
+    );
 
     this.safeLoop(async () => {
       const nextNotify = await this.waitNextNotify(user.kv_session, lastNotify);
@@ -175,38 +178,9 @@ export class CMapWrapper implements IMapWrapper {
 
         lastNotify = nextNotify;
       }
-    })
+    });
 
     return this;
-  }
-
-  private async safeLoop(fn: () => Promise<void>) {
-    while (this.longpool === true) {
-      try {
-        await fn();
-      } catch (e) {
-        if (e !== 'Timeout') {
-          this.longpool = false;
-          throw new Error('longpolling: ' + e);
-        }
-      }
-    }
-}
-
-
-  private async waitNextNotify(kv_session: string, lastNotify: IMapNotifLast): Promise<IMapNotifLast | null> {
-    try {
-      return await this.api.global.mapNotifLast(
-        this.id,
-        kv_session,
-        lastNotify.version
-      );
-    } catch (e) {
-      if (e == 'Timeout') {
-        return null;
-      }
-      throw e;
-    }
   }
 
   /**
@@ -215,18 +189,22 @@ export class CMapWrapper implements IMapWrapper {
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  public async next(ctx: Context, map: CMapWrapper, idx: number = -1): Promise<any> {
+  public async next(
+    ctx: Context,
+    map: CMapWrapper,
+    idx: number = -1
+  ): Promise<any> {
     // todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
 
       if (trigger === ctx.type || trigger === '*') {
-        return await fn(ctx);
+        return fn(ctx);
       } else if (!trigger) {
-        return await fn(ctx);
+        return fn(ctx);
       }
 
-      return await this.next(ctx, map, idx + 1);
+      return this.next(ctx, map, idx + 1);
     }
   }
 
@@ -288,5 +266,36 @@ export class CMapWrapper implements IMapWrapper {
 
     await dive(res.body.children || []);
     return this;
+  }
+
+  private async safeLoop(fn: () => Promise<void>) {
+    while (this.longpool === true) {
+      try {
+        await fn();
+      } catch (e) {
+        if (e !== 'Timeout') {
+          this.longpool = false;
+          throw new Error('longpolling: ' + e);
+        }
+      }
+    }
+  }
+
+  private async waitNextNotify(
+    kv_session: string,
+    lastNotify: IMapNotifLast
+  ): Promise<IMapNotifLast | null> {
+    try {
+      return await this.api.global.mapNotifLast(
+        this.id,
+        kv_session,
+        lastNotify.version
+      );
+    } catch (e) {
+      if (e === 'Timeout') {
+        return null;
+      }
+      throw e;
+    }
   }
 }

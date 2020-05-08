@@ -11,7 +11,6 @@ export enum NotifyStyle {
   INFO = 'INFO',
 }
 
-
 export class NotifyReply implements ICommandReply {
   private content: string = '';
   private style?: NotifyStyle;

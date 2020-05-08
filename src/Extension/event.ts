@@ -1,24 +1,28 @@
-import { Wrapper } from "..";
-import { ICommandReply } from "./reply";
-import Context from "../Map/contex";
+import { Wrapper } from '..';
+import { ICommandReply } from './reply';
+import Context from '../Map/contex';
 
 export interface IEventOptions {
-    eventName: string;
+  eventName: string;
 }
 
 export abstract class Event {
-    /**
-     * Событие на которые нужно подписаться
-     * @type {String}
-     * @public
-     */
-    public eventName!: string;
+  /**
+   * Событие на которые нужно подписаться
+   * @type {String}
+   * @public
+   */
+  public eventName!: string;
 
-    constructor(options?: IEventOptions) {
-        if (!options) { return; }
-
-        if (options.eventName) { this.eventName = options.eventName; }
+  constructor(options?: IEventOptions) {
+    if (!options) {
+      return;
     }
 
-    public abstract async run(self: Wrapper, ctx: Context): Promise<void>;
+    if (options.eventName) {
+      this.eventName = options.eventName;
+    }
+  }
+
+  public abstract async run(self: Wrapper, ctx: Context): Promise<void>;
 }

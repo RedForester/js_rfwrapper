@@ -8,11 +8,13 @@ import { ICommandReply, NotifyReply, NotifyStyle } from './reply';
 import { Command } from './command';
 import { Event } from './event';
 
-export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<ICommandReply|null>;
+export type ExtCmdCallback = (
+  conn: Wrapper,
+  ctx: IExtCommandCtx
+) => Promise<ICommandReply | null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => Promise<void>;
 
 export class CExtention {
-
   public rfBaseUrl: string = 'https://***REMOVED***/';
   private name: string = '';
   private description: string = '';
@@ -77,7 +79,7 @@ export class CExtention {
 
   /**
    * Подписывает на события на всех картах
-   * @param handler 
+   * @param handler
    */
   public subscribe(handler: Event) {
     this.eventHandlers.push(handler);
@@ -92,10 +94,19 @@ export class CExtention {
     return this;
   }
 
-  public showRule(name: 'allNodes' | 'root' | 'selfType' | 'descendantOfType', value: any) {
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+  public showRule(
+    name: 'allNodes' | 'root' | 'selfType' | 'descendantOfType',
+    value: any
+  ) {
+    return (
+      target: any,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+    ) => {
       const idx = this.commands.findIndex(c => c.id === propertyKey);
-      if (idx === -1) { throw new Error('Необходим декоратор .command(name, description)'); }
+      if (idx === -1) {
+        throw new Error('Необходим декоратор .command(name, description)');
+      }
 
       this.commands[idx].showRules.push({ [name]: value });
     };
@@ -204,7 +215,9 @@ export class CExtention {
         mapId: String(req.query.mapId),
         nodeId: String(req.query.nodeId),
         userId: String(req.query.userId),
-        userToken: String(req.headers['rf-extension-token'] || req.headers['Rf-Extension-Token']),
+        userToken: String(
+          req.headers['rf-extension-token'] || req.headers['Rf-Extension-Token']
+        ),
         sessionId: String(req.headers['Session-Id']),
       };
 
@@ -224,7 +237,7 @@ export class CExtention {
           .setStyle(NotifyStyle.DANGER);
       }
 
-      res.status(200).json(result?.toJSON());
+      res.status(200).json(result ? result.toJSON() : result);
     };
   }
 }
