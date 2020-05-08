@@ -189,12 +189,12 @@ export class CExtention {
   }
 
   private wrappRequest(callback: ExtCmdCallback): Express.Handler {
-    return (req, res) => {
+    return async (req, res) => {
       const context: IExtCommandCtx = {
-        mapId: String(req.query.map_id),
-        nodeId: String(req.query.node_id),
-        userId: String(req.query.user_d),
-        userToken: String(req.headers['rf-extension-token']),
+        mapId: String(req.query.mapId),
+        nodeId: String(req.query.nodeId),
+        userId: String(req.query.userId),
+        userToken: String(req.headers['rf-extension-token'] || req.headers['Rf-Extension-Token']),
         sessionId: String(req.headers['Session-Id']),
       };
 
@@ -206,14 +206,15 @@ export class CExtention {
           host: this.rfBaseUrl,
         });
 
-        result = callback(wrapper, context);
+        result = await callback(wrapper, context);
       } catch (e) {
         console.error(e)
         result = new NotifyReply()
           .setContent(`Ошибка во время выполнения`)
           .setStyle(NotifyStyle.DANGER)
       }
-      res.json(JSON.stringify(result));
+
+      res.status(200).json(result?.toJSON());
     };
   }
 }
