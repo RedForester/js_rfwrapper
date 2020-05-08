@@ -73,8 +73,8 @@ ext.subscribe(new TaskStatusWatcher());
 
 ext.start(1233, async () => {
   await ext.register(
-    'kudryavtsev@nppsatek.ru',
-    '2f6d33b8b0f94acfce14d8ec8b4f224f'
+    'adming@google.com',
+    'md5fromverystrongpassword'
   );
   console.log('Плагин успешно зарегистрирован и подключен');
 });
