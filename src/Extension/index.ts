@@ -2,30 +2,22 @@ import * as Express from 'express';
 import Context from '../Map/contex';
 import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
-import { IExtStore, IExtCommandCtx, IExtCommand } from './interface';
+import { IExtStore, IExtCommandCtx } from './interface';
 import { FileStore } from './store';
 import { CommandReply, NotifyReply, NotifyStyle } from './reply';
+import { Command } from './command';
 
 export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<CommandReply|null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => void;
 
 export class CExtention {
-  public get toJSON() {
-    const cmds = this.commands.map(cmd => ({
-      name: cmd.name,
-      description: cmd.description || '',
-      showRules: cmd.showRules || [],
-      type: {
-        action: cmd.id,
-      },
-    }));
-
+  public toJSON() {
     return {
       name: this.name,
       description: this.description,
       email: this.email,
       baseUrl: this.baseUrl,
-      commands: cmds,
+      commands: this.commands,
     };
   }
 
@@ -35,7 +27,7 @@ export class CExtention {
   private email: string = '';
   private baseUrl: string = '';
 
-  private commands: IExtCommand[] = [];
+  private commands: Command[] = [];
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
   private requiredTypes: any[] = [];
 
@@ -79,16 +71,26 @@ export class CExtention {
     return this;
   }
 
-  public on(event: string, callback: ExtEventCallback) {
-    this.eventHandlers.push({ event, callback });
+  public on(event: string) {
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+      this.eventHandlers.push({ event, callback: target[propertyKey] });
+    }
+  }
+
+  public command(cmd: Command): CExtention {
+    this.commands.push(cmd);
+    this.cmdHandlers.set(cmd.id, cmd.run);
+
     return this;
   }
 
-  public command(data: IExtCommand, callback: ExtCmdCallback) {
-    this.commands.push(data);
-    this.cmdHandlers.set(data.id, callback);
+  public showRule(name: 'allNodes' | 'root' | 'selfType' | 'descendantOfType', value: any) {
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+      const idx = this.commands.findIndex(c => c.id === propertyKey);
+      if (idx === -1) throw new Error('Необходим декоратор .command(name, description)')
 
-    return this;
+      this.commands[idx].showRules.push({ [name]: value })
+    }
   }
 
   public map(id: string): CMapWrapper | undefined {
@@ -96,7 +98,7 @@ export class CExtention {
   }
 
   public register(username: string, hash: string): void {
-    console.log(JSON.stringify(this.toJSON));
+    console.log(JSON.stringify(this));
   }
 
   public start(port: number, callback?: (...args: any[]) => void) {

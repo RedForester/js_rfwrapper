@@ -1,10 +1,3 @@
-export interface IExtCommand {
-  id: string;
-  name: string;
-  description?: string;
-  showRules?: any[];
-}
-
 export interface IExtCommandCtx {
   mapId: string;
   nodeId: string;

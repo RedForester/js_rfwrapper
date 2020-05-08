@@ -15,7 +15,8 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*"
