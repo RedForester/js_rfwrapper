@@ -13,6 +13,7 @@ import {
 import { CUserWrapper } from '../User';
 import { CMapUserWrapper } from '../User/mapuser';
 import { IUserInfoFromMap } from '../User/interfaces';
+import { IMapNotifLast } from '../Utils/api/interfaces';
 
 export type IEventCallback = (context: Context, cb: () => void) => void;
 
@@ -111,7 +112,6 @@ export class CMapWrapper implements IMapWrapper {
     }
     await this.make_tree(this.viewport || this.root_node_id);
 
-    this.start();
     return this;
   }
 
@@ -156,44 +156,57 @@ export class CMapWrapper implements IMapWrapper {
 
     const user: any = await this.api.user.get();
 
-    let version = '';
-    let lastevent = '';
+    let lastNotify = await this.api.global.mapNotifLast(this.id, user.kv_session);
 
-    while (this.longpool === true) {
-      try {
-        const newevent = await this.api.global.mapNotifLast(
+    this.safeLoop(async () => {
+      const nextNotify = await this.waitNextNotify(user.kv_session, lastNotify);
+
+      if (nextNotify !== null && nextNotify !== lastNotify) {
+        const events = await this.api.global.mapNotif(
           this.id,
           user.kv_session,
-          version
+          lastNotify.value || '0',
+          nextNotify.value || '0'
         );
-        if (lastevent === '') {
-          lastevent = newevent.value;
-          version = newevent.version;
-        } else {
-          const events = await this.api.global.mapNotif(
-            this.id,
-            user.kv_session,
-            lastevent,
-            newevent.value
-          );
 
-          version = newevent.version;
-          lastevent = newevent.value;
-
-          events.forEach((event: any) => {
-            this.next(new Context(this.id, event.value), this);
-          });
+        for (const event of events) {
+          await this.next(new Context(this.id, event.value), this);
         }
-      } catch (err) {
-        if (err !== 'Timeout') {
-          // ошибка 408 -> переподключение, иначе останавливаем
+
+        lastNotify = nextNotify;
+      }
+    })
+
+    return this;
+  }
+
+  private async safeLoop(fn: () => Promise<void>) {
+    while (this.longpool === true) {
+      try {
+        await fn();
+      } catch (e) {
+        if (e !== 'Timeout') {
           this.longpool = false;
-          throw new Error('longpolling: ' + err);
+          throw new Error('longpolling: ' + e);
         }
       }
     }
+}
 
-    return this;
+
+  private async waitNextNotify(kv_session: string, lastNotify: IMapNotifLast): Promise<IMapNotifLast | null> {
+    try {
+      return await this.api.global.mapNotifLast(
+        this.id,
+        kv_session,
+        lastNotify.version
+      );
+    } catch (e) {
+      if (e == 'Timeout') {
+        return null;
+      }
+      throw e;
+    }
   }
 
   /**
@@ -202,18 +215,18 @@ export class CMapWrapper implements IMapWrapper {
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  public next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
+  public async next(ctx: Context, map: CMapWrapper, idx: number = -1): Promise<any> {
     // todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
 
       if (trigger === ctx.type || trigger === '*') {
-        return fn(ctx);
+        return await fn(ctx);
       } else if (!trigger) {
-        return fn(ctx);
+        return await fn(ctx);
       }
 
-      return this.next(ctx, map, idx + 1);
+      return await this.next(ctx, map, idx + 1);
     }
   }
 

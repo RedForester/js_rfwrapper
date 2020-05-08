@@ -1,5 +1,5 @@
 import { CExtention, NotifyReply, NotifyStyle, Wrapper } from '../src';
-import { CommandReply } from '../src/Extension/reply';
+import { ICommandReply } from '../src/Extension/reply';
 import { IExtCommandCtx } from '../src/Extension/interface';
 import { Id, Name, Description, ShowRules, On } from '../src/Extension/decorators';
 import { Command } from '../src/Extension/command';
@@ -12,7 +12,7 @@ import Context from '../src/Map/contex';
 @Description('Описание команды')
 @ShowRules([{ allNodes: true }])
 class SimpleCommand extends Command {
-    async run(conn: Wrapper, ctx: IExtCommandCtx): Promise<CommandReply> {
+    async run(conn: Wrapper, ctx: IExtCommandCtx): Promise<ICommandReply> {
         const user = await conn.user.get(ctx.userId)
 
         return new NotifyReply()
@@ -51,9 +51,6 @@ const ext = new CExtention()
 
     .command(new SimpleCommand())
     .subscribe(new TaskStatusWatcher())
-    .on('*', async (_, ctx) => {
-        return console.log(ctx);
-    })
 
 ext.register('owner@emai.com', 'somemd5');
 ext.start(1233, () => console.log('app listening on port 1233'));

@@ -1,5 +1,5 @@
 import { Wrapper } from "..";
-import { CommandReply } from "./reply";
+import { ICommandReply } from "./reply";
 import Context from "../Map/contex";
 
 export interface IEventOptions {
@@ -14,11 +14,11 @@ export abstract class Event {
      */
     public eventName!: string;
 
-    public abstract async run(self: Wrapper, ctx: Context): Promise<void>;
-
     constructor(options?: IEventOptions) {
-        if (!options) return;
+        if (!options) { return; }
 
-        if (options.eventName) this.eventName = options.eventName;
+        if (options.eventName) { this.eventName = options.eventName; }
     }
+
+    public abstract async run(self: Wrapper, ctx: Context): Promise<void>;
 }

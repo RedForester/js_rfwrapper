@@ -1,6 +1,6 @@
 import { Wrapper } from "..";
 import { IExtCommandCtx } from "./interface";
-import { CommandReply } from "./reply";
+import { ICommandReply } from "./reply";
 
 export interface ICommandOptions {
     id: string;
@@ -45,22 +45,22 @@ export abstract class Command {
      */
     public showRules!: ICommandShowRule[];
 
+    constructor(options?: ICommandOptions) {
+        if (!options) { return; }
+
+        if (options.id) { this.id = options.id; }
+        if (options.name) { this.name = options.name; }
+        if (options.description) { this.description = options.description; }
+        if (options.showRules) { this.showRules = options.showRules; }
+    }
+
     /**
      * Выполняет команду
      * @param values {*[]}
      * @abstract
      * @public
      */
-    public abstract async run(self: Wrapper, ctx: IExtCommandCtx): Promise<CommandReply|null>;
-
-    constructor(options?: ICommandOptions) {
-        if (!options) return;
-
-        if (options.id) this.id = options.id;
-        if (options.name) this.name = options.name;
-        if (options.description) this.description = options.description;
-        if (options.showRules) this.showRules = options.showRules;
-    }
+    public abstract async run(self: Wrapper, ctx: IExtCommandCtx): Promise<ICommandReply|null>;
 
     /**
      * Преобразует в JSON
@@ -73,6 +73,6 @@ export abstract class Command {
             type: {
               action: this.id,
             },
-        }
+        };
     }
 }

@@ -1,4 +1,4 @@
-export interface CommandReply {
+export interface ICommandReply {
   toJSON(): object;
 }
 
@@ -12,16 +12,14 @@ export enum NotifyStyle {
 }
 
 
-export class NotifyReply implements CommandReply {
+export class NotifyReply implements ICommandReply {
   private content: string = '';
   private style?: NotifyStyle;
   private durationMs?: number;
   private urlCancel?: string;
   private urlContinue?: string;
 
-  constructor(content='', style='asd') {}
-
-  toJSON(): object {
+  public toJSON(): object {
     return {
       notify: {
         content: this.content,

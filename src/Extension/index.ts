@@ -4,23 +4,14 @@ import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
 import { IExtStore, IExtCommandCtx } from './interface';
 import { FileStore } from './store';
-import { CommandReply, NotifyReply, NotifyStyle } from './reply';
+import { ICommandReply, NotifyReply, NotifyStyle } from './reply';
 import { Command } from './command';
 import { Event } from './event';
 
-export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<CommandReply|null>;
+export type ExtCmdCallback = (conn: Wrapper, ctx: IExtCommandCtx) => Promise<ICommandReply|null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => Promise<void>;
 
 export class CExtention {
-  public toJSON() {
-    return {
-      name: this.name,
-      description: this.description,
-      email: this.email,
-      baseUrl: this.baseUrl,
-      commands: this.commands,
-    };
-  }
 
   public rfBaseUrl: string = 'https://***REMOVED***/';
   private name: string = '';
@@ -30,7 +21,7 @@ export class CExtention {
 
   private commands: Command[] = [];
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
-  private eventHandlers: Array<Event> = [];
+  private eventHandlers: Event[] = [];
 
   private requiredTypes: any[] = [];
 
@@ -39,6 +30,15 @@ export class CExtention {
 
   constructor(store?: IExtStore) {
     this.store = store || new FileStore();
+  }
+  public toJSON() {
+    return {
+      name: this.name,
+      description: this.description,
+      email: this.email,
+      baseUrl: this.baseUrl,
+      commands: this.commands,
+    };
   }
 
   public setName(name: string): CExtention {
@@ -95,10 +95,10 @@ export class CExtention {
   public showRule(name: 'allNodes' | 'root' | 'selfType' | 'descendantOfType', value: any) {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
       const idx = this.commands.findIndex(c => c.id === propertyKey);
-      if (idx === -1) throw new Error('Необходим декоратор .command(name, description)')
+      if (idx === -1) { throw new Error('Необходим декоратор .command(name, description)'); }
 
-      this.commands[idx].showRules.push({ [name]: value })
-    }
+      this.commands[idx].showRules.push({ [name]: value });
+    };
   }
 
   public map(id: string): CMapWrapper | undefined {
@@ -218,10 +218,10 @@ export class CExtention {
 
         result = await callback(wrapper, context);
       } catch (e) {
-        console.error(e)
+        console.error(e);
         result = new NotifyReply()
           .setContent(`Ошибка во время выполнения`)
-          .setStyle(NotifyStyle.DANGER)
+          .setStyle(NotifyStyle.DANGER);
       }
 
       res.status(200).json(result?.toJSON());
