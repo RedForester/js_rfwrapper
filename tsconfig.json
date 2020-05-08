@@ -10,13 +10,13 @@
     "strict": true,
     "outDir": "./lib",
     "preserveConstEnums": true,
-    "removeComments": true,
+    "removeComments": false,
     "inlineSourceMap": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
     "skipLibCheck": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   },
   "include": [
     "src/**/*",

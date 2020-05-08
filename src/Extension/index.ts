@@ -2,7 +2,7 @@ import * as Express from 'express';
 import Context from '../Map/contex';
 import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
-import { IExtStore, IExtCommandCtx } from './interface';
+import { IExtStore, IExtCommandCtx, IExtentionOptions } from './interface';
 import { FileStore } from './store';
 import { ICommandReply, NotifyReply, NotifyStyle } from './reply';
 import { Command } from './command';
@@ -14,12 +14,12 @@ export type ExtCmdCallback = (
 ) => Promise<ICommandReply | null>;
 export type ExtEventCallback = (conn: Wrapper, ctx: Context) => Promise<void>;
 
-export class CExtention {
-  public rfBaseUrl: string = 'https://***REMOVED***/';
-  private name: string = '';
-  private description: string = '';
-  private email: string = '';
-  private baseUrl: string = '';
+export class Extention {
+  public rfBaseUrl: string;
+  private name: string;
+  private description: string;
+  private email: string;
+  private baseUrl: string;
 
   private commands: Command[] = [];
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
@@ -30,8 +30,14 @@ export class CExtention {
   private store: IExtStore<string>;
   private connectedMaps: Map<string, CMapWrapper> = new Map();
 
-  constructor(store?: IExtStore) {
-    this.store = store || new FileStore();
+  constructor(options: IExtentionOptions) {
+    this.store = options.store || new FileStore();
+
+    this.name = options.name;
+    this.description = options.description || '';
+    this.email = options.email;
+    this.baseUrl = options.baseUrl;
+    this.rfBaseUrl = options.rfBaseUrl || 'https://***REMOVED***/';
   }
   public toJSON() {
     return {
@@ -44,42 +50,13 @@ export class CExtention {
     };
   }
 
-  public setName(name: string): CExtention {
-    this.name = name;
-    return this;
-  }
-
-  public setDescription(description: string): CExtention {
-    this.description = description;
-    return this;
-  }
-
-  public setEmail(email: string): CExtention {
-    this.email = email;
-    return this;
-  }
-
-  public setRfBase(url: string): CExtention {
-    this.rfBaseUrl = url;
-    return this;
-  }
-
-  /**
-   * The address where the extension is launched in the format of protocol: // host: port / url.
-   * Only necessary if the extension has action type commands
-   */
-  public setBaseUrl(baseUrl: string): CExtention {
-    this.baseUrl = baseUrl;
-    return this;
-  }
-
   public on(event: string, callback: ExtEventCallback) {
     this.eventHandlers.push({ run: callback, eventName: event });
     return this;
   }
 
   /**
-   * Подписывает на события на всех картах
+   * @description Подписывает на события на всех картах
    * @param handler
    */
   public subscribe(handler: Event) {
@@ -88,29 +65,15 @@ export class CExtention {
     return this;
   }
 
-  public command(cmd: Command): CExtention {
+  /**
+   * @description Добавляет команду и регистрирует ее
+   * @param cmd
+   */
+  public command(cmd: Command): Extention {
     this.commands.push(cmd);
     this.cmdHandlers.set(cmd.id, cmd.run);
 
     return this;
-  }
-
-  public showRule(
-    name: 'allNodes' | 'root' | 'selfType' | 'descendantOfType',
-    value: any
-  ) {
-    return (
-      target: any,
-      propertyKey: string,
-      descriptor: PropertyDescriptor
-    ) => {
-      const idx = this.commands.findIndex(c => c.id === propertyKey);
-      if (idx === -1) {
-        throw new Error('Необходим декоратор .command(name, description)');
-      }
-
-      this.commands[idx].showRules.push({ [name]: value });
-    };
   }
 
   public map(id: string): CMapWrapper | undefined {
@@ -124,11 +87,11 @@ export class CExtention {
     for (const plugin of plugins) {
       if (plugin.name !== this.name) continue;
 
-      await w.extention.update(plugin.id!, this.toJSON())
+      await w.extention.update(plugin.id!, this.toJSON());
       return;
     }
 
-    await w.extention.create(this.toJSON())
+    await w.extention.create(this.toJSON());
   }
 
   public start(port: number, callback?: (...args: any[]) => void) {
