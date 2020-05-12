@@ -1,6 +1,4 @@
-export interface ICommandReply {
-  toJSON(): object;
-}
+import { ICommandReply } from "./interface";
 
 export enum NotifyStyle {
   DEFAULT = 'DEFAULT',

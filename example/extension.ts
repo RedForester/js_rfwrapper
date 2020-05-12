@@ -1,20 +1,10 @@
 import { Wrapper } from '../lib';
 import { Extention } from '../lib/Extension';
-import {
-  ICommandReply,
-  NotifyReply,
-  NotifyStyle,
-} from '../lib/Extension/reply';
+import { ICommandReply, NotifyReply, NotifyStyle } from '../lib/Extension/reply';
 import { IExtCommandCtx } from '../lib/Extension/interface';
 import { Command } from '../lib/Extension/command';
 import { Event } from '../lib/Extension/event';
-import {
-  Id,
-  Name,
-  Description,
-  ShowRules,
-  On,
-} from '../lib/Extension/decorators';
+import { Id, Name, Description, ShowRules, On } from '../lib/Extension/decorators';
 import Context from '../lib/Map/contex';
 
 @Id('unique-id')
@@ -34,19 +24,11 @@ class SimpleCommand extends Command {
 @On('node_updated')
 class TaskStatusWatcher extends Event {
   public async run(self: Wrapper, ctx: Context): Promise<void> {
-    if (ctx.data.node_type !== 'Задача') {
-      return;
-    }
-    if (!('properties' in ctx.data) || !ctx.data.properties.byType) {
-      return;
-    }
+    if (ctx.data.node_type !== 'Задача') return;
+    if (!('properties' in ctx.data) || !ctx.data.properties.byType) return;
 
-    const field = ctx.data.properties.byType.updated.find(
-      f => f.key === 'Статус'
-    );
-    if (!field) {
-      return;
-    }
+    const field = ctx.data.properties.byType.updated.find(f => f.key === 'Статус');
+    if (!field) return;
 
     const username =
       ctx.who.name && ctx.who.surname
@@ -54,9 +36,8 @@ class TaskStatusWatcher extends Event {
         : ctx.who.username;
 
     const reply =
-      `🔔 Пользователь [${username}](${ext.rfBaseUrl}user?userid=${
-        ctx.who.id
-      }) ` + `поменял(а) статус "${field.old_value}" -> "${field.value}".`;
+      `🔔 Пользователь [${username}](${ext.rfBaseUrl}user?userid=${ctx.who.id}) `
+      + `поменял(а) статус "${field.old_value}" -> "${field.value}".`;
 
     await self.node.addComment(ctx.what, reply);
   }

@@ -1,5 +1,4 @@
 import { Wrapper } from '..';
-import { ICommandReply } from './reply';
 import Context from '../Map/contex';
 
 export interface IEventOptions {

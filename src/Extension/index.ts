@@ -4,7 +4,7 @@ import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
 import { IExtStore, IExtCommandCtx, IExtentionOptions } from './interface';
 import { FileStore } from './store';
-import { ICommandReply, NotifyReply, NotifyStyle } from './reply';
+import { ICommandReply, NotifyReply, NotifyStyle } from './reply/index';
 import { Command } from './command';
 import { Event } from './event';
 

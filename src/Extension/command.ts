@@ -1,6 +1,6 @@
 import { Wrapper } from '..';
 import { IExtCommandCtx } from './interface';
-import { ICommandReply } from './reply';
+import { ICommandReply } from './reply/index';
 
 export interface ICommandOptions {
   id: string;
