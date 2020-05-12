@@ -1,9 +1,9 @@
 const rf = require('../');
 
 const api = new rf.Wrapper({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
-  // host: 'http://***REMOVED***'
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
+  // host: 'http://188.68.16.188'
 });
 
 api.global.exceptions().then(ex => console.log(ex));

@@ -5,12 +5,12 @@ import { CMapWrapper } from '../../src/Map';
 import { CNodeWrapper } from '../../src/Node';
 
 const api = new Api({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
 const rf = new Wrapper({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
 
 let map: CMapWrapper;

@@ -2,8 +2,8 @@ import { Wrapper, Api } from '../../src';
 import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 
 const api = new Api({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
 
 let map: IMapInfo;
@@ -15,8 +15,8 @@ beforeAll(async () => {
 });
 
 const rf = new Wrapper({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
 
 test('Should throw error with undefinded Node uuid', async () => {

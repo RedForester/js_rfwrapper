@@ -7,8 +7,8 @@ import {
 import { INodeInfo } from '../../lib/Map/interface';
 
 const api = new Api({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
   host: process.env.DEBUG_RF_URL
 });
 
@@ -143,7 +143,7 @@ test('Should create batch request and return current user and map', async () => 
   expect(result[0].status).toBe(200);
   expect(JSON.parse(result[0].body)).toMatchObject({
     user_id: '6dbfa213-defa-43d1-9215-c232e8485978',
-    username: '***REMOVED***',
+    username: 'admin@pachilly.com',
     name: 'somename'
   });
   expect(result[1].status).toBe(200);

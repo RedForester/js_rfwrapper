@@ -3,8 +3,8 @@ import { Api, Wrapper } from '../../src';
 describe('#api create', () => {
   test('Should create rfapi client', () => {
     const app = new Api({
-      username: '***REMOVED***',
-      password: '***REMOVED***',
+      username: 'admin@pachilly.com',
+      password: 'f6fdffe48c908deb0f4c3bd36c032e72',
       host: process.env.DEBUG_RF_URL
     });
 
@@ -45,8 +45,8 @@ describe('#api create', () => {
 
 test('Should create rf wrapper', () => {
   const app = new Wrapper({
-    username: '***REMOVED***',
-    password: '***REMOVED***',
+    username: 'admin@pachilly.com',
+    password: 'f6fdffe48c908deb0f4c3bd36c032e72',
   });
 
   expect(app).toBeInstanceOf(Wrapper);

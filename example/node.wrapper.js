@@ -1,8 +1,8 @@
 const rf = require('../');
 
 const wrapper = new rf.Wrapper({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
 
 // подписка на события карты сразу после того как будут получены данные карты

@@ -46,7 +46,7 @@ export class Extention {
     this.description = options.description || '';
     this.email = options.email;
     this.baseUrl = options.baseUrl;
-    this.rfBaseUrl = options.rfBaseUrl || 'https://***REMOVED***/';
+    this.rfBaseUrl = options.rfBaseUrl || 'https://app.test.redforester.com/';
     this.requiredTypes = options.requiredTypes || [];
   }
 

@@ -1,8 +1,8 @@
 import { Api } from '../../src';
 
 const app = new Api({
-  username: '***REMOVED***',
-  password: '***REMOVED***',
+  username: 'admin@pachilly.com',
+  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
   host: process.env.DEBUG_RF_URL
 });
 
@@ -16,7 +16,7 @@ test('Should return current user', async () => {
   const result = await app.user.get();
   expect(result).toMatchObject({
     user_id: '6dbfa213-defa-43d1-9215-c232e8485978',
-    username: '***REMOVED***',
+    username: 'admin@pachilly.com',
     name: 'default-name'
   });
 });
@@ -26,7 +26,7 @@ test('Should return user by uuid', async () => {
 
   expect(result).toMatchObject({
     user_id: '6dbfa213-defa-43d1-9215-c232e8485978',
-    username: '***REMOVED***',
+    username: 'admin@pachilly.com',
     name: 'default-name'
   });
 });
