@@ -1,5 +1,5 @@
 import * as Express from 'express';
-import Context from '../Map/contex';
+import { EventContext } from '../Map/contex';
 import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
 import {
@@ -18,7 +18,10 @@ export type ExtCmdCallback = (
   conn: Wrapper,
   ctx: IExtCommandCtx
 ) => Promise<ICommandReply | null>;
-export type ExtEventCallback = (conn: Wrapper, ctx: Context) => Promise<void>;
+export type ExtEventCallback = (
+  conn: Wrapper,
+  ctx: EventContext
+) => Promise<void>;
 
 export class Extention {
   public rfBaseUrl: string;

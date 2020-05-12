@@ -1,5 +1,5 @@
 import { Wrapper } from '..';
-import Context from '../Map/contex';
+import { EventContext } from '../Map/contex';
 
 export interface IEventOptions {
   eventName: string;
@@ -23,5 +23,5 @@ export abstract class Event {
     }
   }
 
-  public abstract async run(self: Wrapper, ctx: Context): Promise<void>;
+  public abstract async run(self: Wrapper, ctx: EventContext): Promise<void>;
 }

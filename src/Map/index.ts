@@ -1,7 +1,7 @@
 import { IAxios } from '../interfaces';
 import { CNodeWrapper } from '../Node';
 import { CApi } from '../Utils/api';
-import Context from './contex';
+import { EventContext as Context } from './contex';
 import {
   IMapRole,
   INodeInfo,

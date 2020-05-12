@@ -1,5 +1,6 @@
 export { Wrapper } from './wrapper';
 export { Extention } from './Extension';
+export { EventContext } from './Map/contex';
 
 export {
   IMapInfo,

@@ -1,11 +1,9 @@
-import { Wrapper } from '../lib';
-import { Extention } from '../lib/Extension';
-import { ICommandReply, NotifyReply, NotifyStyle } from '../lib/Extension/reply';
+import { Wrapper, Extention, EventContext } from '../lib';
 import { IExtCommandCtx } from '../lib/Extension/interface';
+import { ICommandReply, NotifyReply, NotifyStyle } from '../lib/Extension/reply';
 import { Command } from '../lib/Extension/command';
 import { Event } from '../lib/Extension/event';
 import { Id, Name, Description, ShowRules, On, RequiredType } from '../lib/Extension/decorators';
-import Context from '../lib/Map/contex';
 
 @Id('unique-id')
 @Name('Название команды')
@@ -25,7 +23,7 @@ class SimpleCommand extends Command {
 
 @On('node_updated')
 class TaskStatusWatcher extends Event {
-  public async run(self: Wrapper, ctx: Context): Promise<void> {
+  public async run(self: Wrapper, ctx: EventContext): Promise<void> {
     if (ctx.data.node_type !== 'Задача') return;
     if (!('properties' in ctx.data) || !ctx.data.properties.byType) return;
 

@@ -1,7 +1,7 @@
 /**
  * Создает класс для обработки событий, передается с необходимыми параметрами
  */
-export default class Context {
+export class EventContext {
   public what: string;
   public type: string;
   public data:
