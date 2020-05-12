@@ -72,7 +72,7 @@ ext.subscribe('*', async (conn, ctx) => {
 
 
 ext.start(1233, async () => {
-  ext.register('kudryavtsev@nppsatek.ru', '2f6d33b8b0f94acfce14d8ec8b4f224f')
+  ext.register('adming@google.com', 'md5fromverystrongpassword')
     .then(_ => console.log('Плагин успешно зарегистрирован и подключен'))
     .catch(_ => process.exit(1));
 });
