@@ -14,6 +14,28 @@ export default class CNode {
   /**
    * @description
    * @param nodeid uuid узла
+   * @param content комментарий
+   * @param reply_to параметры доступа
+   */
+  public async addComment(nodeid: string, content: string, reply_to?: string) {
+    try {
+      const res = await axios.post(
+        `/api/nodes/${nodeid}/comments`,
+        { content, reply_to },
+        this.axios
+      );
+      return res.data;
+    } catch (err) {
+      if (!err.response) {
+        throw new Error(err);
+      }
+      throw new Error(JSON.stringify(err.response.data));
+    }
+  }
+
+  /**
+   * @description
+   * @param nodeid uuid узла
    * @param access параметры доступа
    */
   public async addAccess(nodeid: string, access: IAccessAddNewUser) {
@@ -28,9 +50,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -44,9 +66,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -62,9 +84,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -81,9 +103,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -99,9 +121,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 
@@ -133,9 +155,9 @@ export default class CNode {
       return res.data;
     } catch (err) {
       if (!err.response) {
-        throw err;
+        throw new Error(err);
       }
-      throw err.response.data;
+      throw new Error(JSON.stringify(err.response.data));
     }
   }
 }

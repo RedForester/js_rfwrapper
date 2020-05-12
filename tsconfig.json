@@ -10,15 +10,16 @@
     "strict": true,
     "outDir": "./lib",
     "preserveConstEnums": true,
-    "removeComments": true,
+    "removeComments": false,
     "inlineSourceMap": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
   ],
   "exclude": [
     "node_modules",

@@ -1,5 +1,5 @@
-export { Api } from './api';
 export { Wrapper } from './wrapper';
+export { Extention } from './Extension';
 
 export {
   IMapInfo,

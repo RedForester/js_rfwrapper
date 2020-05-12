@@ -13,10 +13,18 @@ import {
 import { CUserWrapper } from '../User';
 import { CMapUserWrapper } from '../User/mapuser';
 import { IUserInfoFromMap } from '../User/interfaces';
+import { IMapNotifLast } from '../Utils/api/interfaces';
 
 export type IEventCallback = (context: Context, cb: () => void) => void;
 
 export class CMapWrapper implements IMapWrapper {
+  /**
+   * @description Получить массив загруженых узлов для данной карты
+   * @returns {INodeInfo[]}
+   */
+  public get childrens(): INodeInfo[] {
+    return this.nodes;
+  }
   // для проверки того что карта готова
   public ready: Promise<CMapWrapper>;
 
@@ -36,6 +44,8 @@ export class CMapWrapper implements IMapWrapper {
   public root_node_id: string = '';
   public users: CMapUserWrapper[] = [];
   public tree: INodeInfo[] = [];
+  // для отслеживания статуса лонгпулинга
+  public longpool: boolean;
 
   /*
     Private
@@ -45,12 +55,12 @@ export class CMapWrapper implements IMapWrapper {
   private api: CApi;
   // для хранения настроек
   private axios: IAxios;
-  // для отслеживания статуса лонгпулинга
-  private longpool: boolean;
   // список загруженых узлов в виде дерева
   private nodes: INodeInfo[] = [];
   // (виртуальная) начальная точка просмотра карты
   private viewport: string;
+  // загружать ли дерево
+  private loadmap: boolean;
 
   /**
    * @description Создает экземпляр класса CMapWrapper
@@ -69,7 +79,7 @@ export class CMapWrapper implements IMapWrapper {
     this.axios = params;
     this.middlewares = [];
     this.longpool = options.enablePolling || false;
-
+    this.loadmap = options.loadmap ? true : false;
     this.viewport = options.viewport || '';
 
     if (typeof input === 'string') {
@@ -102,7 +112,6 @@ export class CMapWrapper implements IMapWrapper {
     }
     await this.make_tree(this.viewport || this.root_node_id);
 
-    this.start();
     return this;
   }
 
@@ -147,52 +156,31 @@ export class CMapWrapper implements IMapWrapper {
 
     const user: any = await this.api.user.get();
 
-    let version = '';
-    let lastevent = '';
+    let lastNotify = await this.api.global.mapNotifLast(
+      this.id,
+      user.kv_session
+    );
 
-    while (this.longpool === true) {
-      try {
-        const newevent = await this.api.global.mapNotifLast(
+    this.safeLoop(async () => {
+      const nextNotify = await this.waitNextNotify(user.kv_session, lastNotify);
+
+      if (nextNotify !== null && nextNotify !== lastNotify) {
+        const events = await this.api.global.mapNotif(
           this.id,
           user.kv_session,
-          version
+          lastNotify.value || '0',
+          nextNotify.value || '0'
         );
-        if (lastevent === '') {
-          lastevent = newevent.value;
-          version = newevent.version;
-        } else {
-          const events = await this.api.global.mapNotif(
-            this.id,
-            user.kv_session,
-            lastevent,
-            newevent.value
-          );
 
-          version = newevent.version;
-          lastevent = newevent.value;
+        for (const event of events) {
+          await this.next(new Context(this.id, event.value), this);
+        }
 
-          events.forEach((event: any) => {
-            this.next(new Context(event.value), this);
-          });
-        }
-      } catch (err) {
-        if (err !== 'Timeout') {
-          // ошибка 408 -> переподключение, иначе останавливаем
-          this.longpool = false;
-          throw new Error('longpolling: ' + err);
-        }
+        lastNotify = nextNotify;
       }
-    }
+    });
 
     return this;
-  }
-
-  /**
-   * @description Получить массив загруженых узлов для данной карты
-   * @returns {INodeInfo[]}
-   */
-  public get childrens(): INodeInfo[] {
-    return this.nodes;
   }
 
   /**
@@ -201,7 +189,11 @@ export class CMapWrapper implements IMapWrapper {
    * @param {number} idx Порядковый номер обработчика
    * @returns {any} Переключение на новый обработчик
    */
-  public next(ctx: Context, map: CMapWrapper, idx: number = -1): any {
+  public async next(
+    ctx: Context,
+    map: CMapWrapper,
+    idx: number = -1
+  ): Promise<any> {
     // todo
     if (this.middlewares.length > idx + 1) {
       const { fn, trigger } = this.middlewares[idx + 1];
@@ -253,6 +245,10 @@ export class CMapWrapper implements IMapWrapper {
    * @param {string} viewport узел который будет началом
    */
   private async make_tree(viewport: string): Promise<CMapWrapper> {
+    if (!this.loadmap) {
+      return this;
+    }
+
     const res = await this.api.map.getTree(this.id, viewport);
 
     this.tree = res.body.children;
@@ -270,5 +266,36 @@ export class CMapWrapper implements IMapWrapper {
 
     await dive(res.body.children || []);
     return this;
+  }
+
+  private async safeLoop(fn: () => Promise<void>) {
+    while (this.longpool === true) {
+      try {
+        await fn();
+      } catch (e) {
+        if ('Timeout' in e) {
+          this.longpool = false;
+          throw new Error('longpolling: ' + e);
+        }
+      }
+    }
+  }
+
+  private async waitNextNotify(
+    kv_session: string,
+    lastNotify: IMapNotifLast
+  ): Promise<IMapNotifLast | null> {
+    try {
+      return await this.api.global.mapNotifLast(
+        this.id,
+        kv_session,
+        lastNotify.version
+      );
+    } catch (e) {
+      if (e === 'Timeout') {
+        return null;
+      }
+      throw e;
+    }
   }
 }
