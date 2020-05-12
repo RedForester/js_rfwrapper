@@ -1,3 +1,44 @@
+export interface ICommandOptions {
+  id: string;
+  name: string;
+  description: string;
+  showRules: ICommandShowRule[];
+  requiredTypes: ICommandRequiredType[];
+}
+
+export interface IRequiredTypeProp {
+  name: string;
+  argument:
+    | 'NUMBER_INT'
+    | 'NUMBER_REAL'
+    | 'TEXT_SIMPLE'
+    | 'TEXT_HTML'
+    | 'TEXT_MARKDOWN'
+    | 'DATETIME_DATE'
+    | 'DATETIME_TIME'
+    | 'DATETIME_ALL';
+  category:
+    | 'ANY'
+    | 'NUMBER'
+    | 'BOOLEAN'
+    | 'TEXT'
+    | 'DATE_TIME'
+    | 'FILE'
+    | 'USER'
+    | 'ENUM';
+}
+export interface ICommandRequiredType {
+  name: string;
+  properties: IRequiredTypeProp[];
+}
+
+export interface ICommandShowRule {
+  allNodes?: boolean;
+  root?: boolean;
+  selfType?: string;
+  descendantOfType?: string;
+}
+
 export interface IExtCommandCtx {
   mapId: string;
   nodeId: string;
@@ -39,4 +80,9 @@ export interface IExtentionOptions {
    * @description Ссылка на rf с которым работает плагин прод/тест
    */
   rfBaseUrl?: string;
+
+  /**
+   * @description Необходимые типы узлов для работы плагина
+   */
+  requiredTypes?: ICommandRequiredType[];
 }

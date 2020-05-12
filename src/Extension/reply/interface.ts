@@ -1,3 +1,3 @@
 export interface ICommandReply {
-    toJSON(): object;
+  toJSON(): object;
 }

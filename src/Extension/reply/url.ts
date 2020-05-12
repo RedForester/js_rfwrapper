@@ -1,7 +1,7 @@
-import { ICommandReply } from "./interface";
+import { ICommandReply } from './interface';
 
 export class OpenUrlReply implements ICommandReply {
-  private url: string = ''
+  private url: string = '';
 
   public toJSON(): object {
     return {
@@ -20,4 +20,3 @@ export class OpenUrlReply implements ICommandReply {
     return this;
   }
 }
-  

@@ -1,20 +1,11 @@
 import { Wrapper } from '..';
-import { IExtCommandCtx } from './interface';
+import {
+  IExtCommandCtx,
+  ICommandShowRule,
+  ICommandRequiredType,
+  ICommandOptions,
+} from './interface';
 import { ICommandReply } from './reply/index';
-
-export interface ICommandOptions {
-  id: string;
-  name: string;
-  description: string;
-  showRules: ICommandShowRule[];
-}
-
-export interface ICommandShowRule {
-  allNodes?: boolean;
-  root?: boolean;
-  selfType?: string;
-  descendantOfType?: string;
-}
 
 export abstract class Command {
   /**
@@ -45,6 +36,9 @@ export abstract class Command {
    */
   public showRules!: ICommandShowRule[];
 
+  // todo: валидация вызова команды с использованием showRules и requiredTypes
+  public requiredTypes!: ICommandRequiredType[];
+
   constructor(options?: ICommandOptions) {
     if (!options) {
       return;
@@ -61,6 +55,9 @@ export abstract class Command {
     }
     if (options.showRules) {
       this.showRules = options.showRules;
+    }
+    if (options.requiredTypes) {
+      this.requiredTypes = options.requiredTypes;
     }
   }
 

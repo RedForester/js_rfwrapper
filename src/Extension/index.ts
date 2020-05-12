@@ -2,7 +2,12 @@ import * as Express from 'express';
 import Context from '../Map/contex';
 import { CMapWrapper } from '../Map';
 import { Wrapper } from '..';
-import { IExtStore, IExtCommandCtx, IExtentionOptions } from './interface';
+import {
+  IExtStore,
+  IExtCommandCtx,
+  IExtentionOptions,
+  ICommandRequiredType,
+} from './interface';
 import { FileStore } from './store';
 import { ICommandReply, NotifyReply, NotifyStyle } from './reply/index';
 import { Command } from './command';
@@ -25,7 +30,7 @@ export class Extention {
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
   private eventHandlers: Event[] = [];
 
-  private requiredTypes: any[] = [];
+  private requiredTypes: ICommandRequiredType[] = [];
 
   private store: IExtStore<string>;
   private connectedMaps: Map<string, CMapWrapper> = new Map();
@@ -38,15 +43,20 @@ export class Extention {
     this.email = options.email;
     this.baseUrl = options.baseUrl;
     this.rfBaseUrl = options.rfBaseUrl || 'https://***REMOVED***/';
+    this.requiredTypes = options.requiredTypes || [];
   }
+
   public toJSON() {
     return {
       name: this.name,
       description: this.description,
       email: this.email,
       baseUrl: this.baseUrl,
-      commands: this.commands,
-      requiredTypes: this.requiredTypes,
+      commands: this.commands.map(cmd => cmd.toJSON()),
+      requiredTypes: [
+        ...this.commands.map(cmd => cmd.requiredTypes).flat(),
+        ...this.requiredTypes,
+      ], // todo: merge
     };
   }
 

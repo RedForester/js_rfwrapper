@@ -1,7 +1,7 @@
-import { ICommandReply } from "./interface";
+import { ICommandReply } from './interface';
 
 export class FrameReply implements ICommandReply {
-  private url: string = ''
+  private url: string = '';
   private width: number = 800;
   private height: number = 800;
 
@@ -34,4 +34,3 @@ export class FrameReply implements ICommandReply {
     return this;
   }
 }
-  

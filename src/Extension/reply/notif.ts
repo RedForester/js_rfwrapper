@@ -1,4 +1,4 @@
-import { ICommandReply } from "./interface";
+import { ICommandReply } from './interface';
 
 export enum NotifyStyle {
   DEFAULT = 'DEFAULT',

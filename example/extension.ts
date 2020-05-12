@@ -4,13 +4,15 @@ import { ICommandReply, NotifyReply, NotifyStyle } from '../lib/Extension/reply'
 import { IExtCommandCtx } from '../lib/Extension/interface';
 import { Command } from '../lib/Extension/command';
 import { Event } from '../lib/Extension/event';
-import { Id, Name, Description, ShowRules, On } from '../lib/Extension/decorators';
+import { Id, Name, Description, ShowRules, On, RequiredType } from '../lib/Extension/decorators';
 import Context from '../lib/Map/contex';
 
 @Id('unique-id')
 @Name('Название команды')
 @Description('Описание команды')
-@ShowRules([{ allNodes: true }])
+@ShowRules({ allNodes: true })
+@RequiredType('Задача')
+@RequiredType('Постановка', [])
 class SimpleCommand extends Command {
   public async run(conn: Wrapper, ctx: IExtCommandCtx): Promise<ICommandReply> {
     const user = await conn.user.get(ctx.userId);
@@ -46,16 +48,21 @@ class TaskStatusWatcher extends Event {
 const ext = new Extention({
   name: 'somename',
   email: 'deissh@yandex.ru',
-  baseUrl: 'https://d024a331.ngrok.io:443',
+  baseUrl: 'https://86c220d7.ngrok.io:443',
+  requiredTypes: [{
+    name: 'Категория',
+    properties: [{
+      name: 'Поле1',
+      argument: 'NUMBER_REAL',
+      category: 'NUMBER'
+    }]
+  }]
 });
 
 ext.command(new SimpleCommand());
 ext.subscribe(new TaskStatusWatcher());
 
 ext.start(1233, async () => {
-  await ext.register(
-    'adming@google.com',
-    'md5fromverystrongpassword'
-  );
+  await ext.register('kudryavtsev@nppsatek.ru', '2f6d33b8b0f94acfce14d8ec8b4f224f');
   console.log('Плагин успешно зарегистрирован и подключен');
 });
