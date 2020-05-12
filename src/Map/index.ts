@@ -273,7 +273,7 @@ export class CMapWrapper implements IMapWrapper {
       try {
         await fn();
       } catch (e) {
-        if (e !== 'Timeout') {
+        if ('Timeout' in e) {
           this.longpool = false;
           throw new Error('longpolling: ' + e);
         }

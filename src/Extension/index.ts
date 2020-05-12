@@ -7,6 +7,7 @@ import {
   IExtCommandCtx,
   IExtentionOptions,
   ICommandRequiredType,
+  ICommandOptions,
 } from './interface';
 import { FileStore } from './store';
 import { ICommandReply, NotifyReply, NotifyStyle } from './reply/index';
@@ -26,7 +27,7 @@ export class Extention {
   private email: string;
   private baseUrl: string;
 
-  private commands: Command[] = [];
+  private commands: ICommandOptions[] = [];
   private cmdHandlers: Map<string, ExtCmdCallback> = new Map();
   private eventHandlers: Event[] = [];
 
@@ -52,25 +53,35 @@ export class Extention {
       description: this.description,
       email: this.email,
       baseUrl: this.baseUrl,
-      commands: this.commands.map(cmd => cmd.toJSON()),
+      commands: this.commands.map(cmd => ({
+        name: cmd.name,
+        description: cmd.description || '',
+        showRules: cmd.showRules || [],
+        type: {
+          action: cmd.id,
+        },
+      })),
       requiredTypes: [
-        ...this.commands.map(cmd => cmd.requiredTypes).flat(),
+        ...this.commands.map(cmd => cmd.requiredTypes || []).flat(),
         ...this.requiredTypes,
       ], // todo: merge
     };
   }
-
-  public on(event: string, callback: ExtEventCallback) {
-    this.eventHandlers.push({ run: callback, eventName: event });
-    return this;
-  }
-
   /**
    * @description Подписывает на события на всех картах
-   * @param handler
+   * @param callback
    */
-  public subscribe(handler: Event) {
-    this.eventHandlers.push(handler);
+  public subscribe(callback: Event): Extention;
+  public subscribe(event: string, callback: ExtEventCallback): Extention;
+  public subscribe(
+    event: Event | string,
+    callback?: ExtEventCallback
+  ): Extention {
+    if (typeof event === 'string') {
+      this.eventHandlers.push({ run: callback!, eventName: event });
+    } else {
+      this.eventHandlers.push(event);
+    }
 
     return this;
   }
@@ -79,9 +90,14 @@ export class Extention {
    * @description Добавляет команду и регистрирует ее
    * @param cmd
    */
-  public command(cmd: Command): Extention {
+  public command(cmd: Command): Extention;
+  public command(cmd: ICommandOptions, callback: ExtCmdCallback): Extention;
+  public command(
+    cmd: Command | ICommandOptions,
+    callback?: ExtCmdCallback
+  ): Extention {
     this.commands.push(cmd);
-    this.cmdHandlers.set(cmd.id, cmd.run);
+    this.cmdHandlers.set(cmd.id, 'run' in cmd ? cmd.run : callback!);
 
     return this;
   }

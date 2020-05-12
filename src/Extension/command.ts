@@ -27,7 +27,7 @@ export abstract class Command {
    * @type {String}
    * @public
    */
-  public description?: string;
+  public description!: string;
 
   /**
    * Условия при которых отображается команда

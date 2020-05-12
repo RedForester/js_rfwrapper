@@ -1,9 +1,9 @@
 export interface ICommandOptions {
   id: string;
   name: string;
-  description: string;
-  showRules: ICommandShowRule[];
-  requiredTypes: ICommandRequiredType[];
+  description?: string;
+  showRules?: ICommandShowRule[];
+  requiredTypes?: ICommandRequiredType[];
 }
 
 export interface IRequiredTypeProp {

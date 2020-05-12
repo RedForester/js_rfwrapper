@@ -60,9 +60,19 @@ const ext = new Extention({
 });
 
 ext.command(new SimpleCommand());
+ext.command({id: 'uuid', name: 'somename'}, async (conn, ctx) => {
+  return new NotifyReply()
+    .setContent('some value')
+    .setDuration(5 * 1000);
+})
 ext.subscribe(new TaskStatusWatcher());
+ext.subscribe('*', async (conn, ctx) => {
+  console.log(ctx)
+})
+
 
 ext.start(1233, async () => {
-  await ext.register('kudryavtsev@nppsatek.ru', '2f6d33b8b0f94acfce14d8ec8b4f224f');
-  console.log('Плагин успешно зарегистрирован и подключен');
+  ext.register('kudryavtsev@nppsatek.ru', '2f6d33b8b0f94acfce14d8ec8b4f224f')
+    .then(_ => console.log('Плагин успешно зарегистрирован и подключен'))
+    .catch(_ => process.exit(1));
 });
