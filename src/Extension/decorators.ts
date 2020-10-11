@@ -1,7 +1,7 @@
 import { ICommandShowRule, IRequiredTypeProp } from './interface';
 
 function setMetaData(key: string, value: unknown): ClassDecorator {
-  return function<T extends Function>(target: T): T {
+  return function<T extends CallableFunction>(target: T): T {
     Object.defineProperty(target.prototype, key, {
       value,
       enumerable: false,
@@ -13,9 +13,10 @@ function setMetaData(key: string, value: unknown): ClassDecorator {
 }
 
 function appendMetaData(key: string, value: unknown): ClassDecorator {
-  return function<T extends Function>(target: T): T {
-    if (key in target.prototype) value = [...target.prototype[key], value];
-    else value = [value];
+  return function<T extends CallableFunction>(target: T): T {
+    // tslint:disable-next-line
+    if (key in target.prototype) { value = [...target.prototype[key], value]; }
+    else { value = [value]; }
 
     Object.defineProperty(target.prototype, key, {
       value,

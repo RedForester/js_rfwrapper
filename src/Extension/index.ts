@@ -114,7 +114,7 @@ export class Extention {
 
     const plugins = await w.extention.getOwned();
     for (const plugin of plugins) {
-      if (plugin.name !== this.name) continue;
+      if (plugin.name !== this.name) { continue; }
 
       await w.extention.update(plugin.id!, this.toJSON());
       return;
@@ -188,6 +188,7 @@ export class Extention {
       await this.store.set(mapId, serviceToken);
       await this.addMap(mapId, serviceToken);
     } catch (error) {
+      // tslint:disable-next-line
       console.error(error);
       res.status(400).json({});
       return;
@@ -234,6 +235,7 @@ export class Extention {
 
         result = await callback(wrapper, context);
       } catch (e) {
+        // tslint:disable-next-line
         console.error(e);
         result = new NotifyReply()
           .setContent(`Ошибка во время выполнения`)

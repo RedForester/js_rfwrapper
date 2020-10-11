@@ -2,19 +2,19 @@ import axios from 'axios';
 import { IAxios } from '../../interfaces';
 import { json } from 'express';
 
-export interface Command {
+export interface ICommand {
   name: string;
   type: {
     action?: string;
     url?: string;
   };
   description?: string;
-  showRules: {
+  showRules: Array<{
     allNodes?: boolean;
     root?: boolean;
     selfType?: string;
     descendantOfType?: string;
-  }[];
+  }>;
 }
 
 export interface IExtention {
@@ -24,15 +24,15 @@ export interface IExtention {
   baseUrl: string;
   email: string;
   published?: boolean;
-  requiredTypes: {
+  requiredTypes: Array<{
     name: string;
-    properties: {
+    properties: Array<{
       name: string;
       category: string;
       argument: string;
-    }[];
-  }[];
-  commands: Command[];
+    }>;
+  }>;
+  commands: ICommand[];
 }
 
 export default class CExtentionAPI {
