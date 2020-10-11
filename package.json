@@ -3,14 +3,15 @@
   "version": "1.5.0",
   "description": "Пакет для работы с API RedForester",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/RedForester/js_rfwrapper",
   "author": {
     "name": "deissh",
     "email": "deissh@yandex.ru",
     "url": "https://vk.com/keelvel"
   },
   "keywords": [
-    ""
+    "api",
+    "redforester"
   ],
   "files": [
     "lib"
