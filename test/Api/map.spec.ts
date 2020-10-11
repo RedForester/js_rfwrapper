@@ -1,9 +1,9 @@
-import { Api } from '../../src';
+import { Wrapper } from '../../src';
 import { IMapInfo, IUser } from '../../lib';
 
-const api = new Api({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
+const api = new Wrapper({
+  username: process.env.DEBUG_RF_USER_1,
+  password: process.env.DEBUG_RF_USER_PWD_1,
   host: process.env.DEBUG_RF_URL
 });
 

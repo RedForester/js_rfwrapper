@@ -1,7 +1,7 @@
-import { Wrapper, Api } from '../../src';
+import { Wrapper } from '../../src';
 import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 
-const api = new Api({
+const rf = new Wrapper({
   username: 'admin@pachilly.com',
   password: 'f6fdffe48c908deb0f4c3bd36c032e72',
 });
@@ -10,13 +10,8 @@ let map: IMapInfo;
 let node: INodeInfo;
 
 beforeAll(async () => {
-  map = await api.map.create('te1stmap');
-  node = await api.node.create(map.id, map.root_node_id, {});
-});
-
-const rf = new Wrapper({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
+  map = await rf.map.create('te1stmap');
+  node = await rf.node.create(map.id, map.root_node_id, {});
 });
 
 test('Should throw error with undefinded Node uuid', async () => {
@@ -55,5 +50,5 @@ test('Should load Map with custom viewport', async () => {
 });
 
 afterAll(async () => {
-  await api.map.delete(map.id);
+  await rf.map.delete(map.id);
 });

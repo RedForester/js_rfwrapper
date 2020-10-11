@@ -1,8 +1,8 @@
-import { Wrapper, Api } from '../../src';
+import { Wrapper } from '../../src';
 import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 import { INodeType } from '../../src/Node/interfaces';
 
-const api = new Api({
+const rf = new Wrapper({
   username: 'admin@pachilly.com',
   password: 'f6fdffe48c908deb0f4c3bd36c032e72',
   host: process.env.DEBUG_RF_URL
@@ -13,15 +13,9 @@ let node: INodeInfo;
 let type: INodeType;
 
 beforeAll(async () => {
-  map = await api.map.create('te1stmap');
-  node = await api.node.get(map.root_node_id);
-  type = await api.nodetype.create(map.id, 'testtype');
-});
-
-const rf = new Wrapper({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
-  host: process.env.DEBUG_RF_URL
+  map = await rf.map.create('te1stmap');
+  node = await rf.node.get(map.root_node_id);
+  type = await rf.nodetype.create(map.id, 'testtype');
 });
 
 // ===================
@@ -29,7 +23,7 @@ const rf = new Wrapper({
 // ===================
 
 test('Should return empty result when search one', async () => {
-  const testnode = await api.node.create(map.id, node.id, {});
+  const testnode = await rf.node.create(map.id, node.id, {});
 
   const tree = await rf.Node(node.id);
 
@@ -38,11 +32,11 @@ test('Should return empty result when search one', async () => {
   });
 
   expect(res).toEqual(false);
-  await api.node.delete(testnode.id);
+  await rf.node.delete(testnode.id);
 });
 
 test('Should return empty result when search all', async () => {
-  const testnode = await api.node.create(map.id, node.id, {});
+  const testnode = await rf.node.create(map.id, node.id, {});
   const tree = await rf.Node(node.id);
 
   const res = await tree.findAll({
@@ -50,11 +44,11 @@ test('Should return empty result when search all', async () => {
   });
 
   expect(res).toEqual([]);
-  await api.node.delete(testnode.id);
+  await rf.node.delete(testnode.id);
 });
 
 test('Should return result when search one by regex', async () => {
-  const testnode = await api.node.create(map.id, node.id, {
+  const testnode = await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'SomeRegex'
@@ -82,18 +76,18 @@ test('Should return result when search one by regex', async () => {
     map_id: map.id,
   });
 
-  await api.node.delete(testnode.id);
+  await rf.node.delete(testnode.id);
 });
 
 test('Should return result when search one by type_id', async () => {
-  const testnode = await api.node.create(map.id, node.id, {
+  const testnode = await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'SomeRegex'
       }
     }
   });
-  await api.node.update(testnode.id, {
+  await rf.node.update(testnode.id, {
     type_id: type.id
   });
 
@@ -118,18 +112,18 @@ test('Should return result when search one by type_id', async () => {
     map_id: map.id,
   });
 
-  await api.node.delete(testnode.id);
+  await rf.node.delete(testnode.id);
 });
 
 test('Should return empty result when search all by regex', async () => {
-  const testnode1 = await api.node.create(map.id, node.id, {
+  const testnode1 = await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'aaaa'
       }
     }
   });
-  const testnode2 = await api.node.create(map.id, node.id, {
+  const testnode2 = await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'aaaaaaaa'
@@ -145,12 +139,12 @@ test('Should return empty result when search all by regex', async () => {
 
   expect(res.length).toEqual(2);
 
-  await api.node.delete(testnode1.id);
-  await api.node.delete(testnode2.id);
+  await rf.node.delete(testnode1.id);
+  await rf.node.delete(testnode2.id);
 });
 
 test('Should return empty result when search all by type_id', async () => {
-  const testnode1 = await api.node.create(map.id, node.id, {
+  const testnode1 = await rf.node.create(map.id, node.id, {
     properties: {
       update: [{
         group: 'global',
@@ -160,10 +154,10 @@ test('Should return empty result when search all by type_id', async () => {
     },
     type_id: type.id
   });
-  await api.node.update(testnode1.id, {
+  await rf.node.update(testnode1.id, {
     type_id: type.id
   });
-  const testnode2 = await api.node.create(map.id, node.id, {
+  const testnode2 = await rf.node.create(map.id, node.id, {
     properties: {
       update: [{
         group: 'global',
@@ -173,7 +167,7 @@ test('Should return empty result when search all by type_id', async () => {
     },
     type_id: type.id
   });
-  await api.node.update(testnode2.id, {
+  await rf.node.update(testnode2.id, {
     type_id: type.id
   });
 
@@ -186,10 +180,10 @@ test('Should return empty result when search all by type_id', async () => {
 
   expect(res.length).toEqual(2);
 
-  await api.node.delete(testnode1.id);
-  await api.node.delete(testnode2.id);
+  await rf.node.delete(testnode1.id);
+  await rf.node.delete(testnode2.id);
 });
 
 afterAll(async () => {
-  await api.map.delete(map.id);
+  await rf.map.delete(map.id);
 });

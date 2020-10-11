@@ -1,30 +1,26 @@
-import Context from '../../src/Map/contex';
-import { Wrapper, Api } from '../../src';
-import { IMapInfo, INodeInfo } from '../../src/Map/interface';
-import { IUser } from '../../src/User/interfaces';
-import { IExceptions } from '../../src/Utils/api/interfaces';
+import { Wrapper, IMapInfo, INodeInfo, IUser } from '../../src';
 
 const user1 = {
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
+  username: process.env.DEBUG_RF_USER_1,
+  password: process.env.DEBUG_RF_USER_PWD_1,
   host: process.env.DEBUG_RF_URL
 };
 
 const user2 = {
-  username: 'yusi@click-mail.net',
-  password: 'de8492b7971f6ded130a06cdd928fafe',
+  username: process.env.DEBUG_RF_USER_2,
+  password: process.env.DEBUG_RF_USER_PWD_2,
   host: process.env.DEBUG_RF_URL
 };
 
-let api: { user1: Api, user2: Api };
+let api: { user1: Wrapper, user2: Wrapper };
 let map: IMapInfo;
 let node: INodeInfo;
 let users: { user1: IUser, user2: IUser };
 
 beforeAll(async () => {
   api = {
-    user1: new Api(user1),
-    user2: new Api(user2)
+    user1: new Wrapper(user1),
+    user2: new Wrapper(user2)
   };
   map = await api.user1.map.create('testmap');
   map = await api.user1.map.get(map.id);

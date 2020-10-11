@@ -15,8 +15,11 @@ function setMetaData(key: string, value: unknown): ClassDecorator {
 function appendMetaData(key: string, value: unknown): ClassDecorator {
   return function<T extends CallableFunction>(target: T): T {
     // tslint:disable-next-line
-    if (key in target.prototype) { value = [...target.prototype[key], value]; }
-    else { value = [value]; }
+    if (key in target.prototype) {
+      value = [...target.prototype[key], value];
+    } else {
+      value = [value];
+    }
 
     Object.defineProperty(target.prototype, key, {
       value,

@@ -1,30 +1,24 @@
-import { Wrapper, Api } from '../../src';
+import { Wrapper } from '../../src';
 import { IMapInfo, INodeInfo } from '../../src/Map/interface';
 import { INodeType } from '../../src/Node/interfaces';
-
-const api = new Api({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
-  host: process.env.DEBUG_RF_URL
-});
 
 let map: IMapInfo;
 let node: INodeInfo;
 let type: INodeType;
 
 beforeAll(async () => {
-  map = await api.map.create('te1stmap');
-  node = await api.node.get(map.root_node_id);
-  type = await api.nodetype.create(map.id, 'testtype');
+  map = await rf.map.create('te1stmap');
+  node = await rf.node.get(map.root_node_id);
+  type = await rf.nodetype.create(map.id, 'testtype');
 
-  await api.node.create(map.id, node.id, {
+  await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'Some node 1'
       }
     }
   });
-  await api.node.create(map.id, node.id, {
+  await rf.node.create(map.id, node.id, {
     properties: {
       global: {
         title: 'Some node 2'
@@ -91,8 +85,8 @@ test('Should load childrens', async () => {
 
 
 test('Should load node with Node Type info', async () => {
-  const testnode = await api.node.create(map.id, map.root_node_id, {});
-  await api.node.update(testnode.id, {
+  const testnode = await rf.node.create(map.id, map.root_node_id, {});
+  await rf.node.update(testnode.id, {
     type_id: type.id
   });
 
@@ -106,5 +100,5 @@ test('Should load node with Node Type info', async () => {
 });
 
 afterAll(async () => {
-  await api.map.delete(map.id);
+  await rf.map.delete(map.id);
 });

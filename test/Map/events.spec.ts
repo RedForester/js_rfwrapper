@@ -1,5 +1,4 @@
-import Context from '../../src/Map/contex';
-import { Wrapper, Api } from '../../src';
+import { Wrapper, EventContext } from '../../src';
 import { IMapInfo } from '../../src/Map/interface';
 
 const params = {
@@ -9,13 +8,13 @@ const params = {
 };
 
 let rf: Wrapper;
-let api: Api;
+let api: Wrapper;
 let event: { what: string; type: string; data: any; sessionId: string; who: any; };
 let testmap: IMapInfo;
 
 beforeAll(async () => {
   rf = new Wrapper(params);
-  api = new Api(params);
+  api = new Wrapper(params);
 
   testmap = await api.map.create('testmap');
 });
@@ -23,7 +22,7 @@ beforeAll(async () => {
 test('Shoud create map wrapper without longpolling', async (done) => {
   const map = await rf.Map(testmap.id, { enablePolling: false });
 
-  map.on('*', (ctx: Context) => {
+  map.on('*', (ctx: EventContext) => {
     throw new Error('Must not be longpolling');
   });
 
@@ -52,8 +51,8 @@ describe('MapEvent#Context', () => {
   test('Should create loongpolling with callback and trigger to any events', async (done) => {
     const map = await rf.Map(testmap.id, { enablePolling: true });
 
-    const handler = (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context);
+    const handler = (ctx: EventContext) => {
+      expect(ctx).toBeInstanceOf(EventContext);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
@@ -62,14 +61,14 @@ describe('MapEvent#Context', () => {
     map.on('*', handler);
 
     // tslint:disable-next-line
-    map.next(new Context({...event, type: 'some_custom_event'}), map);
+    map.next(new EventContext(map.id, {...event, type: 'some_custom_event'}), map);
   });
 
   test('Should create loongpolling with callback and trigger to event type', async (done) => {
     const map = await rf.Map(testmap.id);
 
-    map.on('node_created', (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context);
+    map.on('node_created', (ctx: EventContext) => {
+      expect(ctx).toBeInstanceOf(EventContext);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
@@ -78,15 +77,15 @@ describe('MapEvent#Context', () => {
     });
 
     // tslint:disable-next-line
-    map.next(new Context(event), map);
+    map.next(new EventContext(map.id, event), map);
   });
 
   test('Should create loongpolling without valid trigger', async (done) => {
     const map = await rf.Map(testmap.id);
 
     map.on('node_empty', (ctx) => ctx);
-    map.on('node_created', (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context);
+    map.on('node_created', (ctx: EventContext) => {
+      expect(ctx).toBeInstanceOf(EventContext);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
@@ -95,7 +94,7 @@ describe('MapEvent#Context', () => {
     });
 
     // tslint:disable-next-line
-    map.next(new Context(event), map);
+    map.next(new EventContext(map.id, event), map);
     return;
   });
 
@@ -103,8 +102,8 @@ describe('MapEvent#Context', () => {
   test('Should create loongpolling with callback to trigger any events', async (done) => {
     const map = await rf.Map(testmap.id);
 
-    map.on(null, (ctx: Context) => {
-      expect(ctx).toBeInstanceOf(Context);
+    map.on(null, (ctx: EventContext) => {
+      expect(ctx).toBeInstanceOf(EventContext);
       expect(ctx.data).toBeTruthy();
       expect(ctx.type).toBeTruthy();
       expect(ctx.who).toBeTruthy();
@@ -113,13 +112,13 @@ describe('MapEvent#Context', () => {
     });
 
     // tslint:disable-next-line
-    map.next(new Context(event), map);
+    map.next(new EventContext(map.id, event), map);
   });
 
   test('Should contain event body', () => {
-    const context = new Context(event);
+    const context = new EventContext('someuuid', event);
 
-    expect(context).toBeInstanceOf(Context);
+    expect(context).toBeInstanceOf(EventContext);
     expect(context.what).toBe(event.what);
 
     expect([

@@ -43,7 +43,7 @@
     "@types/jest": "^22.0.1",
     "@types/node": "^13.13.5",
     "coveralls": "^3.1.0",
-    "jest": "^26.0.1",
+    "jest": ">=25.0.0",
     "prettier": "^1.5.2",
     "rimraf": "^2.0.0",
     "ts-jest": "^25.5.0",
@@ -57,7 +57,7 @@
   },
   "jest": {
     "transform": {
-      ".(ts)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts)": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|js)$",
     "moduleFileExtensions": [
@@ -65,6 +65,8 @@
       "js"
     ],
     "testEnvironment": "node",
-    "setupTestFrameworkScriptFile": "./jest.setup.js"
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
   }
 }

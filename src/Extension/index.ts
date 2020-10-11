@@ -114,7 +114,9 @@ export class Extention {
 
     const plugins = await w.extention.getOwned();
     for (const plugin of plugins) {
-      if (plugin.name !== this.name) { continue; }
+      if (plugin.name !== this.name) {
+        continue;
+      }
 
       await w.extention.update(plugin.id!, this.toJSON());
       return;

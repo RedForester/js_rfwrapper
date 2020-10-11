@@ -1,33 +1,36 @@
-import { Api } from '../../src';
+import { IUser, Wrapper } from '../../src';
 
-const app = new Api({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
+const app = new Wrapper({
+  username: process.env.DEBUG_RF_USER_1,
+  password: process.env.DEBUG_RF_USER_PWD_1,
   host: process.env.DEBUG_RF_URL
 });
 
+
+let current: IUser;
+
 beforeAll(async() => {
-  await await app.user.update({
-    name: 'default-name'
+  await app.user.update({
+    name: process.env.DEBUG_RF_USER_1
   });
+
+  current = await app.user.get()
 });
 
 test('Should return current user', async () => {
   const result = await app.user.get();
   expect(result).toMatchObject({
-    user_id: '6dbfa213-defa-43d1-9215-c232e8485978',
-    username: 'admin@pachilly.com',
-    name: 'default-name'
+    username: process.env.DEBUG_RF_USER_1,
+    name: process.env.DEBUG_RF_USER_1
   });
 });
 
 test('Should return user by uuid', async () => {
-  const result = await app.user.get('6dbfa213-defa-43d1-9215-c232e8485978');
+  const result = await app.user.get(current.user_id);
 
   expect(result).toMatchObject({
-    user_id: '6dbfa213-defa-43d1-9215-c232e8485978',
-    username: 'admin@pachilly.com',
-    name: 'default-name'
+    username: process.env.DEBUG_RF_USER_1,
+    name: process.env.DEBUG_RF_USER_1
   });
 });
 
@@ -46,6 +49,6 @@ test('Should throw error when update undefinded key', async () => {
       somekey: 'somename'
     });
   } catch (e) {
-    expect(e.message).toEqual('Отсутствуют данные для редактирования пользователя 6dbfa213-defa-43d1-9215-c232e8485978');
+    expect(e.message).toEqual(`Отсутствуют данные для редактирования пользователя ${current.user_id}`);
   }
 });

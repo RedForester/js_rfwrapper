@@ -1,13 +1,9 @@
-import { Wrapper, Api } from '../../src';
+import { Wrapper } from '../../src';
 import { IMapInfo } from '../../src/Map/interface';
 import { IUser } from '../../src/User/interfaces';
 import { CMapWrapper } from '../../src/Map';
 import { CNodeWrapper } from '../../src/Node';
 
-const api = new Api({
-  username: 'admin@pachilly.com',
-  password: 'f6fdffe48c908deb0f4c3bd36c032e72',
-});
 const rf = new Wrapper({
   username: 'admin@pachilly.com',
   password: 'f6fdffe48c908deb0f4c3bd36c032e72',
@@ -17,9 +13,9 @@ let map: CMapWrapper;
 let userInfo: IUser;
 
 beforeAll(async () => {
-  const temp: IMapInfo = await api.map.create('te1stmap');
+  const temp: IMapInfo = await rf.map.create('te1stmap');
   map = await rf.Map(temp.id);
-  userInfo = await api.user.get();
+  userInfo = await rf.user.get();
 });
 
 // =====================
