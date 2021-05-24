@@ -91,7 +91,7 @@ class SimpleCommand extends Command {
 class TaskStatusWatcher extends Event {
   public async run(self: Wrapper, ctx: EventContext): Promise<void> {
     // проверяем что это тип узла - задача и обновилось типовое поле
-    if (ctx.data.node_type.name !== 'Задача') return;
+    if (!ctx.data.node_type || ctx.data.node_type.name !== 'Задача') return;
     if (!('properties' in ctx.data) || !ctx.data.properties.byType) return;
 
     const field = ctx.data.properties.byType.updated.find(f => f.key === 'Статус');

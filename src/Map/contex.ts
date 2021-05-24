@@ -46,7 +46,7 @@ export interface ICommentDataEvent {
 
 export interface INodeTypeDataEvent {
   name: string;
-  icon: string | null;
+  icon?: string;
 }
 
 export interface IPropertiesChangesDataEvent {
@@ -75,7 +75,7 @@ export interface IPropertiesChangesDataEvent {
 
 export interface IPropertiesDataEvent {
   node_title: string;
-  node_type: INodeTypeDataEvent;
+  node_type?: INodeTypeDataEvent;
   parent_title: string;
   properties: {
     byType?: IPropertiesChangesDataEvent;
@@ -88,13 +88,13 @@ export interface IPropertiesDataEvent {
 export interface IEmptyDataEvent {
   node_title: string;
   parent_title: string;
-  node_type: INodeTypeDataEvent;
+  node_type?: INodeTypeDataEvent;
 }
 
 export interface INodeCopyedDataEvent {
   node_title: string;
   parent_title: string;
-  node_type: INodeTypeDataEvent;
+  node_type?: INodeTypeDataEvent;
   map_id_from: string;
   node_id_from: string;
 }
