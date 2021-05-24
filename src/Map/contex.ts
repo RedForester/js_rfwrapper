@@ -49,22 +49,39 @@ export interface INodeTypeDataEvent {
   icon: string | null;
 }
 
+export interface IPropertiesChangesDataEvent {
+  updated: Array<{
+    group: string;
+    key: string;
+    old_type_id?: number;
+    old_value: any;
+    old_key?: string;
+    type?: string;
+    value: any;
+  }>;
+  created: Array<{
+    group: string;
+    key: string;
+    value: any;
+    type?: string;
+  }>;
+  deleted: Array<{
+    group: string;
+    key: string;
+    value: any;
+    type?: string;
+  }>;
+}
+
 export interface IPropertiesDataEvent {
   node_title: string;
   node_type: INodeTypeDataEvent;
   parent_title: string;
   properties: {
-    byType?: {
-      removed: any[];
-      updated: Array<{
-        group: string;
-        key: string;
-        old_type_id: number;
-        old_value: any;
-        type: string;
-        value: any;
-      }>;
-    };
+    byType?: IPropertiesChangesDataEvent;
+    byUser?: IPropertiesChangesDataEvent;
+    global?: IPropertiesChangesDataEvent;
+    style?: IPropertiesChangesDataEvent;
   };
 }
 
