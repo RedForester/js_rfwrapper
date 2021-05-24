@@ -24,11 +24,11 @@ class SimpleCommand extends Command {
 @On('node_updated')
 class TaskStatusWatcher extends Event {
   public async run(self: Wrapper, ctx: EventContext): Promise<void> {
-    if (!ctx.data.node_type || ctx.data.node_type.name !== 'Задача') return;
-    if (!('properties' in ctx.data) || !ctx.data.properties.byType) return;
+    if (!ctx.data.node_type || ctx.data.node_type.name !== 'Задача') { return; }
+    if (!('properties' in ctx.data) || !ctx.data.properties.byType) { return; }
 
     const field = ctx.data.properties.byType.updated.find(f => f.key === 'Статус');
-    if (!field) return;
+    if (!field) { return; }
 
     const username =
       ctx.who.name && ctx.who.surname
@@ -46,6 +46,9 @@ class TaskStatusWatcher extends Event {
 const ext = new Extention({
   name: 'somename',
   email: 'deissh@yandex.ru',
+  user: {
+    username: 'task-status-watch',
+  },
   baseUrl: 'https://86c220d7.ngrok.io:443',
   requiredTypes: [{
     name: 'Категория',
@@ -62,11 +65,11 @@ ext.command({id: 'uuid', name: 'somename'}, async (conn, ctx) => {
   return new NotifyReply()
     .setContent('some value')
     .setDuration(5 * 1000);
-})
+});
 ext.subscribe(new TaskStatusWatcher());
 ext.subscribe('*', async (conn, ctx) => {
-  console.log(ctx)
-})
+  console.log(ctx);
+});
 
 
 ext.start(1233, async () => {
