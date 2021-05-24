@@ -24,7 +24,7 @@ class SimpleCommand extends Command {
 @On('node_updated')
 class TaskStatusWatcher extends Event {
   public async run(self: Wrapper, ctx: EventContext): Promise<void> {
-    if (ctx.data.node_type !== 'Задача') return;
+    if (ctx.data.node_type.name !== 'Задача') return;
     if (!('properties' in ctx.data) || !ctx.data.properties.byType) return;
 
     const field = ctx.data.properties.byType.updated.find(f => f.key === 'Статус');
