@@ -131,7 +131,7 @@ export class Extention {
   public start(port: number, callback?: (...args: any[]) => void) {
     const app = Express();
 
-    app.post('/api/is-alive', (req, res) =>
+    app.all('/api/is-alive', (req, res) =>
       res.json({ message: "I'm alive!" })
     );
     app.post('/api/maps/:mapid', (req, res) => this.connectRequest(req, res));
