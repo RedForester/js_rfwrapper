@@ -57,6 +57,7 @@ export class Extention {
     return {
       name: this.name,
       description: this.description,
+      user: this.user,
       email: this.email,
       baseUrl: this.baseUrl,
       commands: this.commands.map(cmd => ({

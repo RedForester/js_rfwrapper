@@ -1,6 +1,6 @@
 {
   "name": "rfwrapper",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Пакет для работы с API RedForester",
   "license": "MIT",
   "repository": "https://github.com/RedForester/js_rfwrapper",
