@@ -8,6 +8,7 @@ import {
   IExtentionOptions,
   ICommandRequiredType,
   ICommandOptions,
+  IExtUserInfo,
 } from './interface';
 import { FileStore } from './store';
 import { ICommandReply, NotifyReply, NotifyStyle } from './reply/index';
@@ -26,6 +27,7 @@ export type ExtEventCallback = (
 export class Extention {
   public rfBaseUrl: string;
   private name: string;
+  private user: IExtUserInfo;
   private description: string;
   private email: string;
   private baseUrl: string;
@@ -43,6 +45,7 @@ export class Extention {
     this.store = options.store || new FileStore();
 
     this.name = options.name;
+    this.user = options.user;
     this.description = options.description || '';
     this.email = options.email;
     this.baseUrl = options.baseUrl;

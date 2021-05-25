@@ -20,6 +20,12 @@ export interface ICommand {
 export interface IExtention {
   id?: string; // todo: разделить интерфейсы и вынести от сюда
   name: string;
+  user: {
+    avatarUrl: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+  };
   description?: string;
   baseUrl: string;
   email: string;

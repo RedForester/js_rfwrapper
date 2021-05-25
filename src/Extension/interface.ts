@@ -55,11 +55,22 @@ export interface IExtStore<T = any> {
   delete(key: string): Promise<void>;
 }
 
+export interface IExtUserInfo {
+  username: string;
+  avatarUrl?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 export interface IExtentionOptions {
   /**
    * @description Уникальное название плагина, если плагина не существует с таким именем то будет созда новый
    */
   name: string;
+  /**
+   * @description Параметры пользователя которые будут указаны у расширения
+   */
+  user: IExtUserInfo;
   /**
    * @description Описание плагина, отображается при подключении плагина к карте
    */
